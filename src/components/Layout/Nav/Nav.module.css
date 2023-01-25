@@ -1,0 +1,9 @@
+.logo:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  display: block;
+  background-color: currentColor;
+  z-index: 12;
+}

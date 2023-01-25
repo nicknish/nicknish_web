@@ -1,0 +1,254 @@
+---
+
+title: "React Hooks Deep Dive: Introduction"
+slug: "react-hooks-deep-dive-introduction"
+date: "2019-09-30T00:00"
+tags: ["javascript","react","hooks"]
+
+---
+
+This post kicks off *React Hooks Deep Dive*, a series where we'll explore each of these hooks. We'll define what problems they solve and show examples of how you can start using them today!
+
+---
+
+On February 06, 2019 React released the anticipated version 16.8 and [officially announced React Hooks](https://reactjs.org/blog/2019/02/06/react-v16.8.0.html).
+
+And I’m. So. Excited.
+
+![bubble-buddy](//images.ctfassets.net/yqt11gq08a4r/3ydCD4Pyur5ECxF0IgDXe6/249340927bd404e2d5d06fed1bba7e3d/bubble-buddy.png)
+I ❤️ ~~BUBBLE BUDDY~~ REACT HOOKS
+
+Hooks open up of possibilities to optimize, organize, and reuse code. But admittedly they evolve the previous conventions, making them confusing to use.
+
+Good thing you’re here! My writing aims to make your life as a dev easier. So let’s pull back the curtain and unveil what makes Hooks so special. 
+
+Before we get in the thick of it though, let's talk about why React Hooks exist in the first place.
+
+## React's Principles
+
+React is based on the principles of *composition* and of mixing data and markup to build UI.
+
+Composition is a fancy word for when you combine different data types to make a more complex object. Think of a React component with some children components. Each child component can be thought of as a different piece of data that combines to make a more complex data object. More on this in a bit. 
+
+These principles are apparent even in React's precursors XHP and FaxJS. Let’s look at those really quickly. 
+
+### XHP
+
+XHP, a PHP plugin, first solved this issue for Facebook's phtml files in 2011. Yes, PHP.
+
+```php
+// XHP
+if ($_POST['name']) {
+  echo Hello, {$_POST['name']};
+} else {
+  echo
+    <form method="post">
+      What is your name?
+      <input type="text" name="name" />
+      <input type="submit" />
+    </form>;
+}
+```
+
+Building UI with data and markup is liberating in its simplicity. Because your data and markup are in the same place, it’s easy to understand what the page looks like from the code.
+
+This simplicity may be even more apparent in PHP than React. You simply create a new phtml file and add some HTML and PHP. Then, BAM! You have a new page that users can see.
+
+But phtml files can quickly get out of hand and they are hard to scale. Its quirks make it a total pain to work with, which is why Facebook created XHP!
+
+### FaxJS
+
+Then, FaxJS, a JavaScript library, solved this issue by emphasizing composition to build UI components in 2012.
+
+```javascript
+// FaxJS
+var MainComponent = exports.MainComponent = F.Componentize({
+    structure : function() {
+        return Div({
+        firstPerson: PersonDisplayer({
+            name: 'Joe Johnson', age: 31,
+            interests: 'hacking, eating, sleeping'
+        }),
+        secondPerson: PersonDisplayer({
+            name: 'Sally Smith', age: 29,
+            interests: 'biking, cooking swiming'
+        })
+        });
+    }
+});
+```
+
+Like React, FaxJS combines different sub-components to create larger components. 
+
+One of the defining benefits of composition is its code reusability and modularity, two pillars of React. Reusability makes the code easier to manage, while modularity makes the code easy to test and iterate upon.
+
+Despite XHP and FaxJS coming out 2 years before React was announced (7 years ago!), you can still see where React was inspired from and what problems it aims to solve. From early on, these two principles inspired and guided the development of React and this continues today with Hooks. 
+
+## Class and stateless components
+
+Fast forward to React in 2019 when we're using JSX, class components, and stateless components. 
+
+As a refresher, class components allow us to quickly create and encapsulate stateful and UI logic in a single place:
+```jsx
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleInput = this.handleInput.bind(this)
+        this.state = { name: 'World' }
+    }
+
+    handleInput(e) {
+        this.setState({ name: e.target.value })
+    }
+
+    render() {
+        const { name } = this.state
+
+        return (
+            <div className="container">
+                <Welcome name={name} />
+                <input type="text" value={name} onChange={handleInput} />
+            </div>
+        )
+    }
+}
+
+class Welcome extends React.Component {
+    render() {
+        return (
+            <p>Hello {this.props.name}</p>
+        )
+    }
+}
+
+// Renders <div className="container"><p>Hello [greeting]</p></div>
+```
+
+With class components came stateless components, which primarily focused on the presentation as opposed to state or data logic. 
+
+Here we've refactored the `Welcome` component to be a stateless component. 
+
+```diff
+-class Welcome extends React.Component {
+-	render() {
+-		return (
+-			<p>Hello {this.props.name}</p>
+-		)
+-	}
+-}
++const Welcome = (props) => {
++	return (
++	  <p>{props.name}</p>
++	)
++}
+```
+
+## So why change it?
+
+Despite its success, the React team noticed a few key issues with class components.
+
+- **They confused new developers**. Class inheritance, the `this` keyword, and binding event handlers created confusion amongst even senior developers.
+- **They encouraged antipatterns**. Code inside component lifecycle hooks like `componentDidMount` and `componentDidUpdate` got messy quickly, which made those components difficult to reuse and test.
+- **They required additional tooling to work**. Tooling like Webpack, Babel, and unproven JavaScript proposals are widely used to make React easier more ergonomic, but this made code brittle and created an even larger barrier to entry for new React developers.
+- **They are difficult to optimize and minify**.
+- As an abstraction, they were **less aligned with React principles**.
+
+## Enter React Hooks and Functional Components
+
+This leads us to React Hooks. Oh boy.
+
+React Hooks add state, control over lifecycle hooks, and performance tuning that make functional components a full replacement for class components.
+
+In the previous example, we talked about stateless components. Taking it one step further, the React team evolved this pattern to *functional components*.
+
+Functional components are the same structure as their stateless predecessors, but they can use hooks.
+
+Check out this example of a functional component using the [`useState`](https://reactjs.org/docs/hooks-reference.html#usestate) hook.
+
+```jsx
+import React, { useState } from 'react';
+
+const Welcome = () => {
+    const [name, setName] = useState('World');
+
+    return (
+        <div>
+            <p>Hello {name}</p>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+        </div>
+    )
+}
+```
+
+![react-hooks-deep-dive-intro-demo](//images.ctfassets.net/yqt11gq08a4r/5hf86ZolURdXDGYoRPXvP3/884f1fec7e86ac61b77e3efdb18cd0c4/react-hooks-deep-dive-intro-demo.gif)
+
+Now, THAT is some sexy code!
+
+Instead of writing boilerplate for a clunky class component, useState is so easy to use and understand. 
+
+I mean, just look at how clean that code is! In only 10 lines, we've created a component that has state, markup, and an event handler. And don't worry if you don't fully understand `useState` in this example. We'll go over that in the next post. 😉
+
+Hooks allow us to reuse our state and effect logic elsewhere too. 
+
+Say we wanted to reuse this state logic. **Hooks are just functions**, so we can simply break our useState logic into a separate function.
+
+```diff
++const useNameState = name => {
++  return useState(name)
++}
++
+const Welcome = () => {
+-	const [name, setName] = useState('World');
++	const [name, setName] = useNameState('World');
+
+    return (
+        <div>
+            <p>Hello {name}</p>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+        </div>
+    )
+}
+```
+
+This is the power of hooks!
+
+## Not just an optimization
+
+It's important to realize that Hooks are not just an optimization. They are a progression to be more aligned with React's core principles in building UI. To reiterate, they are:
+
+1. Combine data and markup
+2. Emphasize composition of components
+
+Hooks make our code more composable and make it easier to write component-based code. (There's even [new, fantastic communities and blogs](https://usehooks.com) centered around sharing hooks)
+
+They allow us to more easily share, reuse, and test our code. As a result, they make our components more reusable, easier to read, and easier to understand. Ultimately, they make us better at building UI and (I believe) will be another turning point for React.
+
+## Next up: useState
+
+Phew! With that long-winded introduction, let's finally kick off this series. 
+
+The next post in *React Hooks Deep Dive* will cover `useState` with examples of how and when to use it so you can start using hooks right away.
+
+---
+
+Thanks for reading! You are awesome for sticking around to the end.
+
+If you want to play with the useState example above, [check out the CodeSandbox demo](https://codesandbox.io/s/react-deep-dive-introduction-5dv57).
+
+To read more about the React team's motivations behind Hooks, they have a great section in the [Hooks Introduction](https://reactjs.org/docs/hooks-intro.html#motivation) documentation.
+
+This post drew knowledge from [Lee Bryon's fun talk from Reactathon 2019](https://youtu.be/mtjHxwUQUs0) and this [super cool interactive history timeline](https://blog.risingstack.com/the-history-of-react-js-on-a-timeline/) from the folks at RisingStack. 
+
+Finally, a massive thank you to [Hector Benitez](https://twitter.com/@wha_the_hec) for providing early feedback on this post.
+
+---
+
+*This post first appeared on my blog. To see more posts about React, JavaScript, and other fun stuff check out [nicknish.co/blog](http://nicknish.co/blog).*

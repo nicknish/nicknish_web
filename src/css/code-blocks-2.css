@@ -1,0 +1,61 @@
+.prose pre > code {
+  display: grid;
+}
+
+.prose pre {
+  /* Unsets Tailwind CSS Typography Plugin padding so we can add line numbers and line highlighting */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.prose code {
+  /* Adds line numbers */
+  counter-reset: line;
+}
+
+.prose pre > code > .line {
+  padding-right: 1rem;
+}
+
+.prose pre > code > .line:before {
+  /* Adds line numbers */
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: gray;
+}
+
+.prose code > .line.highlighted:before {
+  /* TODO */
+  border-left: 3px solid blue;
+}
+
+.prose code[data-line-numbers-max-digits='2'] > .line::before {
+  width: 2rem;
+}
+
+.prose code[data-line-numbers-max-digits='3'] > .line::before {
+  width: 3rem;
+}
+
+.prose div[data-rehype-pretty-code-title] {
+  font-family: var(--font-code);
+  font-style: italic;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose div[data-rehype-pretty-code-title] + pre {
+  margin-top: 0;
+}
+
+.prose :where(code):not(:where([class~='not-prose'] *))::before,
+.prose :where(code):not(:where([class~='not-prose'] *))::after {
+  content: '' !important;
+}

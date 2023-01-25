@@ -1,0 +1,176 @@
+---
+
+title: "React Router: Authenticated Routes"
+slug: "react-router-authenticated-routes"
+date: "2019-08-28T00:00"
+tags: ["react","dev"]
+
+---
+
+*This post will cover how to create a higher-order component that ensures specific subroutes require authentication. For a primer on react-router I highly suggest reading [Tyler McGinnis's React Router Philosophy blog post](https://tylermcginnis.com/react-router-philosophy-introduction/).*
+
+When you're building an app you'll often have authenticated routes and unauthenticated routes. These will separate your app’s public pages and private pages which are locked behind a login page. 
+
+For example, you might have a Dashboard page that requires a user to login first. If the user is signed in, they can access these subroutes. If not, then the user will be redirected to the Login page.
+
+## Set up our project
+
+First, let's scaffold a typical React entry point *index.js*. 
+
+```jsx
+/* index.js */
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import ReactDOM from "react-dom";
+
+import AppRouter from "./router";
+import Navbar from "./Navbar";
+import "./styles.css";
+
+const App = () => {
+  return (
+    <div className="App">
+      <Router>
+        <Navbar />
+        <AppRouter />
+      </Router>
+    </div>
+  );
+};
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```
+
+Now, let's create a basic router in *router.js*. We were assigned to create a private Dashboard page, so let's do that first. We'll work on making it private after.
+
+```jsx
+/* router.js */
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { HOME_URL, LOGIN_URL, DASHBOARD_URL } from "./urls";
+
+import Homepage from "./Homepage";
+import Login from "./Login";
+import Dashboard from "./Dashboard";
+
+const AppRouter = () => (
+  <Switch>
+    <Route exact path={HOME_URL} component={Homepage} />
+    <Route exact path={LOGIN_URL} component={Login} />
+    {/* TODO: Require login */}
+    <Route exact path={DASHBOARD_URL} component={Dashboard} />
+  </Switch>
+);
+
+export default AppRouter;
+```
+
+We have an app entry point and a router! Now, let's make this Dashboard page private.
+
+## Create a higher-order component that authenticates subroutes
+
+Let's think about what we want to do. We want to:
+
+1. Check that the user is signed in
+2. If they're signed in, let them access the Dashboard route (or other private routes)
+3. If they're not signed in, redirect them to the Login route
+
+We can create a `RequireAuth` higher order component (or, HOC, a function that takes a new component and returns a new component).
+
+This component will first check if the user is signed in, then it will either redirect to login or allow access to the private routes.
+
+```jsx
+/* router.js */
+
+// Simulated authentication obj, maybe this would be retrieved in cookies
+export const fakeAuth = {
+  signedIn: false
+};
+
+const RequireAuth = ({ children }) => {
+  if (!fakeAuth.signedIn) {
+    return <Redirect to={LOGIN_URL} />;
+  }
+
+  return children;
+};
+
+// ...AppRouter
+```
+
+Now, let’s wrap up our `RequireAuth` HOC around our routes that we want to privatize.
+
+```jsx
+/* router.js */
+
+// ... RequireAuth
+
+const AppRouter = () => (
+  <Switch>
+    <Route exact path={HOME_URL} component={Homepage} />
+    <Route exact path={LOGIN_URL} component={Login} />
+
+    <RequireAuth>
+      <Route exact path={DASHBOARD_URL} component={Dashboard} />
+    </RequireAuth>
+  </Switch>
+);
+```
+
+Let's break this down.
+
+1. We pass our `RequireAuth` component our `Route`s. 
+2. `RequireAuth` accesses the `Route`s component using the `children` prop. As you might know, `children` is a special prop that contains the components and HTML that you passed between the opening and closing tags. 
+3. `RequireAuth` checks if the user is logged in. (For the sake of this example, we'll simulate checking if a user is authenticated. In a production application a common method is to check a stored cookie to see if the user is logged in.)
+4. If the user isn't logged in, they'll be redirected to the Login page.
+5. If the user is logged in, they'll have access to the `children`, which includes our Dashboard `Route`.
+
+And we're done! Here's the whole *router.js* file.
+
+```jsx
+/* router.js */
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { HOME_URL, LOGIN_URL, DASHBOARD_URL } from "./urls";
+
+import Homepage from "./Homepage";
+import Login from "./Login";
+import Dashboard from "./Dashboard";
+
+// Simulated authentication obj, maybe this would be retrieved in cookies
+export const fakeAuth = {
+  signedIn: false
+};
+
+const RequireAuth = ({ children }) => {
+  if (!fakeAuth.signedIn) {
+    return <Redirect to={LOGIN_URL} />;
+  }
+
+  return children;
+};
+
+const AppRouter = () => (
+  <Switch>
+    <Route exact path={HOME_URL} component={Homepage} />
+    <Route exact path={LOGIN_URL} component={Login} />
+
+    <RequireAuth>
+      <Route exact path={DASHBOARD_URL} component={Dashboard} />
+    </RequireAuth>
+  </Switch>
+);
+```
+
+## Live Example
+
+To better illustrate this, I've created a [CodeSandbox example](https://codesandbox.io/s/loving-beaver-wzt2e?autoresize=1&fontsize=14&hidenavigation=1) which you can also preview below.
+
+This example is nearly identical, but I've built out the other components.
+
+Other than the simulated authentication, this setup is nearly identical to how we would approach this in production applications! 
+
+Feel free to share, fork, and play with it right now!
+
+https://codesandbox.io/s/loving-beaver-wzt2e

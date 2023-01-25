@@ -1,38 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# nicknish.co
 
-## Getting Started
+This portfolio version is built with GatsbyJS, a static site generator. In this project, we use the JAMStack architecture using React, GraphQL, and Markdown files.
 
-First, run the development server:
+To get reacquainted, check out the `package.json` first or use one of these commands:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+yarn start # start server for dev with Hot Module Reloading and netlify functions
+yarn build # create production build with app and netlify functions
+yarn serve # start server for testing build site
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables Needed
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+In order to run this app, you'll need these environment variables for everything to function.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Run `touch .env.development` and add these variables. Contact me for the correct values.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- CONTENTFUL_SPACE_ID
+- CONTENTFUL_ACCESS_TOKEN
+- CONTENTFUL_PRODUCTION_ENDPOINT
+- CONTENTFUL_PREVIEW_ACCESS_TOKEN
+- CONTENTFUL_PREVIEW_ENDPOINT
+- CONTENTFUL_ENV
+- MAILCHIMP_API_KEY
+- MAILCHIMP_LIST_ID
+- MAILCHIMP_REGION
+- GATSBY_SITE_RECAPTCHA_KEY
+- GOOGLE_ANALYTICS

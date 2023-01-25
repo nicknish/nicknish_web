@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @import './variables.css'; */
+/* @import './code-blocks.css'; */
+@import './code-blocks-2.css';
+
+@layer base {
+  :root {
+    --color-primary-500: #f9bb56;
+    --color-primary-600: #e0a23d;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.site-container {
+  display: flex;
+  min-height: 98vh;
+  flex-direction: column;
+}
+
+.site-content {
+  flex: 1;
+}
+
+a:hover,
+a:active {
+  color: var(--color-primary-500);
+  transition: color 150ms ease;
+}
+
+/* Dynamic Content from CMS */
+.content p {
+  margin: 1rem 0;
+}
+
+.content ul {
+  list-style: inherit;
+  padding-left: 1rem;
+}
+
+.content li {
+  margin-top: 0.5rem;
+}

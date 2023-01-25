@@ -1,0 +1,326 @@
+---
+
+title: "React Hooks Deep Dive: useState"
+slug: "react-hooks-deep-dive-usestate"
+date: "2019-10-07T00:00"
+tags: ["javascript","react","hooks","usestate"]
+
+---
+
+This post is a part of *[React Hooks Deep Dive](https://www.nicknish.co/series/react-hooks-deep-dive)*, a series where we’ll explore each of React’s hooks. We’ll define what problems hooks solve and show examples of how you can start using them today!
+
+---
+
+Hello friends! 
+
+In our previous post, we learned about the motivations and background of React Hooks. 
+
+In this post let’s explore the simple, but powerful **useState** hook. I love this little addition to the React toolkit and I’m so excited to tell you about it.
+
+So without further adieu, let’s jump in!
+
+## Create state with class components
+
+Let’s start with a class component with state. We start by creating a class that extends from `React.Component`, initiating the state in the `constructor` function, and using `this.setState` to update it.
+
+```jsx
+import React from 'react'
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { count: 0 }
+  }
+
+  render() {
+    return (
+      <div>
+        <p>You clicked {this.state.count} times</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>Click me</button>
+      </div>
+    )
+  }
+}
+```
+
+Here we have a simple Counter component that shows how many times you click the button. Easy enough, right? 
+
+But you may have written a component like this hundreds of times. You’re here for the good stuff. So let's get on with it and learn how we can do this with useState now!
+
+## useState
+
+The useState hook allows us to create state for our functional components. The API is simple:
+
+```javascript
+const [value, setValue] = useState(initialValue)
+```
+
+`useState` takes a single parameter to set the *initial state value*. 
+
+Then, it returns an array with two items. The first item is the *stateful value* (the value that changes) and the second is the *updater method* (how we change the value). The stateful value is set to the initial value until changed.
+
+Note: If you are confused by `const [value, setValue]`  this is *array destructuring*. This extracts the first two items out of the array that `useState` returns, then assigns them to new variables `value` and `setValue`. 
+
+## Refactor our class component with useState
+
+Using what we know, let’s apply useState to refactor our Counter class component.
+
+```jsx
+// 1. Import useState
+import React, { useState } from 'react'
+
+// 2. Change Counter to functional component
+const Counter = () => {
+
+  // 3. Call useState and set initial count to 0
+  const [count, setCount] = useState(0)
+
+  // 4. Return text and button
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+
+      {/* 5. Increment count on click */}
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  )
+}
+```
+
+![react-hooks-deep-dive-usestate-counter](//images.ctfassets.net/yqt11gq08a4r/5RsSlImFerJQLxVhhxhM3i/80b4f113d682eb7589b63f280fcf6856/react-hooks-deep-dive-usestate-counter.gif)
+
+Look at that clean motha! Let’s break down what’s going on. 
+
+### Break down our changes
+
+1. First, we import `useState` from React.
+2. We’ve refactored our class component to be a functional component. 
+3. Inside the component, we call `useState` and pass `0` for the initial state. On the same line, `useState` returns an array containing the stateful value and the updater, which are assigned to the variables `count` and `setCount` accordingly. 
+4. Then, we render the counter text and button. The text displays the stateful variable `count` number. 
+5. Finally, the button’s `onClick` callback calls the `setCount` updater method to increment the `count` variable.
+
+Every time we click the button, the `count` number is incremented by 1, which triggers a rerender and the text displays our new number.
+
+## Reuse our useState hook
+
+Uh oh! Another component has the same counting functionality. We could always rewrite the logic, right? But that wouldn’t follow the DRY (Don’t Repeat Yourself) principle!
+
+Don’t worry fellow developer, useState makes sharing stateful logic a breeze. 
+
+We can simply extract our `useState` hook into a separate function that we call in both of our components.
+
+```diff
+import React, { useState } from 'react'
+
++const useCounter = (defaultNumber = 0) => {
++ return useState(defaultNumber)
++}
+
+const Counter = () => {
++ const [count, setCount] = useState(0)
+- const [count, setCount] = useCounter(0)
+
+  return (
+    <div>
+      <p>You clicked the first counter {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  )
+}
+
++const AnotherCounter = () => {
++  const [count, setCount] = useCounter(0)
++
++  return (
++    <div>
++      <p>You clicked the second counter {count} times</p>
++      <button onClick={() => setCount(count + 1)}>Click me</button>
++    </div>
++  )
++}
+```
+
+When you reuse a hook like the example above, it instantiates another instance of that state. To be clear, **these two components will not share state**. If we wanted to share state between them, we can always move our state to a parent component or we use *useContext*, which we’ll learn about later in the series!
+
+## Moar Examples!
+
+You’re right. We’re not done yet!
+
+Now that we’ve got the basics down, let’s take a look at more examples and ramp up the complexity as we go. 
+
+## Text Input
+
+Start off slow with a simple text input. EZ-PZ.
+
+```jsx
+const Input = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <input 
+      value={value} 
+      onChange={e => setValue(e.target.value)} 
+    />
+  )
+}
+```
+
+![react-hooks-deep-dive-usestate-input](//images.ctfassets.net/yqt11gq08a4r/3JXaJLscELW6DcglIiUJTz/4be613efcbe555e2e951f9014a3def64/react-hooks-deep-dive-usestate-input.gif)
+
+## Button Toggle (Using a function to update state)
+
+This component shows and hides content by clicking a button.
+
+```jsx
+const Collapser = () => {
+  const [opened, setOpened] = useState(false)
+
+  return (
+    <div>
+      {/* 🙅 */}
+      <button onClick={() => setOpened(!opened)}>Toggle Open</button>
+      {opened && <p>Peekaboo!</p>}
+    </div>
+  )
+}
+```
+
+But wait–this code contains a big no-no! The issue is setting the new show state using the `opened` stateful value. What’s wrong with this?
+
+When you call `this.setState` in class components or the `useState` updater function (like `setOpened`), it’s called asynchronously not synchronously. 
+
+For example, if we clicked on this button 100x some clicks might look like they don’t update the state. This is because React batches state updates, then runs them together as a performance optimization. 
+
+```
+Open click + Close click (skipped) + Open click = Open state
+```
+
+We need to use the previous state to determine the new one so if `Collapser` is closed it should show the text on the following click. We need functional updates!
+
+### Functional updates (aka Passing a function to updater)
+
+If our new state should be created from our previous state, we should use *functional updates* (aka pass a function) in our updater. By passing a function to our updater method, we have reliable access to the previous state.
+
+Let’s update our component now.
+
+```diff
+const Collapser = () => {
+  const [opened, setOpened] = useState(false)
+
+  return (
+    <div>
+-     <button onClick={() => setOpened(!opened)}>
++     <button onClick={() => setOpened(prevOpened => !prevOpened)}>Toggle Open</button>
+      {opened && <p>Peekaboo!</p>}
+    </div>
+  )
+}
+```
+
+![react-hooks-deep-dive-usestate-collapser](//images.ctfassets.net/yqt11gq08a4r/4bnJ15oCbYQvz8oZ8Jerci/225e1809b67704432689bc229d463e15/react-hooks-deep-dive-usestate-collapser.gif)
+
+Noice! If you want to read more about this, [Sophia Shoemaker has a great blog post](https://medium.com/@wisecobbler/using-a-function-in-setstate-instead-of-an-object-1f5cfd6e55d1) that goes deeper on functional updates. The code examples are using class components, but it still applies for hooks.
+
+## Form State (Using objects for state)
+
+For more complex states, we can store an object. Below is an example of using useState to build a form with an object to represent our form state.
+
+Notice that we're using functional updates again to rebuild the form state.
+
+```jsx
+const Form = () => {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+  })
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    alert(JSON.stringify(formValues))
+  }
+
+  const handleChange = e => {
+    const target = e.target
+    setFormValues(form => ({ ...form, [target.name]: target.value }))
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Form Example</h2>
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" value={formValues.name} onChange={handleChange} />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" value={formValues.email} onChange={handleChange} />
+      </div>
+      <button>Submit</button>
+    </form>
+  )
+}
+```
+
+![react-hooks-deep-dive-usestate-form](//images.ctfassets.net/yqt11gq08a4r/2CBSNjTAUOnexMmwkRoya9/be60c84182a8e36f5691d7b3a2acf9a5/react-hooks-deep-dive-usestate-form.gif)
+
+## Todo List (Using array of objects for state)
+
+For this final example, we’ll build a simple todo list. We’ve ramped up the complexity, using useState to store an array of objects. 
+
+```jsx
+const TodoList = () => {
+  const [inputVal, setInputVal] = useState('')
+  const [todos, setTodos] = useState([])
+
+  const addTodo = () => {
+    setTodos(todoArr => [...todoArr, inputVal])
+    setInputVal('')
+  }
+
+  const removeTodo = todoIndex => {
+    setTodos(todoArr => {
+      const todosWithoutRemoved = todoArr.filter((val, index) => index !== todoIndex)
+      return todosWithoutRemoved
+    })
+  }
+
+  return (
+    <div>
+      <h1>Todo List Example</h1>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            {todo} <span onClick={() => removeTodo(index)}>❌</span>
+          </li>
+        ))}
+      </ul>
+      <input type="text" value={inputVal} onChange={e => setInputVal(e.target.value)} />
+      <button onClick={addTodo}>Add Todo</button>
+    </div>
+  )
+}
+```
+
+![react-hooks-deep-dive-usestate-todolist](//images.ctfassets.net/yqt11gq08a4r/1fFj4bKqoX3sWAoLXKAttA/a048b09610d3ab9dd61d5eb1498f91e2/react-hooks-deep-dive-usestate-todolist.gif)
+
+## Next up: useReducer
+
+useState is simple to understand, yet so powerful. For most components, this is all you’ll need for managing state.
+
+However, as you might have been able to tell in our `TodoList` example stateful logic can become complex. useState may start to feel inefficient and overly verbose.
+
+Luckily, we have the fantastic **useReducer** hook for more complex use cases. In the next *React Hooks Deep Dive* post, we’ll explore this hook to solve this.
+
+## Live Examples
+
+You can see every example in this blog post live in this [Code Sandbox](https://codesandbox.io/embed/react-hooks-deep-dive-usestate-jm6kv). I’m a strong believer in learning by doing, so get in there and start playing and building! 
+
+[https://codesandbox.io/s/react-hooks-deep-dive-usestate-jm6kv?fontsize=14&view=preview](https://codesandbox.io/s/react-hooks-deep-dive-usestate-jm6kv?fontsize=14&view=preview)
+
+---
+
+Thanks for reading! You are my favorite person for sticking around until the end. If you have feedback or questions on this post, I’m always happy to discuss on [Twitter](https://twitter.com/@nickjnish). 
+
+For more info on useState, check out the [official React API docs](https://reactjs.org/docs/hooks-state.html). 
+
+*This post first appeared on my blog. To see more posts about React, JavaScript, and other fun stuff check out [nicknish.co/blog](http://nicknish.co/blog).*

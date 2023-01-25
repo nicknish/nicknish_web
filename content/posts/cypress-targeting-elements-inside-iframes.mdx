@@ -1,0 +1,225 @@
+---
+title: 'Cypress: Targeting elements inside iframes'
+slug: 'cypress-targeting-elements-inside-iframes'
+description:
+  'How to work with iframes with Cypress–including custom commands, configuration, and postMessage
+  API.'
+date: '2020-02-21T00:00'
+tags: ['cypress', 'javascript', 'dev']
+---
+
+**[Cypress](https://www.cypress.io/)** is an automated testing tool that allows you to write
+end-to-end tests for your app. It has a fantastically easy-to-use, jQuery-like syntax and is a
+powerful and delightful tool for your integration tests.
+
+One major pain point when using Cypress is testing on elements within `iframe`s. Unfortunately,
+Cypress can’t easily target elements within an `iframe` without a bit of extra work.
+
+Worse, their documentation on doing so is a
+[sad paragraph in their FAQ](https://docs.cypress.io/faq/questions/using-cypress-faq.html#How-do-I-test-elements-inside-an-iframe)
+so you’ll wind up combing through loads of GitHub Issues (for extra reading
+[this issue](https://github.com/cypress-io/cypress/issues/136) is the best you'll find).
+
+This post outlines some lessons learned and some simple Cypress custom commands that make working
+with `iframe`s a breeze.
+
+## Disable `chromeWebSecurity`
+
+First, if your `iframe` uses cross-origin resources (ex. loading a script from a 3rd party website
+like Plaid or Stripe), you need to update your `cypress.json` and disable `chromeWebSecurity`.
+
+```json
+{
+  // ...Other settings
+  "chromeWebSecurity": false
+}
+```
+
+Without this change, your `iframe` assets will not load due to CORS (cross-origin resource sharing)
+issues.
+
+## Selecting `iframe`s in Cypress
+
+The simplest method to target elements within `iframe`s is to simply use Cypress's `then` method.
+`then` yields the element from the previous command.
+
+```javascript
+cy.get('iframe').then($iframe => {
+  const $body = $iframe.contents().find('body')
+
+  cy.wrap($body).find('input').type('fake@email.com')
+})
+```
+
+The issue with this approach is it doesn't ensure that the content within the `iframe` is available
+yet. For example, this approach may test errors because the `body` element wasn't found when you
+attempted to run `find('input')`.
+
+To ensure that the `iframe` has loaded, we need a little more legwork:
+
+```javascript
+cy
+  .get('iframe')
+  .should(iframe => expect(iframe.contents().find('body').to.exist)
+  .then(iframe => cy.wrap(iframe.contents().find('body')))
+  .within({}, $iframe => {
+    cy.get('input').type('fake@email.com')
+  })
+```
+
+The primary improvement is the `should` method. `should` ensures that the iframe _has_ a `body`
+before we attempt to run commands on it. Additionally, instead of returning the `iframe`'s `body` to
+work off of, we can scope subsequent calls within the `body` element using `within`.
+
+## Clean it up with a Cypress custom command
+
+The code above it pretty gnarly. We can greatly DRY up the code by extracting it into a reusable
+Cypress command:
+
+```javascript
+Cypress.Commands.add('iframe', { prevSubject: 'element' }, ($iframe, callback = () => {}) => {
+  // For more info on targeting inside iframes refer to this GitHub issue:
+  // https://github.com/cypress-io/cypress/issues/136
+  cy.log('Getting iframe body')
+
+  return cy
+    .wrap($iframe)
+    .should(iframe => expect(iframe.contents().find('body')).to.exist)
+    .then(iframe => cy.wrap(iframe.contents().find('body')))
+    .within({}, callback)
+})
+```
+
+This command utilizes the previously found element, then ensures that the `iframe` has finished
+loading before scoping the `iframe` `body` for subsequent calls.
+
+Usage:
+
+```javascript
+cy.get('iframe').iframe(() => {
+  // Targets the input within the iframe element
+  cy.get('input').type('fake@email.com')
+})
+```
+
+Clean code, baby!
+
+## Timeouts
+
+Don’t be afraid to set pretty high timeouts when working with `iframe`s. There’s a lot of room for
+high latency because:
+
+1. `iframe`s load a separate HTML document, which takes time to parse, execute, and render.
+2. `iframe` assets don’t share the same cache as your app. This means every asset is downloaded as
+   if were for the first time.
+3. `iframe`s often load 3rd party scripts. In addition to downloading, parsing, and executing, this
+   3rd party script may take time to initialize dynamic content.
+4. The client’s network conditions may vary from you and your 3rd party’s servers.
+
+When testing `iframe`s loaded by 3rd party scripts, I often reach for timeouts like so:
+
+```javascript
+cy.get('iframe').iframe(() => {
+  cy.find('input', { timeout: 10 * 1000 }).type('fake@email.com')
+})
+```
+
+The code above will look inside the `iframe` for the `input` element. If it finds the element, it
+will resolve immediately and move on to the `type` method. Otherwise, it will wait 10sec before
+erroring.
+
+Note: Using `timeout` within Cypress commands is preferable to the generic `cy.wait`. Unlike
+`timeout` , `cy.wait` will pause execution for the entirety of the time regardless of whether the
+element is found or not. As a result, `cy.wait` tends to be much more brittle and cause intermittent
+failures.
+
+```javascript
+// 🙅‍♂️ - Wait 10sec
+cy.wait(10 * 1000)
+
+// 🙆‍♂️ - Wait 10sec or less
+cy.get('#el', { timeout: 10 * 1000 })
+```
+
+## `postMessage`
+
+When working with `iframe`s, we sometimes use
+[`postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) to facilitate
+communication between the `iframe` and our app.
+
+One helpful use case is to notify the app that the `iframe` content has finished loading dynamic
+content and is ready to receive user input.
+
+For example, you might use the `postMessage` API to send your app a ready event after a few seconds.
+
+```javascript
+<!-- Inside the iframe -->
+<script>
+  setTimeout(() => {
+    window.parent.postMessage({ code: 'Ready' }, e.origin)
+  }, 3 * 1000)
+</script>
+
+// Inside your app
+window.addEventListener('message', e => {
+  var data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data
+  var code = data.code
+
+  if (code === 'Ready') {
+    alert('iframe is ready')
+  }
+})
+```
+
+If you use the `postMessage` API, using the command from the previous section may have a race
+condition prone to intermittent failures.
+
+Our custom `iframe` Cypress command only checks that the `iframe` element is in the ready state, but
+that may not include dynamically rendered content.
+
+If you have this issue, you can create another Cypress custom command `isIFrameReady` to listen for
+the `Ready` event sent from your `iframe.html`.
+
+```javascript
+Cypress.Commands.add('isIFrameReady', () => {
+  return cy.window().then({ timeout: 10 * 1000 }, window => {
+    return new Cypress.Promise(resolve => {
+      window.addEventListener('message', e => {
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data
+
+        if (data.code === 'Ready') {
+          resolve()
+        }
+      })
+    })
+  })
+})
+```
+
+And using our two commands together:
+
+```javascript
+cy.isIFrameReady().then(() => {
+  cy.get('iframe').iframe(() => {
+    cy.get('input', { timeout: 10 * 1000 }).type('fake@email.com')
+  })
+})
+```
+
+## Wrapping up
+
+Working with `iframe`s is a headache in Cypress, but I hope this post helps you overcome common
+issues I ran into with them.
+
+Feel free to leave questions below.
+
+---
+
+Thanks for reading! You are my favorite person for sticking around until the end. 🍻
+
+This blog is a constant work in progress, and I want to get better with your help! If you have
+feedback or questions on this post, please leave a comment below or reach out to me on
+[Twitter](https://twitter.com/@nickjnish).
+
+_This article is from [nicknish.co](https://nicknish.co) where I publish articles on software
+engineering and how to leverage technology to build products that people will pay you for._

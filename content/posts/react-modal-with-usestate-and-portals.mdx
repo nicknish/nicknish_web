@@ -1,0 +1,630 @@
+---
+
+title: "Production-ready React Modal with useState and portals"
+slug: "react-modal-with-usestate-and-portals"
+description: "Build a production-ready React Modal from scratch with React Hooks."
+date: "2019-10-13T00:00"
+tags: ["react","javascript","hooks"]
+
+---
+
+Modals are one of the most common UI elements, but they can be a total pain to write without the use of external UI libraries. In this post, we'll build our own production-ready, reusable modal component with the [`useState`](https://reactjs.org/docs/hooks-state.html) React hook and _react-dom_’s [`createPortal`](https://reactjs.org/docs/portals.html).
+
+![react-modal-1](//images.ctfassets.net/yqt11gq08a4r/6rX6n3ASKS1eRO0XYmbVpt/7ac0467dba3b37174b6ec37ee6ce480b/react-modal-1.gif)
+
+Before React hooks, creating modal components wasn’t difficult but it was verbose, hard to understand, and tough to reuse. It Was A Pain™.
+
+We ain’t about that. I'm about to show you how React hooks makes this easy-peasy. Ready to shake it up?
+
+## Hod up, what are Hooks?
+
+React v16.8 added Hooks which add state, control over lifecycle hooks, and performance tuning for functional components.
+
+If this confused you or if you'd like to learn more about hooks, check out my _[React Hooks Deep Dive](https://www.nicknish.co/series/react-hooks-deep-dive)_ series where we explore why hooks exist and how to use each one. We use the useState hook in this blog post, so if you want to learn more about that specifically check out my [post on useState](./react-hooks-deep-dive-usestate).
+
+## Set up our project
+
+First, let’s set up a React project with a placeholder Modal component.
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const Modal = ({ children }) => {
+  return children
+}
+
+const App = () => {
+  return (
+    <div>
+      <h1>React Modal</h1>
+      <h3>with useState</h3>
+      <button
+        type="button"
+        onClick={() => {
+          /* Open Modal */
+        }}
+      >
+        Show Modal
+      </button>
+      <Modal>This is inside the modal!</Modal>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.body)
+```
+
+For now, our Modal just returns its children (the text `This is inside the modal`).
+
+## Build the static UI
+
+When building complex functionality, it helps to first break down requirements. Then, start building the static elements with placeholder content. Last, add in functionality and replace the placeholder content with dynamic elements. Let's follow that structure.
+
+The requirements for our modal are simple:
+
+- Should hover over the other app content with a dark backdrop when opened
+- Should have a close button that closes the modal
+- Should be reusable and render whatever we want for different scenarios
+
+Now, let's start building the static elements.
+
+```diff
+const Modal = ({ children }) => {
+-  return children
++  const content = (
++    <div className="overlay">
++      <div className="modal">
++        <button
++          className="modal-close"
++          type="button"
++        >
++          X
++        </button>
++        <div className="modal-body">{children}</div>
++      </div>
++    </div>
++  )
++
++  return content
+}
+```
+
+![react-modal-2](//images.ctfassets.net/yqt11gq08a4r/4vBwofp2zSedh3XndeMcvu/2fdc717ddf53c666a6ad86d1fa1ddc44/react-modal-2.png)
+
+This adds the modal's backdrop element, a close button, and some structure for our modal's contents. Nice! Our component is starting to shape up, but it's still just rendering all this on the page.
+
+Let’s add some styling to make it hover over the page and look more like a modal.
+
+```css
+/* highlight-next-line */
+.overlay {
+  z-index: 98;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* highlight-next-line */
+.modal {
+  z-index: 99;
+  /* Everything below is optional styling */
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  max-height: 100%;
+  margin: 0 auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: -24px;
+  right: 0;
+  padding: 5px;
+  border: 0;
+  -webkit-appearance: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px 24px;
+  border-radius: 4px;
+  background-color: white;
+}
+```
+
+![react-modal-4](//images.ctfassets.net/yqt11gq08a4r/72BK05ePpL2ZniJWgsrFx6/a17b9adc2110f1053a72d754cae8ed7e/react-modal-4.png)
+
+Oh baby, now we're getting somewhere! If this CSS is making your head spin, I break down the CSS wizardry below.
+
+### CSS Breakdown
+
+The key styles are for the overlay and modal.
+
+**`.overlay`**
+
+We use a combination of `position: fixed` and `z-index`. This will make our `.overlay` element lie over the page content like a backdrop for the modal. Imagine a blank sheet that lies over the page. Then, we use a dark transparent `background-color` to darken our overlying sheet. This effectively makes the modal the focal point.
+
+To center our modal, we use `display: flex` with `align-items` and `justify-content`.
+
+**`.modal`**
+
+Finally, we use `z-index` on the `.modal` element to position it over the `.overlay`.
+
+The rest is nice-to-have additions for presentation. 😉
+
+## Add the open/close functionality
+
+That's cool but we can't open or close it. So it ain't a modal yet, Jack!
+
+To do that, let’s add `useState` to our parent component `App`, then pass down the state and updater method to `Modal`. While we’re at it, let’s hook up our buttons to open and close it.
+
+```diff
+-import React from 'react'
++import React, { useState } from 'react'
+
+// ...
+
+const App = () => {
++  const [show, setShow] = useState(false)
++
+  return (
+    <div>
+      <h1>React Modal</h1>
+      <h3>with useState</h3>
+      <button
+        type="button"
+-       onClick={() => {}}
++       onClick={() => setShow(true)}
+      >
+        Show Modal
+      </button>
+-     <Modal>
++     <Modal show={show} setShow={setShow}>
+        This is inside the modal!
+      </Modal>
+    </div>
+  )
+}
+```
+
+Update Modal to use these values...
+
+```diff
+-const Modal = ({ children }) => {
++const Modal = ({ children, show, setShow }) => {
+-  const content = (
++  const content = show && (
+    <div className="overlay">
+      <div className="modal">
+        <button
+          className="modal-close"
+          type="button"
++         onClick={() => setShow(false)}
+        >
+          Close
+        </button>
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  )
+
+  return content
+}
+```
+
+And BAM! Have you ever seen anything so magnifico? I think not.
+
+![react-modal-5](//images.ctfassets.net/yqt11gq08a4r/2zwW9ripDmBj3tUJ2kpXEZ/de21d2f728b1a1bdb1294b6141db5dab/react-modal-5.gif)
+
+Congrats! We successfully created a reusable modal with no tears. It's sleek and reusable and simple. All the signals of good code.
+
+The rest of this post will discuss improvements we can and should make to our modal.
+
+## Quick Additional Improvements
+
+### 1. Use react-dom's `createPortal`
+
+You may have noticed that our Modal renders its contents right next to the rest of our app. Check out this screenshot. Notice that the `.overlay` element sits right beside our `Show Modal` button. This can create layout issues, especially in larger codebases.
+
+![react-modal-6](//images.ctfassets.net/yqt11gq08a4r/3rV7Nl6U0Y2nCl6oPcCpJD/16b7a92471c05a2844e02d7969557119/react-modal-7.png)
+
+We solve some of these issues using `position: fixed` but you never know how silly developers (or future you) will use your code.
+
+To make this more foolproof, we can use _react-dom_'s `createPortal` method to render this content elsewhere.
+
+`createPortal` accepts two parameters: A React node and a DOM node to render it on. Let’s update our Modal to use it.
+
+```diff
+import React, { useState } from 'react'
+-import ReactDOM from 'react-dom'
++import ReactDOM, { createPortal } from 'react-dom'
+
+const Modal = ({ children, show, setShow }) => {
+  const content = show && (
+    <div className="overlay">
+      <div className="modal">
+        <button
+          className="modal-close"
+          type="button"
+          onClick={() => setShow(false)}
+        >
+          X
+        </button>
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  )
+
+- return content
++ return createPortal(content, document.body)
+}
+```
+
+This updates our Modal component to render before the closing `<body>` tag instead of rendering inside the component we use it in. Check out our DOM now.
+
+![react-modal-7](//images.ctfassets.net/yqt11gq08a4r/5tzgYUsRXThs38f8ICFnLJ/c1896a428569585afb94d0936f4e1d00/react-modal-6.png)
+
+### 2. Handle state inside the modal
+
+Imagine using our Modal in a dozen places. Each place needs to manage its own version of the modal state just to use the component. Yuck.
+
+We can simplify our component usage by having it manage its state internally and exposing the show/close functionality to the consumer.
+
+There are multiple ways to do this (and each has its pros and cons), but for the sake of brevity let's implement this using the [_render pattern_](https://reactpatterns.com/#render-prop).
+
+```diff
+-const Modal = ({ children, show, setShow }) => {
++const Modal = ({ children, activator }) => {
++ const [show, setShow] = useState(false)
+
+  const content = show && (
+    <div className="overlay">
+      // ...
+    </div>
+  )
+
+- return createPortal(content, document.body)
++ return (
++   <>
++     {activator({ setShow })}
++     {createPortal(content, document.body)}
++   </>
++ )
+}
+
+export default Modal
+```
+
+Notice we're removed the `show` and `setShow` props and moved the `useState` hook inside the Modal component.
+
+We’ve also created a new prop `activator`. This prop is a function that returns the button element that will open and close our modal. We pass it the `setShow` method and render it on the page.
+
+Let's update `App` and you can see what I mean.
+
+```diff
+const App = () => {
+- const [show, setShow] = useState(false)
+
+  return (
+    <div>
+      <h1>React Modal</h1>
+      <h3>with useState</h3>
+-     <button
+-       type="button"
+-       onClick={() => setShow(true)}
+-     >
+-       Show Modal
+-     </button>
+      <Modal
+-       show={show}
+-       setShow={setShow}
++       activator={({ setShow }) => (
++         <button
++           type="button"
++           onClick={() => setShow(true)}
++         >
++           Show Modal
++         </button>
++       )}
+      >
+        This is inside the modal!
+      </Modal>
+    </div>
+  )
+}
+```
+
+First, we've removed `useState` because it's been moved into the Modal component.
+
+More importantly, we've moved our `<button>` inside the `activator` prop.
+
+Previously, our button could call `setShow` anywhere in `App` but we’ve removed `useState`. To give it access again, we tell Modal what to render with the `activator` prop, and get back the `setShow` method to call.
+
+This is the render prop pattern in action. For more info on this pattern, you can read about it [here](https://reactpatterns.com/#render-prop).
+
+### 3. Transitions
+
+Transitions can make your app feel alive, but damn they can be tough to implement! I won't go too in-depth here (this section has "Quick" in the title after all) but let's try it quickly.
+
+First, install _react-transition-group._
+
+```bash
+npm i react-transition-group
+```
+
+Now, let's update our Modal to use the `CSSTransition` component from _react-transition-group_.
+
+```diff
++import { CSSTransition } from 'react-transition-group'
+
+const Modal = ({ children, activator }) => {
+  const [show, setShow] = useState(false)
+
+- const content = show && (
++ const content = (
+    <div className="overlay">
+      // ...
+    </div>
+  )
+
+  return (
+    <>
+      {activator({ setShow })}
+      {createPortal(
+-       content,
++       <CSSTransition
++         in={show}
++         timeout={120}
++         classNames="modal-transition"
++         unmountOnExit
++       >
++         {() => <div>{content}</div>}
++       </CSSTransition>,
+        document.body
+      )}
+    </>
+  )
+}
+
+export default Modal
+```
+
+We also need to add some CSS to get our transitions working.
+
+```css
+/* Overlay Transitions */
+
+.modal-transition-enter .overlay {
+  opacity: 0;
+}
+
+.modal-transition-enter-active .overlay {
+  opacity: 1;
+  transition: opacity 120ms;
+}
+
+.modal-transition-exit-active .overlay {
+  opacity: 1;
+}
+
+.modal-transition-exit-active .overlay {
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+/* Modal Transitions */
+
+.modal-transition-enter .modal {
+  opacity: 0;
+  transform: scale(0.95) translateY(-30px);
+}
+
+.modal-transition-enter-active .modal {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  transition: opacity 120ms, transform 120ms;
+}
+
+.modal-transition-exit .modal {
+  opacity: 1;
+}
+
+.modal-transition-exit-active .modal {
+  opacity: 0;
+  transform: scale(0.95) translateY(-30px);
+  transition: opacity 200ms, transform 200ms;
+}
+```
+
+![react-modal-8](//images.ctfassets.net/yqt11gq08a4r/1E1jKAgdCP1EWImVucBmcd/36487c912c8c1b71a24c8f6b1bdf0392/react-modal-8.gif)
+
+Now THAT is a fully-fledged modal. ✨
+
+For more info on _react-transition-group_, [check out the docs](http://reactcommunity.org/react-transition-group/css-transition) which provides a great interactive example.
+
+## The list goes on
+
+We could keep making improvements but this blog post is long already!
+
+If you want to keep exploring, here's a list of additional improvements you can make on your own. Feel free to fire questions at me on [Twitter](http://twitter.com/@nickjnish) for more info on these or debugging help.
+
+- **Close modal on typing ESC** ⇒ Use `useEffect` to add a `window.addEventListener` for the keypress ESC. Don't forget to remove the event listener on effect cleanup!
+- **Close modal on tapping outside the modal** ⇒ Use the [useOnClickOutside](https://usehooks.com/useOnClickOutside/) hook or use the [react-click-outside](https://github.com/kentor/react-click-outside) HOC.
+- **Manage the open/close state more cleanly** ⇒ Perhaps replace the render props pattern with [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext) to manage the open/close state.
+- **Make that dang close button look good**
+
+## Full Code and Live Examples
+
+Here is the full code. Also check out each of these examples in this [CodeSandbox](https://codesandbox.io/s/react-modals-with-usestate-6b4q0?fontsize=14). The best way to learn is through playing and breaking things. Get in there!
+
+[https://codesandbox.io/embed/react-modals-with-usestate-6b4q0?fontsize=14](https://codesandbox.io/embed/react-modals-with-usestate-6b4q0?fontsize=14)
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM, { createPortal } from 'react-dom'
+import { CSSTransition } from 'react-transition-group'
+
+const Modal = ({ children, activator }) => {
+  const [show, setShow] = useState(false)
+
+  const content = (
+    <div className="overlay">
+      <div className="modal">
+        <button
+          className="modal-close"
+          type="button"
+          onClick={() => setShow(false)}
+        >
+          X
+        </button>
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  )
+
+  return (
+    <>
+      {activator({ setShow })}
+      {createPortal(
+        <CSSTransition
+          in={show}
+          timeout={120}
+          classNames="modal-transition"
+          unmountOnExit
+        >
+          {() => <div>{content}</div>}
+        </CSSTransition>,
+        document.body
+      )}
+    </>
+  )
+}
+
+const App = () => {
+  return (
+    <div>
+      <h1>React Modal</h1>
+      <h3>with useState</h3>
+
+      <Modal
+        activator={({ setShow }) => (
+          <button type="button" onClick={() => setShow(true)}>
+            Show Modal
+          </button>
+        )}
+      >
+        This is inside the modal!
+      </Modal>
+    </div>
+  )
+}
+
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
+```
+
+```css
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 98;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal {
+  position: relative;
+  z-index: 99;
+  width: 100%;
+  max-width: 20rem;
+  max-height: 100%;
+  margin: 0 auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: -1.5rem;
+  right: 0;
+  padding: 5px;
+  border: 0;
+  -webkit-appearance: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Overlay Transitions */
+
+.modal-transition-enter .overlay {
+  opacity: 0;
+}
+
+.modal-transition-enter-active .overlay {
+  opacity: 1;
+  transition: opacity 120ms;
+}
+
+.modal-transition-exit-active .overlay {
+  opacity: 1;
+}
+
+.modal-transition-exit-active .overlay {
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+/* Modal Transitions */
+
+.modal-transition-enter .modal {
+  opacity: 0;
+  transform: scale(0.95) translateY(-30px);
+}
+
+.modal-transition-enter-active .modal {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  transition: opacity 120ms, transform 120ms;
+}
+
+.modal-transition-exit .modal {
+  opacity: 1;
+}
+
+.modal-transition-exit-active .modal {
+  opacity: 0;
+  transform: scale(0.95) translateY(-30px);
+  transition: opacity 200ms, transform 200ms;
+}
+```
+
+---
+
+Thanks for reading! You are my favorite person for sticking around until the end. 🍻
+
+As always, shoot me your comments and questions on [Twitter @nickjnish](https://twitter.com/@nickjnish). I’m always happy to help you debug or take feedback.
+
+_This post first appeared on my blog. To see more posts about React, JavaScript, and other fun stuff check out [nicknish.co/blog](https://nicknish.co/blog)._

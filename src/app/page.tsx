@@ -1,91 +1,105 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+import React from 'react'
+import Link from 'next/link'
+import { compareDesc, format, parseISO } from 'date-fns'
 
-const inter = Inter({ subsets: ['latin'] })
+import { allPosts, allPostSeries, Post } from 'contentlayer/generated'
+
+function getPosts() {
+  const posts = allPosts.sort((a, b) => {
+    return compareDesc(new Date(a.date), new Date(b.date))
+  })
+  return posts
+}
+function getPostSeries() {
+  return allPostSeries
+}
 
 export default function Home() {
+  const posts = getPosts()
+  const postSeries = getPostSeries()
+  const popularPosts = posts.slice(0, 4)
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
+    <main className="px-4 mx-auto max-w-4xl">
+      <header className="py-16">
+        <div className="mx-auto max-w-xl text-lg">
+          <h1 className="mb-8 text-3xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
+          <p className="mb-8">
+            Welcome to my blog where you{"'"}ll find writing on ideas, tutorials, and resources
+            ranging on topics like startups, making products, and software engineering.
           </p>
-        </a>
+          <div className="mb-3">
+            <span>👉</span>
+            <Link href="/start" className="ml-3 font-bold underline">
+              Start here
+            </Link>
+          </div>
+          <div className="mb-3">
+            <span>👇</span>
+            <span className="ml-3">Or check out my latest writing</span>
+          </div>
+        </div>
+      </header>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
+      <section className="mb-12">
+        <HomeSectionTitle>Popular Posts</HomeSectionTitle>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-x-3">
+          {popularPosts.map((post, idx) => (
+            <PopularPostCard key={idx} {...post} />
+          ))}
+        </div>
+      </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="md:grid md:grid-cols-3 md:gap-x-12">
+        <section className="mb-12 md:col-span-2">
+          <HomeSectionTitle>Latest Posts</HomeSectionTitle>
+          {posts.map((post, idx) => (
+            <PostCard key={idx} {...post} />
+          ))}
+        </section>
+
+        <aside className="">
+          <HomeSectionTitle>Post Series</HomeSectionTitle>
+          {/* TODO */}
+          {postSeries.map((series, idx) => (
+            <div key={idx}>{series.title}</div>
+          ))}
+        </aside>
       </div>
     </main>
+  )
+}
+
+function HomeSectionTitle(props: React.HtmlHTMLAttributes<HTMLHeadingElement>) {
+  const { children } = props
+  return <h2 className="mb-3 uppercase tracking-wide">{children}</h2>
+}
+
+function PostCard(post: Post) {
+  return (
+    <div className="mb-6">
+      <time dateTime={post.date} className="block text-sm text-black-50 dark:text-white-50">
+        {format(parseISO(post.date), 'LLLL d, yyyy')}
+      </time>
+      <h3 className="text-lg">
+        <Link href={post.url}>{post.title}</Link>
+      </h3>
+    </div>
+  )
+}
+
+function PopularPostCard(post: Post) {
+  return (
+    <Link
+      className="block p-4 border-2 border-black-10 dark:border-white-10 rounded-sm"
+      href={post.url}
+    >
+      <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
+      {/* TODO: post.body.raw is kind of jank */}
+      <p className="text-sm line-clamp-4">{post.description || post.body.raw.slice(0, 300)}</p>
+      <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
+        {format(parseISO(post.date), 'LLLL d, yyyy')}
+      </time>
+    </Link>
   )
 }

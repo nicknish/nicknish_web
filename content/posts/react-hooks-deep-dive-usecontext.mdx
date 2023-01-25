@@ -1,0 +1,353 @@
+---
+title: 'React Hooks Deep Dive: useContext'
+slug: 'react-hooks-deep-dive-usecontext'
+description:
+  'Learn about the React useContext hook to create global state with examples and best practices.'
+date: '2019-11-17T00:00'
+tags: ['react', 'hooks', 'javascript']
+shareImage: { 'sys': { 'type': 'Link', 'linkType': 'Asset', 'id': '4RWrZh6KzivLj5QBCBzXim' } }
+---
+
+This article is a part of _[React Hooks Deep Dive](../series/react-hooks-deep-dive)_, a series that
+covers how to use each React hook, what problems they solve, and best practices so you can be
+effective using them today.
+
+---
+
+In our previous installment of
+[_React Hooks Deep Dive_](https://www.nicknish.co/series/react-hooks-deep-dive), we learned about
+[**useReducer**](./react-hooks-deep-dive-usereducer) which centralizes complex state logic.
+
+But we're stuck with a problem: How do we _share_ state between our components? If we wanted to
+create a global state, is it possible with React?
+
+Enter **useContext** which is used to cleanly and efficiently share state. No Redux. No tears. 100%
+React.
+
+Let’s dive in!
+
+## The Issue with Props
+
+Passing props is explicit, easy-to-understand, and quick. Generally, we should favor them over more
+complex solutions.
+
+However, when we use props to share state, our code can become verbose and hard to read and to
+understand.
+
+Consider the following example.
+
+```jsx {8,12,16}
+import React from 'react'
+
+const Homepage = ({ theme }) => {
+  return (
+    <div>
+      <nav>
+        Nav
+        <Button theme={theme}>Sign up</Button>
+      </nav>
+      <main>
+        {/* ... */}
+        <Button theme={theme}>Sign Up</Button>
+      </main>
+      <footer>
+        Footer
+        <Button theme={theme}>Sign up</Button>
+      </footer>
+    </div>
+  )
+}
+```
+
+Notice we pass `theme` to 3 `Button{:js}`s, but imagine a production app where we passed `theme` to
+dozens of components. It would be a mess.
+
+So what can we do when many components need to share the same state? There's got to be a better way
+than “prop drilling” all the time, right?
+
+## React Context
+
+**React Context allows us to create state that is available to many components regardless of nesting
+level**. It's particularly useful to create a "global" state similar to Redux.
+
+Context uses a [**publish/subscribe model**](https://blog.stackpath.com/pub-sub/) aka pub-sub model.
+This model defines a publisher, which emits events, and subscribers, which subscribe to those events
+and change accordingly.
+
+For our purposes, the context `Provider` component publishes state changes. Then, components can
+subscribe to the state using `useContext`.
+
+Let's take a look at how these individual pieces work, then put it all together.
+
+### createContext
+
+Before we can use context, we need to initialize a context first with `createContext`.
+
+```javascript
+const MyContext = createContext(defaultState)
+```
+
+**`createContext`** takes a default state value and returns a new Context object. The default value
+is only used when the context is accessed without a `Provider` component (more on this next).
+
+No need to be intimidated by the term "context object". This is simply the stateful value wrapped in
+an object! This wrapper object allows React to read and update the context state, and importantly
+contains the `Provider` component.
+
+### Context Provider
+
+The **`Provider`** component from the context object publishes state changes. With `Provider`, we
+can change the state and publish those updates to subscribing components without passing any props.
+
+```jsx {5-7}
+const MyContext = createContext(defaultState)
+
+const App = () => {
+  return (
+    <MyContext.Provider value={initialState}>
+      {/* child components */}
+    </MyContext.Provider>
+  )
+}
+```
+
+An important constraint with React Context is **only children inside `Provider`’s subhierarchy can
+access the context state**.
+
+Now that we've created a context and set the publisher, aka `Provider`, we can subscribe to the
+context state with `useContext`.
+
+### useContext
+
+The **`useContext`** hook allows `Provider`'s subcomponents to access and subscribe to the context
+state.
+
+```jsx {2}
+const Component = () => {
+  const value = useContext(MyContext)
+  // ...
+}
+```
+
+`useContext` takes the context object created by `createContext` and returns the stateful value.
+When the `Provider` publishes new state updates, the component downstream invoking `useContext` will
+receive the new state.
+
+## Put it all together
+
+This is a lot to keep in mind, so let's refactor our props example with React Context to see how
+this all comes together.
+
+```jsx {4,9,28}
+import React, { createContext, useContext } from 'react'
+
+// 1. Create Context object
+const ThemeContext = createContext(null)
+
+const Homepage = ({ theme }) => {
+  return (
+    // 2. Set state and publish state updates
+    <ThemeContext.Provider value={theme}>
+      <nav>
+        Nav
+        <Button>Sign up</Button>
+      </nav>
+      <main>
+        {/* ... */}
+        <Button>Sign Up</Button>
+      </main>
+      <footer>
+        Footer
+        <Button>Sign up</Button>
+      </footer>
+    </ThemeContext.Provider>
+  )
+}
+
+const Button = ({ children }) => {
+  // 3. Access context state and subscribe to changes
+  const theme = useContext(ThemeContext)
+
+  return <button className={theme}>{children}</button>
+}
+```
+
+![react-hooks-deep-dive-usecontext-example](//images.ctfassets.net/yqt11gq08a4r/7yBhhw6S2TlROsZW7YlnAa/5dc9ec9bc7fd069905e70ac3db95ad72/react-hooks-deep-dive-usecontext-example.png)
+
+[See the full CodeSandbox example](https://codesandbox.io/s/blog-post-template-v3-d6oq0?fontsize=14&hidenavigation=1&theme=dark).
+
+This is freaking awesome! Using React Context, we've cleaned up our code by removing repeated props.
+Without adding a single dependency, we have created a "global" state that subcomponents can access
+without passing props.
+
+### Updating context state
+
+To update our context state, we simply pass a new value to our `Provider`. We can use state to
+dynamically pass a new value for example.
+
+```jsx {10}
+import React, { useState, createContext, useContext } from 'react'
+
+const ThemeContext = createContext(null)
+
+const Homepage = () => {
+  const [theme, setTheme] = useState('blue')
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <Button onClick={() => setTheme('green')}>Change Theme</Button>
+      <p>Current theme: {theme}</p>
+    </ThemeContext.Provider>
+  )
+}
+
+const Button = ({ children, ...props }) => {
+  const theme = useContext(ThemeContext)
+
+  return (
+    <button className={theme} {...props}>
+      {children}
+    </button>
+  )
+}
+```
+
+### Setting the updater to context
+
+The above example works fine, but we're passing around the `setTheme` prop now. What if we added
+`setTheme` to the context state as well?
+
+```jsx {9}
+import React, { useState, createContext, useContext } from 'react'
+
+const ThemeContext = createContext(null)
+
+const Homepage = () => {
+  const [theme, setTheme] = useState('blue')
+
+  return (
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      <Button onClick={() => setTheme('green')}>Change Theme</Button>
+      <p>Current theme: {theme}</p>
+    </ThemeContext.Provider>
+  )
+}
+
+const Button = ({ children, ...props }) => {
+  const [theme] = useContext(ThemeContext)
+
+  return (
+    <button className={theme} {...props}>
+      {children}
+    </button>
+  )
+}
+```
+
+Nice! But we've introduced a performance issue.
+
+Whenever a component using `useContext` reexecutes, React runs a shallow equality check on the
+context stateful value. If the previous value does not equal the new value, then React will rerender
+the component.
+
+Because we pass `[theme, setTheme]` to the `Provider`, the `Button` will rerender every time
+`Homepage` rerenders because we create a new array every render.
+
+We can fix this by creating a _new_ Context object for the updater method.
+
+```jsx {4,10,15}
+import React, { useState, createContext, useContext } from 'react'
+
+const ThemeContext = createContext(null)
+const ThemeUpdateContext = createContext(null)
+
+const Homepage = () => {
+  const [theme, setTheme] = useState('blue')
+
+  return (
+    <ThemeUpdateContext.Provider value={setTheme}>
+      <ThemeContext.Provider value={theme}>
+        <Button onClick={() => setTheme('green')}>Change Theme</Button>
+        <p>Current theme: {theme}</p>
+      </ThemeContext.Provider>
+    </ThemeUpdateContext.Provider>
+  )
+}
+
+const Button = ({ children, ...props }) => {
+  const [theme] = useContext(ThemeContext)
+
+  return (
+    <button className={theme} {...props}>
+      {children}
+    </button>
+  )
+}
+```
+
+![react-hooks-deep-dive-usecontext-example-updater](//images.ctfassets.net/yqt11gq08a4r/7eGJk3MvTuoyGTAPHmlsh1/11970cefa79eb46cd0545d13ca23f1f8/react-hooks-deep-dive-usecontext-example-updater.png)
+
+![react-hooks-deep-dive-usecontext-example-updater](//images.ctfassets.net/yqt11gq08a4r/4dGuucFLaLfniP0pb4jhDc/2739c85329a2b23c549ca909087dc5dc/react-hooks-deep-dive-usecontext-example-updater.gif)
+
+[See the full CodeSandbox example](https://codesandbox.io/s/react-hooks-deep-dive-usecontext-part-1-f4tl7?fontsize=14&hidenavigation=1&theme=dark).
+
+React Context performance is a large enough topic to warrant a future post, but for now keep this in
+mind when using saving multiple items in context.
+
+## Best Practice: Code Cleanliness
+
+As a final note, I recommend extracting your Context logic into a separate file like so:
+
+```jsx title="src/contexts/theme.js"
+import React, { useState, createContext } from 'react'
+
+export const ThemeContext = createContext(null)
+export const ThemeUpdateContext = createContext(null)
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('blue')
+
+  return (
+    <ThemeUpdateContext.Provider value={setTheme}>
+      <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+    </ThemeUpdateContext.Provider>
+  )
+}
+```
+
+The result is an easy-to-use-and-understand API to access and update your context state.
+
+## Next up: useEffect
+
+**useContext** is a powerful way to share state in our components and massively clean up our code.
+
+I generally dive into a few more examples but we had a lot of ground to cover. I will post
+additional examples in separate posts following this one.
+
+In the next article, we’ll do a deep dive on useEffect, which will allow our components to perform
+side effects like data-fetching and event handlers!
+
+## Learn More
+
+Here's a link to the [React Context documentation](https://reactjs.org/docs/context.html).
+
+For more information on patterns discussed in this post, I highly recommend reading Kent C Dodd’s
+posts
+[_Application State Management with React_](https://kentcdodds.com/blog/application-state-management-with-react)
+and
+[_How to use React Context effectively_](https://kentcdodds.com/blog/how-to-use-react-context-effectively/).
+
+If you are curious how useReducer + useContext stack up to Redux, Robin Wieruch's
+[_React's useReducer vs Redux_](https://www.robinwieruch.de/redux-vs-usereducer) is a great read
+too.
+
+---
+
+Thanks for reading! You are my favorite person for sticking around until the end. 🍻
+
+This blog is a constant work in progress and I want it to get better with your help! If you have
+feedback or questions on this post, please leave a comment below or reach out to me on
+[Twitter](https://twitter.com/@nickjnish).
+
+_This article is from [nicknish.co](https://nicknish.co) where I publish articles on software
+engineering and how to leverage technology to build products that people will pay you for._

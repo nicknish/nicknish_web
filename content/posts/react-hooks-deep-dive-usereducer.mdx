@@ -1,0 +1,449 @@
+---
+
+title: "React Hooks Deep Dive: useReducer"
+slug: "react-hooks-deep-dive-usereducer"
+description: "Learn about the React useReducer hook to clean up complex stateful logic with examples and best practices."
+date: "2019-10-17T00:00"
+tags: ["javascript","react","hooks"]
+shareImage: {"sys":{"type":"Link","linkType":"Asset","id":"631HitgGwknFgo8ccgaaqB"}}
+
+---
+
+This post is a part of *[React Hooks Deep Dive](https://www.nicknish.co/series/react-hooks-deep-dive)*, a series where we'll explore each of React's hooks. We'll define what problems hooks solve and show examples of how you can start using them today!
+
+---
+
+Hey code ninja! 
+
+In our previous post, we learned about the simple and powerful **[useState](./react-hooks-deep-dive-usestate)**.
+
+In this post let's explore **useReducer**, which will handle those complex state management cases that useState doesn't cover well. We'll also call back to the useState post examples and refactor them with useReducer.
+
+Let's dive in!
+
+## Start with useState
+
+In the last post, we saw how useState works. It's awesome. Remember our Counter example? Here it is again slightly modified to fit our needs.
+
+```jsx
+import React, { useState } from 'react'
+
+const Counter = () => {
+  const [count, setCount] = useState(0)
+
+  const increment = () => {
+    setCount(prevCount => prevCount + 1)
+  }
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>+</button>
+    </div>
+  )
+}
+```
+
+This is clean! 👌 
+
+However, as state becomes more complex useState can become verbose and hard to understand. What happens if we add more functionality? Let's add a way to decrement and reset our counter.
+
+```jsx
+import React, { useState } from 'react'
+
+const Counter = () => {
+  const [count, setCount] = useState(0)
+
+  const increment = () => {
+    setCount(prevCount => prevCount + 1)
+  }
+
+  const decrement = () => {
+    setCount(prevCount => prevCount - 1)
+  }
+
+  const reset = () => {
+    setCount(0)
+  }
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  )
+}
+```
+
+Not so clean. Okay, it’s not terrible. But you can begin to imagine how our component might start to feel heavy with useState.
+
+This is where useReducer comes in! But before that let's visit Redux for a moment. Don't worry, we'll be quick.
+
+## Redux
+
+Before we talk about useReducer, it makes sense to review Redux first. After all, useReducer borrows the same pattern that Redux is based on. 
+
+**Redux** is a state management library that aims to centralize state and its logic. 
+
+Essentially it works by using a single function to handle global state, which any updates and state come from.
+
+Let's see what this looks like in a React app.
+
+### React-Redux Example
+
+First, we create a `reducer` function. This function will contain our state logic. We'll pass this into redux's `createStore`, which will allow us to update and retrieve items in the state.
+
+```javascript
+import { createStore } from 'redux'
+
+const initialState = { count: 0 }
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 }
+    case 'decrement':
+      return { count: state.count - 1 }
+    case 'reset':
+      return { count: 0 }
+    default:
+      return state
+  }
+}
+
+export default createStore(reducer)
+```
+
+Now, let's use *react-redux*'s `Provider` component and pass it our store. With this change, the rest of our App will have access to the store. Also notice that we don't pass any props to `Counter`.
+
+```jsx
+import React from 'react'
+import { Provider } from 'react-redux'
+import store from './reducer'
+import Counter from './Counter'
+
+const App = () => (
+  <Provider store={store}>
+    <Counter />
+  </Provider>
+)
+
+export default App
+```
+
+Finally, let's access and update our store in our `Counter` component. 
+
+```jsx
+import React from 'react'
+import { connect } from 'react-redux'
+
+const Counter = ({ count, increment, decrement, reset }) => {
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  )
+}
+
+const mapStateToProps = ({ count }) => {
+  return { count }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    increment: () => dispatch({ type: 'increment' }),
+    decrement: () => dispatch({ type: 'decrement' }),
+    reset: () => dispatch({ type: 'reset' }),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+```
+
+Starting from the bottom, we use *react-redux*'s `connect` method to hook into our global store. We pass in what state we want and define updater methods that `Counter` will use. 
+
+When `Counter` mounts, it receives `count` and updater methods as props.
+
+![react-hooks-deep-dive-usereducer-1](//images.ctfassets.net/yqt11gq08a4r/3J3Qs660oGSsm8IqfM1mRi/b3f06057c585652c18192e4073cb2f38/react-hooks-deep-dive-usereducer-1.gif)
+
+Phew! 
+
+With this setup, we have centralized our state logic in our `reducer` function and created a global state object. Our `App` component has access to the state and any subcomponents can update it. Because `Counter` is a subcomponent of `App`, it can access the state and update it.
+
+### Thoughts on Redux
+
+That is freakin' awesome! Before Redux, we were often chucking stuff onto `window` (bad practice) or passing React props down like crazy. Redux is an awesome choice for production apps, with massive companies using it like Instagram, Intuit, OpenTable, Credit Karma, and [more](https://stackshare.io/reduxjs).
+
+However, it *is* a lot of code and complexity. It may be more than you need. 
+
+So let's get on to the good stuff already. Let's see useReducer.
+
+## useReducer
+
+The useReducer hook allows us to manage state for our functional components using a similar pattern to Redux. Here's how it works.
+
+```javascript
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+
+useReducer takes three arguments:
+
+1. A `reducer` function
+2. The initial state
+3. A function that returns the initial state (Either use initial state or this argument)
+
+useReducer returns:
+
+1. The stateful value
+2. The `dispatch` method, which we pass our actions to update our state
+
+## Refactor useState with useReducer
+
+Let’s see how useReducer looks with our initial Counter example.
+
+```diff
+-import React, { useState } from 'react'
++import React, { useReducer } from 'react'
+
++const initialState = { count: 0 }
+
++const reducer = (state, action) => {
++  switch (action.type) {
++    case 'increment':
++	 	   return { count: state.count + 1 }
++	 	 case 'decrement':
++			 return { count: state.count - 1 }
++		 case 'reset':
++			 return { count: 0 }
++		 default:
++			 return state
++  }
++}
+
+const Counter = () => {
+-  const [count, setCount] = useState(0)
++  const [{ count }, dispatch] = useReducer(reducer, initialState)
+
+-	const increment = () => {
+-		setCount(prevCount => prevCount + 1)
+-	}
+-
+-	const decrement = () => {
+-		setCount(prevCount => prevCount - 1)
+-	}
+-
+-	const reset = () => {
+-		setCount(0)
+-	}
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+-     <button onClick={increment}>+</button>
++     <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+-     <button onClick={decrement}>-</button>
++     <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+-     <button onClick={reset}>Reset</button>
++     <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </div>
+  )
+}
+```
+
+This leaves us with:
+
+```jsx
+import React, { useReducer } from 'react'
+
+const initialState = { count: 0 }
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 }
+    case 'decrement':
+      return { count: state.count - 1 }
+    case 'reset':
+      return { count: 0 }
+    default:
+      return state
+  }
+}
+
+const Counter = () => {
+  const [{ count }, dispatch] = useReducer(reducer, initialState)
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </div>
+  )
+}
+```
+
+![react-hooks-deep-dive-usereducer-2](//images.ctfassets.net/yqt11gq08a4r/2x0sdKQBGQy8YVzRRH2J8q/f5ac835ebcb5b23bb673894902361709/react-hooks-deep-dive-usereducer-2.gif)
+
+Clean code baby!🚿 And look at how similar this is to Redux! 
+
+Instead of a bunch of useState updater functions cluttering our component, useReducer centralizes that state logic into a single function `reducer`.
+
+Like Redux, the primary benefit of useReducer is that it centralizes stateful logic and creates a simple API, the `dispatch` method, to update the state. 
+
+You may have noticed that useReducer can create more lines of code. That's OK my (wo)man. More lines doesn't necessarily mean worse code if it means that the code is easier to read and understand.
+
+## When to use useReducer
+
+My rule of thumb is to use useState until it feels like a component's stateful logic has become overly complex. Only then will I move the logic to useReducer.
+
+Especially if a component is performing CRUD (create, read, update, destroy) operations with useState then it will likely benefit from useReducer.
+
+## Moar Examples!
+
+Alright! Now that we got the basics down, let's revisit some examples from the previous post.
+
+## Form State
+
+```jsx
+import React, { useReducer } from 'react'
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'update':
+      const { name, value } = action.payload
+      return { ...state, [name]: value }
+    default:
+      return state
+  }
+}
+
+const initialState = {
+  name: '',
+  email: '',
+}
+
+const Form = () => {
+  const [formValues, dispatch] = useReducer(reducer, initialState)
+
+  const handleChange = e => {
+    const target = e.target
+    dispatch({ type: 'update', payload: target })
+  }
+
+  return (
+    <form>
+      <div>
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formValues.name}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formValues.email}
+          onChange={handleChange}
+        />
+      </div>
+      <button>Submit</button>
+    </form>
+  )
+}
+```
+
+![react-hooks-deep-dive-usereducer-3](//images.ctfassets.net/yqt11gq08a4r/3CF7JjuEEGxEDC8MJjJbem/9701244b6193ea59029be09cac10709c/react-hooks-deep-dive-usereducer-3.gif)
+
+## Todo List
+
+This example really captures the power of useReducer because we perform CRUD on the todos. Where useState felt a little messy, useReducer has cleaned up those errant functions in the render method. 
+
+```jsx
+import React, { useReducer } from 'react'
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'add':
+      return {
+        ...state,
+        inputVal: '',
+        todos: [...state.todos, state.inputVal],
+      }
+    case 'remove':
+      return {
+        ...state,
+        todos: state.todos.filter((val, index) => index !== action.payload.id),
+      }
+    case 'updateVal':
+      return { ...state, inputVal: action.payload.value }
+    default:
+      return state
+  }
+}
+
+const initialState = { inputVal: '', todos: [] }
+
+const TodoList = () => {
+  const [{ inputVal, todos }, dispatch] = useReducer(reducer, initialState)
+
+  return (
+    <div>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            {todo}
+            <span
+              onClick={() =>
+                dispatch({ type: 'remove', payload: { id: index } })
+              }
+            >
+              ❌
+            </span>
+          </li>
+        ))}
+      </ul>
+      <input
+        type="text"
+        value={inputVal}
+        onChange={e => dispatch({ type: 'updateVal', payload: e.target })}
+      />
+      <button onClick={() => dispatch({ type: 'add' })}>Add Todo</button>
+    </div>
+  )
+}
+```
+
+![react-hooks-deep-dive-usereducer-4](//images.ctfassets.net/yqt11gq08a4r/631HitgGwknFgo8ccgaaqB/a8982547ce35da132959682b18fcfd55/react-hooks-deep-dive-usereducer-4.gif)
+
+## Next up: useContext
+
+As we've seen, useReducer is a powerful utility to extract stateful logic where useState begins to feel overly complex.
+
+However, unlike *react-redux*'s `connect`, useReducer doesn't create a global store for us to access and update from anywhere. If we wanted to share state between components, we're stuck with passing props right now.
+
+In the next post of *React Hooks Deep Dive*, we'll cover the **useContext** hook which provides us a powerful way to do that.
+
+## Live Examples
+
+You can see every example in this blog post live in this [Code Sandbox](https://codesandbox.io/s/react-hooks-deep-dive-usereducer-yxigt). Get in there and start playing and breaking stuff!
+
+[https://codesandbox.io/s/react-hooks-deep-dive-usereducer-yxigt](https://codesandbox.io/s/react-hooks-deep-dive-usereducer-yxigt)
+
+---
+
+Thanks for reading! You are my favorite person for sticking around until the end. 🍻
+
+If you have feedback or questions on this post, I’m always happy to discuss on [Twitter](https://twitter.com/@nickjnish). If you were curious about how React's useReducer compares with Redux, I highly recommend reading Robin Wieruch's [*React's useReducer vs Redux*](https://www.robinwieruch.de/redux-vs-usereducer).
+
+*This post first appeared on my blog. To see more posts about React, JavaScript, and other fun stuff check out [nicknish.co/blog](https://nicknish.co/blog). If you want to keep up to date automatically, signup for the newsletter at [nicknish.co](https://nicknish.co/blog)*
