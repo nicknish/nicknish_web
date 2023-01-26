@@ -1,5 +1,7 @@
-const siteUrl = 'https://www.nicknish.co';
-const userTwitter = '@nickjnish';
+// TODO: Move to constants file
+
+const siteUrl = 'https://www.nicknish.co'
+const userTwitter = '@nickjnish'
 
 module.exports = {
   siteUrl,
@@ -23,6 +25,5 @@ module.exports = {
   github_url: 'https://github.com/nicknish',
   linkedin_url: 'https://linkedin.com/in/nicknish',
   twitter_url: `https://twitter.com/${userTwitter}`,
-  resume_url:
-    'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume.pdf'
-};
+  resume_url: 'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume.pdf',
+}

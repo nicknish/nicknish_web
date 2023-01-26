@@ -1,29 +1,39 @@
 # nicknish.co
 
-This portfolio version is built with GatsbyJS, a static site generator. In this project, we use the JAMStack architecture using React, GraphQL, and Markdown files.
+This portfolio version is built with NextJS, a static site generator. In this project, we use the
+JAMStack architecture using React, GraphQL, and Markdown files.
 
-To get reacquainted, check out the `package.json` first or use one of these commands:
+To get acquainted, check out the `package.json` first or use one of these commands:
 
 ```bash
-yarn start # start server for dev with Hot Module Reloading and netlify functions
-yarn build # create production build with app and netlify functions
-yarn serve # start server for testing build site
+npm run dev   # run development server with React Fast Refresh
+npm run build # create production build with app and netlify functions
+npm run start # start server for testing build site
 ```
 
-## Environment Variables Needed
+## Environment Variables
 
-In order to run this app, you'll need these environment variables for everything to function.
+In production, some functionality (e.g. newsletter signup and contact form) will require secrets
+such as API keys. However, in development these features should work in a "developer mode" without
+hitting production endpoints.
 
-Run `touch .env.development` and add these variables. Contact me for the correct values.
+To test these features hitting production endpoints, duplicate the `.env.local.example` file with
+`cp .env.local.example .env.local` and update the values.
 
-- CONTENTFUL_SPACE_ID
-- CONTENTFUL_ACCESS_TOKEN
-- CONTENTFUL_PRODUCTION_ENDPOINT
-- CONTENTFUL_PREVIEW_ACCESS_TOKEN
-- CONTENTFUL_PREVIEW_ENDPOINT
-- CONTENTFUL_ENV
-- MAILCHIMP_API_KEY
-- MAILCHIMP_LIST_ID
-- MAILCHIMP_REGION
-- GATSBY_SITE_RECAPTCHA_KEY
-- GOOGLE_ANALYTICS
+## TODO
+
+- [ ] Move Projects and Work to Contentlayer
+- [ ] Fix Post Series
+- [ ] Fix Contact page with lambda functions
+- [ ] Make Start page
+- [ ] Figure out images in Contentlayer
+- [ ] Fix SEO for Posts, Projects, Work, etc.
+- [ ] Fix light and dark mode for website
+- [ ] Remove siteConfig and replace it with a constants file
+- [ ] Fix `post.body.raw`
+- [ ] Fix Popular Posts
+- [ ] Redesign Homepage
+- [ ] Fix Outbound Link tracking
+- [ ] Fix WorkItem drop shadows
+- [ ] Update Resume link
+- [ ] Fix code block highlight styling
