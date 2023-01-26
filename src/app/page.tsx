@@ -17,6 +17,8 @@ function getPostSeries() {
 export default function Home() {
   const posts = getPosts()
   const postSeries = getPostSeries()
+
+  // TODO: Find a way to fix this
   const popularPosts = posts.slice(0, 4)
 
   return (
