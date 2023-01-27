@@ -13,6 +13,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = withContentlayer(nextConfig)

@@ -12,6 +12,9 @@ interface ButtonProps {
   className?: string
   linkProps?: LinkProps
   buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
+  // TODO: Typing could better enforce componentProps
+  component?: (props: any) => JSX.Element
+  componentProps?: any
 }
 
 const themeClassNamesMap: { [T in ButtonThemes]: string } = {
@@ -26,6 +29,8 @@ const sizeClassNamesMap: { [T in ButtonSizes]: string } = {
 export const Button = ({
   theme = 'primary',
   size = 'small',
+  component,
+  componentProps,
   children,
   className,
   linkProps,
@@ -35,6 +40,18 @@ export const Button = ({
     'inline-block border-none rounded-sm no-underline tracking-wide font-semibold transition-all cursor-pointer'
   const themeClassNames = themeClassNamesMap[theme]
   const sizeClassNames = sizeClassNamesMap[size]
+
+  if (component) {
+    const Component = component
+    return (
+      <Component
+        {...componentProps}
+        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className}`}
+      >
+        {children}
+      </Component>
+    )
+  }
 
   if (linkProps) {
     return (

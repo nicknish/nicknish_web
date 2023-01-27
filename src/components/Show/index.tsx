@@ -1,9 +1,12 @@
-import { WORK_URL } from '../../constants/urls'
-
-import { FaChevronLeft, FaExternalLinkAlt } from 'react-icons/fa'
-
 import Image from 'next/image'
 import Link from 'next/link'
+import { FaChevronLeft, FaExternalLinkAlt } from 'react-icons/fa'
+
+import { MDXBlock } from '@/components/common/MDXBlock'
+import { DynamicProseBlock } from '../common/DynamicProseBlock'
+
+import { WORK_URL } from '../../constants/urls'
+import { OutboundLink } from '../common/OutboundLink'
 
 export enum ShowTypes {
   PROJECT = 'project',
@@ -48,7 +51,7 @@ export const Show = ({
         <div className="text-lg">
           <span className="text-black-80 dark:text-white-80">{date}</span>
           {external_url && (
-            <a
+            <OutboundLink
               href={external_url}
               className="inline-flex items-center ml-2"
               target="_blank"
@@ -56,7 +59,7 @@ export const Show = ({
             >
               <span>See it here</span>
               <FaExternalLinkAlt className="text-sm ml-2" />
-            </a>
+            </OutboundLink>
           )}
         </div>
       </header>
@@ -77,13 +80,15 @@ export const Show = ({
 
       <div className="container">
         <h3 className="text-2xl font-bold mb-4">{headerText}</h3>
-        <div className="content" dangerouslySetInnerHTML={{ __html: description }} />
+        <DynamicProseBlock>
+          <MDXBlock code={description} />
+        </DynamicProseBlock>
       </div>
     </div>
   )
 }
 
-const prepareShowData = (type: ShowTypes) => {
+function prepareShowData(type: ShowTypes) {
   const isProject = type === ShowTypes.PROJECT
 
   const backUrl = WORK_URL
@@ -92,5 +97,3 @@ const prepareShowData = (type: ShowTypes) => {
 
   return { backUrl, backLinkText, headerText }
 }
-
-export default Show

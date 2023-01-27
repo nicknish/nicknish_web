@@ -11,10 +11,11 @@ import styles from './Nav.module.css'
 export const Nav: React.FC = () => {
   const pathname = usePathname()
 
-  const isBlog = pathname?.includes('/blog')
+  const isBlog = pathname?.includes('/blog') || pathname === '/'
   const isBlogSeries = pathname?.includes('/series')
   const isWork = pathname?.includes('/work')
   const isProject = pathname?.includes('/projects')
+  const isStart = pathname?.includes('/start')
 
   return (
     <nav className="flex w-full max-w-4xl px-4 py-8 mx-auto items-center justify-between">
@@ -25,7 +26,9 @@ export const Nav: React.FC = () => {
         nicknish
       </Link>
       <div className="text-lg text-right">
-        <NavLink href={START_HERE_URL}>Start Here</NavLink>
+        <NavLink href={START_HERE_URL} isActive={isStart}>
+          Start Here
+        </NavLink>
         <NavLink
           href={HOME_URL} // This isn't a bug, the Homepage is the blog
           isActive={isBlog || isBlogSeries}

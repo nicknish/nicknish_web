@@ -1,35 +1,44 @@
-// TODO: move to contentalyer
-
 import { notFound } from 'next/navigation'
 
-import Show, { ShowTypes } from '@/components/Show'
-import { getAllWorkHistory, getWorkHistoryBySlug } from '@/lib/api'
-import { formatDate, getDate } from '@/utils/dates'
+import { Show, ShowTypes } from '@/components/Show'
+import { formatIsoDate, getDate } from '@/utils/dates'
+import { allJobs, type Job } from 'contentlayer/generated'
+import { getJobBySlug } from './utils'
 
 export async function generateStaticParams() {
-  const jobs = await getAllWorkHistory()
-  return jobs.map(job => ({ slug: job.slug }))
+  return allJobs.map(job => ({ slug: job.slug }))
 }
 
-export default async function WorkPage({ params: { slug } }: { params: { slug: string } }) {
-  const data = await getWorkHistoryBySlug(slug)
-  const formattedStartDate = data.startDate ? formatDate(data.startDate) : data.startDate
-  const formattedEndDate = data.endDate ? formatDate(data.endDate) : data.endDate
+interface IWorkPageProps {
+  params: IWorkPageParams
+}
 
-  if (!data) {
+export interface IWorkPageParams {
+  slug: string
+}
+
+export default async function WorkPage(props: IWorkPageProps) {
+  const job = getJobBySlug(props.params.slug)
+  if (!job) {
     notFound()
   }
+
+  const formattedStartDate = job.startDate ? formatIsoDate(job.startDate) : job.startDate
+  const formattedEndDate = job.endDate ? formatIsoDate(job.endDate) : job.endDate
+  const formattedDate = getDate(formattedStartDate, formattedEndDate, job.current)
 
   return (
     <main>
       <Show
-        title={data.title}
-        description={data.description}
-        date={getDate(formattedStartDate, formattedEndDate, data.current)}
-        path={data.path}
-        external_url={data.url}
+        title={job.title}
+        description={job.body.code}
+        date={formattedDate}
+        // TODO: Fix path?
+        // path={job.path}
+        external_url={job.url}
         type={ShowTypes.WORK}
-        image={data.imagesCollection.items[0]}
+        // TODO: Fix images
+        // image={job.imagesCollection.items[0]}
       />
     </main>
   )

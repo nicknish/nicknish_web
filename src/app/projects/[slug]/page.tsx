@@ -1,35 +1,49 @@
-// TODO: Move to Contentlayer
+import { notFound } from 'next/navigation'
+import { format, parseISO } from 'date-fns'
 
-import { getProjects, getProjectBySlug } from '@/lib/api'
-import { formatDate, getDate } from '@/utils/dates'
+import { Show, ShowTypes } from '@/components/Show'
 
-import Show, { ShowTypes } from '@/components/Show'
+import { getDate } from '@/utils/dates'
+import { allProjects, type Project } from 'contentlayer/generated'
 
 export async function generateStaticParams() {
-  const projects = await getProjects()
-  return projects.map(project => ({ slug: project.slug }))
+  return allProjects.map(project => ({ slug: project.slug }))
 }
 
-interface IProjectPageParams {
+function getProjectBySlug(slug: Project['slug']) {
+  return allProjects.find(project => project.slug === slug)
+}
+
+interface IProjectPageProps {
   params: { slug: string }
 }
 
-export default async function ProjectPage(props: IProjectPageParams) {
-  const project = await getProjectBySlug(props.params.slug)
-  const formattedStartDate = project.startDate ? formatDate(project.startDate) : project.startDate
-  const formattedEndDate = project.endDate ? formatDate(project.endDate) : project.endDate
+export default async function ProjectPage(props: IProjectPageProps) {
+  const project = getProjectBySlug(props.params.slug)
+  if (!project) {
+    notFound()
+  }
+
+  const formattedStartDate = project.startDate
+    ? format(parseISO(project.startDate), 'LLLL d, yyyy')
+    : undefined
+  const formattedEndDate = project.endDate
+    ? format(parseISO(project.endDate), 'LLLL d, yyyy')
+    : undefined
   const formattedDate = getDate(formattedStartDate, formattedEndDate, project.current)
 
   return (
     <main>
       <Show
         title={project.title}
-        description={project.description}
+        description={project.body.code}
         date={formattedDate}
-        path={project.path}
+        // TODO: Fix path?
+        // path={project.path}
         external_url={project.url}
         type={ShowTypes.PROJECT}
-        image={project.imagesCollection.items[0]}
+        // TODO: Fix images
+        // image={project.imagesCollection.items[0]}
       />
     </main>
   )

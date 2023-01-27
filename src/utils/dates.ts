@@ -13,7 +13,6 @@ export const getDate = (startDate?: string, endDate?: string, current?: boolean)
   return ''
 }
 
-export const formatDate = (isoDate: string): string => {
-  const parsedDate = parseISO(isoDate)
-  return format(parsedDate, 'MMM yyyy')
+export const formatIsoDate = (isoDate: string, formatType?: string): string => {
+  return format(parseISO(isoDate), formatType ?? 'LLLL d, yyyy')
 }

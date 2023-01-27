@@ -1,5 +1,5 @@
 // Styled after https://github.com/kfirfitousi/blog
-import { defineDocumentType, makeSource, type ComputedFields } from 'contentlayer/source-files'
+import { defineDocumentType, type FieldDefs, makeSource } from 'contentlayer/source-files'
 import { rehypePlugins, remarkPlugins } from './lib/mdx-plugins'
 
 export const Post = defineDocumentType(() => ({
@@ -92,14 +92,25 @@ export const Project = defineDocumentType(() => ({
   },
 }))
 
+const POST_COLLECTION_FIELDS: FieldDefs = {
+  title: { type: 'string', required: true },
+  slug: { type: 'string', required: true },
+  posts: { type: 'list', of: { type: 'string' }, required: true },
+}
+
+export const PostCollection = defineDocumentType(() => ({
+  name: 'PostCollection',
+  contentType: 'mdx',
+  filePathPattern: 'post-collections/**/*.mdx',
+  fields: POST_COLLECTION_FIELDS,
+}))
+
 export const PostSeries = defineDocumentType(() => ({
   name: 'PostSeries',
   contentType: 'mdx',
   filePathPattern: 'series/**/*.mdx',
   fields: {
-    title: { type: 'string', required: true },
-    slug: { type: 'string', required: true },
-    posts: { type: 'reference', of: Post },
+    ...POST_COLLECTION_FIELDS,
     previewImage: { type: 'json' }, // TODO
   },
   computedFields: {
@@ -112,7 +123,7 @@ export const PostSeries = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: './content',
-  documentTypes: [Post, PostSeries, Job, ContractJob, Project],
+  documentTypes: [Post, PostCollection, PostSeries, Job, ContractJob, Project],
   mdx: {
     remarkPlugins,
     rehypePlugins,

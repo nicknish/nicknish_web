@@ -22,9 +22,9 @@ export const WorkItem = ({
     >
       <div className="mb-3">
         <p className="mb-3 text-xl font-semibold">{title}</p>
-        <p className="text-lg">{description}</p>
+        <p className="line-clamp-4">{description}</p>
       </div>
-      <span className="">{footerSubtitle}</span>
+      <span className="text-sm">{footerSubtitle}</span>
     </Link>
   )
 }

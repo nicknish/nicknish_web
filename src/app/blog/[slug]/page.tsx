@@ -1,7 +1,8 @@
+import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
 import { allPosts, Post } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
 import { notFound } from 'next/navigation'
-import { MDXBlock } from './MDXBlock'
+import { MDXBlock } from '@/components/common/MDXBlock'
 
 export async function generateStaticParams() {
   return allPosts.map(post => ({ slug: post.slug }))
@@ -32,9 +33,9 @@ export default async function BlogPost({ params: { slug } }: IBlogPostProps) {
           {format(parseISO(post.date), 'LLLL d, yyyy')}
         </time>
       </header>
-      <div className="prose md:prose-lg dark:prose-invert">
+      <DynamicProseBlock>
         <MDXBlock code={post.body.code} />
-      </div>
+      </DynamicProseBlock>
     </article>
   )
 }

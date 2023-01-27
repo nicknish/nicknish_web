@@ -1,20 +1,16 @@
 import Link from 'next/link'
 import React from 'react'
 import { FaGithubAlt, FaLinkedin, FaTwitter } from 'react-icons/fa'
-import {
-  NEWSLETTER_URL,
-  GITHUB_URL,
-  LINKEDIN_URL,
-  TWITTER_URL,
-  RESUME_URL,
-} from '../../../constants/urls'
+
+import siteConfig from '@/config'
+import { IOutboundLinkProps, OutboundLink } from '@/components/common/OutboundLink'
 
 type SocialMediaLinks<T> = Record<'github' | 'twitter' | 'linkedin', T>
 
 const socialMediaUrls: SocialMediaLinks<string> = {
-  github: GITHUB_URL,
-  linkedin: LINKEDIN_URL,
-  twitter: TWITTER_URL,
+  github: siteConfig.githubUrl,
+  linkedin: siteConfig.linkedinUrl,
+  twitter: siteConfig.twitterUrl,
 }
 
 const ICONS: SocialMediaLinks<React.ReactElement> = {
@@ -42,15 +38,22 @@ export const Footer = () => {
       </nav>
 
       <nav className="flex justify-center max-w-xl mx-auto mb-7 text-center">
-        <Link className="mx-2 no-underline black-40 dark:white-80" href={NEWSLETTER_URL}>
-          Newsletter
-        </Link>
-        <Link className="mx-2 no-underline black-40 dark:white-80" href={RESUME_URL}>
-          Resume
-        </Link>
+        <FooterExternalTextLink href={siteConfig.newsletterUrl}>Newsletter</FooterExternalTextLink>
+        <FooterExternalTextLink href={siteConfig.resumeUrl}>Resume</FooterExternalTextLink>
       </nav>
 
       <div>&copy; Nick Nish {new Date().getFullYear()}</div>
     </footer>
+  )
+}
+
+function FooterExternalTextLink(props: IOutboundLinkProps) {
+  return (
+    <OutboundLink
+      {...props}
+      className="mx-2 no-underline black-40 dark:white-80"
+      target="_blank"
+      rel="noopener noreferrer"
+    />
   )
 }

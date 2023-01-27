@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { compareDesc, format, parseISO } from 'date-fns'
 
 import { allPosts, allPostSeries, Post } from 'contentlayer/generated'
+import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
 
 function getPosts() {
   const posts = allPosts.sort((a, b) => {
@@ -17,9 +18,7 @@ function getPostSeries() {
 export default function Home() {
   const posts = getPosts()
   const postSeries = getPostSeries()
-
-  // TODO: Find a way to fix this
-  const popularPosts = posts.slice(0, 4)
+  const popularPosts = getPostsFromCollection(getPostCollectionBySlug('homepage-popular-posts'))
 
   return (
     <main className="px-4 mx-auto max-w-4xl">
@@ -55,6 +54,7 @@ export default function Home() {
       <div className="md:grid md:grid-cols-3 md:gap-x-12">
         <section className="mb-12 md:col-span-2">
           <HomeSectionTitle>Latest Posts</HomeSectionTitle>
+          {/* TODO: Make better styling */}
           {posts.map((post, idx) => (
             <PostCard key={idx} {...post} />
           ))}
@@ -93,12 +93,14 @@ function PostCard(post: Post) {
 function PopularPostCard(post: Post) {
   return (
     <Link
-      className="block p-4 border-2 border-black-10 dark:border-white-10 rounded-sm"
+      className="flex flex-col justify-between p-4 border-2 border-black-10 dark:border-white-10 rounded-sm"
       href={post.url}
     >
-      <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
-      {/* TODO: post.body.raw is kind of jank */}
-      <p className="text-sm line-clamp-4">{post.description || post.body.raw.slice(0, 300)}</p>
+      <div>
+        <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
+        {/* TODO: post.body.raw is kind of jank */}
+        <p className="text-sm line-clamp-4">{post.description || post.body.raw.slice(0, 300)}</p>
+      </div>
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
         {format(parseISO(post.date), 'LLLL d, yyyy')}
       </time>

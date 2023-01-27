@@ -1,12 +1,22 @@
-import { getWorkHistoryBySlug } from '@/lib/api'
+import { notFound } from 'next/navigation'
 
-export default async function Head({ params: { slug } }) {
-  const post = await getWorkHistoryBySlug(slug)
+import { type IWorkPageParams } from './page'
+import { getJobBySlug } from './utils'
+
+interface IWorkPageHeadProps {
+  params: IWorkPageParams
+}
+
+export default async function WorkPageHead(props: IWorkPageHeadProps) {
+  const job = getJobBySlug(props.params.slug)
+  if (!job) {
+    notFound()
+  }
 
   return (
     <>
       {/* TODO: Fix SEO for Work posts */}
-      <title>{post.title}</title>
+      <title>{job.title}</title>
     </>
   )
 }
