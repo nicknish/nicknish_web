@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { format, parseISO } from 'date-fns'
 
-import { Show, ShowTypes } from '@/components/Show'
+import { Show, ShowTypes } from '@/components/layout/Show'
 
 import { getDate } from '@/utils/dates'
 import { allProjects, type Project } from 'contentlayer/generated'

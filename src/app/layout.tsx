@@ -1,7 +1,7 @@
 import '../css/global.css'
 import { Figtree, Fira_Code } from '@next/font/google'
-import { Nav } from '@/components/Layout/Nav'
-import { Footer } from '@/components/Layout/Footer'
+import { Nav } from '@/components/layout/Nav'
+import { Footer } from '@/components/layout/Footer'
 
 const fontTitle = Figtree({
   subsets: ['latin'],

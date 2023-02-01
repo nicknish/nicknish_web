@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { Show, ShowTypes } from '@/components/Show'
+import { Show, ShowTypes } from '@/components/layout/Show'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { allJobs, type Job } from 'contentlayer/generated'
 import { getJobBySlug } from './utils'

@@ -1,5 +1,4 @@
-import { SiteMetadata } from '@/components/Layout/SiteMetadata'
-
+import { SiteMetadata } from '@/components/layout/SiteMetadata'
 
 // TODO: Fix SEO
 export default function Head() {
