@@ -7,7 +7,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { allJobs, allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
-import { sortItemsByEndDate } from '@/lib/jobs-projects'
+import { sortItemsByDate } from '@/lib/jobs-projects'
 import { createPath, HOME_URL, PROJECT_URL, WORK_URL } from '@/constants/urls'
 import siteConfig from '@/config'
 
@@ -18,8 +18,8 @@ import { Button } from '@/components/common/Button'
 import HAPPY_IMG from './happy.svg'
 
 export default async function WorkPage() {
-  const jobHistory = sortItemsByEndDate(allJobs)
-  const projectHistory = sortItemsByEndDate(allProjects)
+  const jobHistory = sortItemsByDate(allJobs)
+  const projectHistory = sortItemsByDate(allProjects)
 
   return (
     <main className="px-4">

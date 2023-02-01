@@ -8,7 +8,7 @@ export async function generateStaticParams() {
   return allPosts.map(post => ({ slug: post.slug }))
 }
 
-async function getBlogPostBySlug(slug: string) {
+function getBlogPostBySlug(slug: Post['slug']): Post | undefined {
   return allPosts.find(post => post.slug === slug)
 }
 
@@ -18,9 +18,8 @@ interface IBlogPostProps {
   }
 }
 
-export default async function BlogPost({ params: { slug } }: IBlogPostProps) {
-  const post = await getBlogPostBySlug(slug)
-
+export default function BlogPost(props: IBlogPostProps) {
+  const post = getBlogPostBySlug(props.params.slug)
   if (!post) {
     notFound()
   }
@@ -36,6 +35,17 @@ export default async function BlogPost({ params: { slug } }: IBlogPostProps) {
       <DynamicProseBlock>
         <MDXBlock code={post.body.code} />
       </DynamicProseBlock>
+      <footer className="mt-8">
+        <div className="flex items-center gap-x-2">
+          {post.tags?.map((tag, idx) => (
+            <div className="px-2 py-2 dark:bg-black-30" key={idx}>
+              {tag}
+            </div>
+          ))}
+        </div>
+      </footer>
+      {/* TODO: Fix BlogPostLikes */}
+      {/* <BlogPostLikes slug={slug} /> */}
     </article>
   )
 }

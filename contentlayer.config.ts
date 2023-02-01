@@ -36,7 +36,7 @@ export const Job = defineDocumentType(() => ({
     excerpt: { type: 'string' },
     thumbnail: { type: 'json' }, // TODO
     shareImage: { type: 'json' }, // TODO
-    images: { type: 'json' }, //TODO
+    bannerImage: { type: 'string' },
   },
   computedFields: {
     url: {
@@ -82,7 +82,7 @@ export const Project = defineDocumentType(() => ({
     excerpt: { type: 'string' },
     thumbnail: { type: 'json' }, // TODO
     shareImage: { type: 'json' }, // TODO
-    images: { type: 'json' }, // TODO
+    bannerImage: { type: 'string' },
   },
   computedFields: {
     url: {
@@ -111,7 +111,8 @@ export const PostSeries = defineDocumentType(() => ({
   filePathPattern: 'series/**/*.mdx',
   fields: {
     ...POST_COLLECTION_FIELDS,
-    previewImage: { type: 'json' }, // TODO
+    bannerImage: { type: 'string', required: true },
+    bannerImageCredit: { type: 'markdown', required: true },
   },
   computedFields: {
     url: {

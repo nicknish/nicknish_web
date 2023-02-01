@@ -2,7 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import { compareDesc, format, parseISO } from 'date-fns'
 
-import { allPosts, allPostSeries, Post } from 'contentlayer/generated'
+import { Image } from '@/components/common/Image'
+
+import { allPosts, allPostSeries, Post, PostSeries } from 'contentlayer/generated'
 import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
 
 function getPosts() {
@@ -62,10 +64,11 @@ export default function Home() {
 
         <aside className="">
           <HomeSectionTitle>Post Series</HomeSectionTitle>
-          {/* TODO */}
-          {postSeries.map((series, idx) => (
-            <div key={idx}>{series.title}</div>
-          ))}
+          <div className="flex flex-col gap-y-4">
+            {postSeries.map((series, idx) => (
+              <PostSeriesCard key={idx} {...series} />
+            ))}
+          </div>
         </aside>
       </div>
     </main>
@@ -104,6 +107,26 @@ function PopularPostCard(post: Post) {
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
         {format(parseISO(post.date), 'LLLL d, yyyy')}
       </time>
+    </Link>
+  )
+}
+
+function PostSeriesCard(series: PostSeries) {
+  return (
+    <Link href={series.url} className="group relative flex items-center h-40 rounded-sm">
+      <div className="absolute top-0 w-full h-full overflow-hidden">
+        <Image
+          src={series.bannerImage}
+          alt={series.bannerImageCredit.raw}
+          width="256"
+          height="170"
+          className="w-full"
+        />
+        <div className="absolute bg-black-50 top-0 w-full h-full group-hover:bg-black-60 transition-colors" />
+      </div>
+      <h3 className="relative w-full px-4 text-center dark:text-white-100 font-bold text-lg">
+        {series.title}
+      </h3>
     </Link>
   )
 }

@@ -1,15 +1,15 @@
 import Link from 'next/link'
-import Image from 'next/image'
 
 import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
 import { OutboundLink } from '@/components/common/OutboundLink'
+import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
+import { Image } from '@/components/common/Image'
+
+import siteConfig from '@/config'
 import { BLOG_URL, NEWSLETTER_URL, createPath } from '@/constants/urls'
 import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
 import { type Post } from 'contentlayer/generated'
-import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import PROFILE_IMG from './profile.png'
-
-import siteConfig from '@/config'
 
 export default async function StartPage() {
   const topTechnicalPosts = getPostsFromCollection(

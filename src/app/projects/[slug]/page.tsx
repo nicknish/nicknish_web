@@ -10,12 +10,14 @@ export async function generateStaticParams() {
   return allProjects.map(project => ({ slug: project.slug }))
 }
 
-function getProjectBySlug(slug: Project['slug']) {
+function getProjectBySlug(slug: Project['slug']): Project | undefined {
   return allProjects.find(project => project.slug === slug)
 }
 
 interface IProjectPageProps {
-  params: { slug: string }
+  params: {
+    slug: Project['slug']
+  }
 }
 
 export default async function ProjectPage(props: IProjectPageProps) {
@@ -42,8 +44,7 @@ export default async function ProjectPage(props: IProjectPageProps) {
         // path={project.path}
         external_url={project.url}
         type={ShowTypes.PROJECT}
-        // TODO: Fix images
-        // image={project.imagesCollection.items[0]}
+        image={project.bannerImage ? { url: project.bannerImage, description: 'Logo' } : undefined}
       />
     </main>
   )

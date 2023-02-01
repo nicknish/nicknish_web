@@ -14,10 +14,10 @@ interface IWorkPageProps {
 }
 
 export interface IWorkPageParams {
-  slug: string
+  slug: Job['slug']
 }
 
-export default async function WorkPage(props: IWorkPageProps) {
+export default function WorkPage(props: IWorkPageProps) {
   const job = getJobBySlug(props.params.slug)
   if (!job) {
     notFound()
@@ -37,8 +37,7 @@ export default async function WorkPage(props: IWorkPageProps) {
         // path={job.path}
         external_url={job.url}
         type={ShowTypes.WORK}
-        // TODO: Fix images
-        // image={job.imagesCollection.items[0]}
+        image={job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined}
       />
     </main>
   )

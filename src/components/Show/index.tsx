@@ -1,12 +1,14 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { FaChevronLeft, FaExternalLinkAlt } from 'react-icons/fa'
 
 import { MDXBlock } from '@/components/common/MDXBlock'
 import { DynamicProseBlock } from '../common/DynamicProseBlock'
+import { OutboundLink } from '../common/OutboundLink'
+import { Image } from '../common/Image'
 
 import { WORK_URL } from '../../constants/urls'
-import { OutboundLink } from '../common/OutboundLink'
+import { PageLayout } from '../common/PageLayout'
+import { ProseContainer } from '../common/ProseContainer'
 
 export enum ShowTypes {
   PROJECT = 'project',
@@ -35,56 +37,64 @@ export const Show = ({
   const { backUrl, backLinkText, headerText } = prepareShowData(type)
 
   return (
-    <div className="px-4 max-w-3xl mx-auto">
-      <header className="mb-6" data-testid="ShowHeader">
-        <div>
-          <Link
-            href={backUrl}
-            className="inline-flex items-center p-1 pl-0"
-            data-testid="ShowBackLink"
-          >
-            <FaChevronLeft className="mr-1 align-middle" />
-            <span>{backLinkText}</span>
-          </Link>
-        </div>
-        <h1 className="text-5xl font-bold mt-5 mb-3">{title}</h1>
-        <div className="text-lg">
-          <span className="text-black-80 dark:text-white-80">{date}</span>
-          {external_url && (
-            <OutboundLink
-              href={external_url}
-              className="inline-flex items-center ml-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>See it here</span>
-              <FaExternalLinkAlt className="text-sm ml-2" />
-            </OutboundLink>
-          )}
-        </div>
-      </header>
+    <PageLayout>
+      <>
+        <ProseContainer
+          element={'header'}
+          className="md:text-lg max-w-prose mx-auto mt-8 mb-12"
+          data-testid="ShowHeader"
+        >
+          <>
+            <div>
+              <Link
+                href={backUrl}
+                className="inline-flex items-center p-1 pl-0 mb-8"
+                data-testid="ShowBackLink"
+              >
+                <FaChevronLeft className="mr-1 align-middle" />
+                <span>{backLinkText}</span>
+              </Link>
+            </div>
+            <h1 className="text-5xl font-bold mb-3">{title}</h1>
+            <div className="text-lg">
+              <span className="text-black-80 dark:text-white-80">{date}</span>
+              {external_url && (
+                <OutboundLink
+                  href={external_url}
+                  className="inline-flex items-center ml-2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>See it here</span>
+                  <FaExternalLinkAlt className="text-sm ml-2" />
+                </OutboundLink>
+              )}
+            </div>
+          </>
+        </ProseContainer>
 
-      {image && (
-        <div className="container mb-8">
-          <figure className="">
-            <Image
-              src={image.url}
-              alt={image.description ?? ''}
-              className=""
-              width="800"
-              height="300"
-            />
-          </figure>
-        </div>
-      )}
+        {image && (
+          <div className="my-12">
+            <figure className="">
+              <Image
+                className="w-full h-auto"
+                src={image.url}
+                alt={image.description ?? ''}
+                width="800"
+                height="300"
+              />
+            </figure>
+          </div>
+        )}
 
-      <div className="container">
-        <h3 className="text-2xl font-bold mb-4">{headerText}</h3>
-        <DynamicProseBlock>
-          <MDXBlock code={description} />
-        </DynamicProseBlock>
-      </div>
-    </div>
+        <div className="md:text-lg max-w-prose mx-auto">
+          <h3 className="text-2xl font-bold mb-4">{headerText}</h3>
+          <DynamicProseBlock>
+            <MDXBlock code={description} />
+          </DynamicProseBlock>
+        </div>
+      </>
+    </PageLayout>
   )
 }
 

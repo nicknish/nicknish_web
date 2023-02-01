@@ -1,10 +1,12 @@
 import {
   allPostCollections,
   allPosts,
+  allPostSeries,
+  type PostSeries,
   type Post,
   type PostCollection,
 } from 'contentlayer/generated'
-// import { compareAsc, parseISO } from 'date-fns'
+import { compareAsc, parseISO } from 'date-fns'
 
 export function getPostCollectionBySlug(slug: PostCollection['slug']): PostCollection {
   const collection = allPostCollections.find(collection => collection.slug === slug)
@@ -15,18 +17,33 @@ export function getPostCollectionBySlug(slug: PostCollection['slug']): PostColle
 }
 
 export function getPostsFromCollection(collection: PostCollection): Post[] {
-  // Ensures the collection's posts are ordered by their declaration
+  return getPostsFromSlugs(collection.posts)
+}
+
+export function sortPostsByDate(posts: Post[]): Post[] {
+  return posts.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)))
+}
+
+export function getBlogPostSeriesBySlug(slug: string): PostSeries | undefined {
+  const collection = allPostSeries.find(series => series.slug === slug)
+  if (!collection) {
+    throw new Error(`Cannot find PostSeries for slug ${slug}`)
+  }
+  return collection
+}
+
+export function getPostsFromPostSeries(series: PostSeries): Post[] {
+  return sortPostsByDate(getPostsFromSlugs(series.posts))
+}
+
+export function getPostsFromSlugs(slugs: Post['slug'][]): Post[] {
   const postsMap = allPosts.reduce((accumulator, post) => {
-    if (collection.posts.includes(post.slug)) {
+    if (slugs.includes(post.slug)) {
       accumulator[post.slug] = post
     }
     return accumulator
   }, {} as { [title: Post['title']]: Post })
-  const posts = collection.posts.map(slug => postsMap[slug])
+  const posts = slugs.map(slug => postsMap[slug])
 
   return posts
 }
-
-// export function sortPostsByDate(posts: Post[]): Post[] {
-//   return posts.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)))
-// }
