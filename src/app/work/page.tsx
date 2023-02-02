@@ -8,7 +8,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { allJobs, allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { sortItemsByDate } from '@/lib/jobs-projects'
-import { createPath, HOME_URL, PROJECT_URL, WORK_URL } from '@/constants/urls'
+import { HOME_URL } from '@/constants/urls'
 import siteConfig from '@/config'
 
 import { OutboundLink } from '@/components/common/OutboundLink'
@@ -79,7 +79,7 @@ export default async function WorkPage() {
             return (
               <WorkItem
                 key={title}
-                href={createPath(WORK_URL, slug)}
+                href={url}
                 title={title}
                 // TODO
                 description={excerpt ?? ''}
@@ -111,14 +111,14 @@ export default async function WorkPage() {
         <SectionTitle id="projects">Projects</SectionTitle>
         <SectionGrid>
           {projectHistory.map(data => {
-            const { title, slug, startDate, endDate, current, excerpt } = data
+            const { title, url, startDate, endDate, current, excerpt } = data
             const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
             const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
 
             return (
               <WorkItem
                 key={title}
-                href={createPath(PROJECT_URL, slug)}
+                href={url}
                 title={title}
                 // TODO
                 description={excerpt ?? ''}

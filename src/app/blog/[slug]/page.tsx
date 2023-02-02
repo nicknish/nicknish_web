@@ -3,16 +3,13 @@ import { allPosts, Post } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
 import { notFound } from 'next/navigation'
 import { MDXBlock } from '@/components/common/MDXBlock'
+import { getBlogPostBySlug } from '@/lib/posts'
 
 export async function generateStaticParams() {
   return allPosts.map(post => ({ slug: post.slug }))
 }
 
-function getBlogPostBySlug(slug: Post['slug']): Post | undefined {
-  return allPosts.find(post => post.slug === slug)
-}
-
-interface IBlogPostProps {
+export interface IBlogPostProps {
   params: {
     slug: Post['slug']
   }

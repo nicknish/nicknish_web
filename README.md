@@ -30,6 +30,7 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Make Start page
 - [x] Figure out images in Contentlayer
 - [ ] Fix SEO for Posts, Projects, Work, etc.
+- [ ] Fix sitemap
 - [ ] Fix light and dark mode for website
 - [x] Remove siteConfig and replace it with a constants file
 - [x] Fix Popular Posts
@@ -41,3 +42,4 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [ ] Add post likes "claps" with Supabase
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
+- [ ] Cypress tests

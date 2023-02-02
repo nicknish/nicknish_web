@@ -1,11 +1,12 @@
-import { SiteMetadata } from '@/components/layout/SiteMetadata'
+import { DefaultSiteTitle } from '@/components/layout/SEO/DefaultSiteTitle'
+import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 
-// TODO: Fix SEO
 export default function Head() {
   return (
     <>
-      <title>Create Next App</title>
+      <DefaultSiteTitle />
       <SiteMetadata />
+      {/* TODO: DO we need <SEO/> */}
     </>
   )
 }

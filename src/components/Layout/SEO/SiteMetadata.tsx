@@ -12,7 +12,6 @@ export const SiteMetadata: React.FC = () => {
 
       <link rel="manifest" href="/manifest.json" />
 
-      {/* TODO: Pass themeColor? */}
       <meta name="msapplication-TileColor" content={siteConfig.themeColor} />
       <meta name="theme-color" content={siteConfig.themeColor} />
       <meta name="google-site-verification" content="ZsR7DBayXkYHUqgVqkePKJRLeQXzkri7m-s5CFZzMG4" />

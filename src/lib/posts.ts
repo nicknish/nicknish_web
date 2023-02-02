@@ -8,6 +8,10 @@ import {
 } from 'contentlayer/generated'
 import { compareAsc, parseISO } from 'date-fns'
 
+export function getBlogPostBySlug(slug: Post['slug']): Post | undefined {
+  return allPosts.find(post => post.slug === slug)
+}
+
 export function getPostCollectionBySlug(slug: PostCollection['slug']): PostCollection {
   const collection = allPostCollections.find(collection => collection.slug === slug)
   if (!collection) {

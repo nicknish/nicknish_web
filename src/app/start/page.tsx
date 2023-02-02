@@ -151,7 +151,7 @@ function StartPopularArticles({ posts }: { posts: Post[] }) {
     <ul className="list-none !pl-0">
       {posts.map((post, idx) => (
         <li className="!pl-0" key={idx}>
-          <Link href={createPath(BLOG_URL, post.slug)}>{post.title}</Link>
+          <Link href={post.url}>{post.title}</Link>
         </li>
       ))}
     </ul>

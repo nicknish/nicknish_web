@@ -1,3 +1,5 @@
+import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
+import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 import { notFound } from 'next/navigation'
 
 import { type IWorkPageParams } from './page'
@@ -15,8 +17,14 @@ export default async function WorkPageHead(props: IWorkPageHeadProps) {
 
   return (
     <>
-      {/* TODO: Fix SEO for Work posts */}
-      <title>{job.title}</title>
+      <SiteMetadata />
+      <SEO
+        path={job.url}
+        type={SEOTypes.page}
+        content={{
+          title: job.title,
+        }}
+      />
     </>
   )
 }
