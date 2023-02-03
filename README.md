@@ -24,21 +24,21 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 
 - [x] Move Projects and Work to Contentlayer
 - [x] Fix Post Series
+- [x] Remove siteConfig and replace it with a constants file
+- [x] Fix Popular Posts
+- [x] Make Start page
+- [x] Figure out images in Contentlayer
+- [ ] Add Comments with Disqus
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
 - [ ] Fix `post.body.raw`
 - [ ] Fix Contact page with lambda functions
-- [x] Make Start page
-- [x] Figure out images in Contentlayer
 - [ ] Fix SEO for Posts, Projects, Work, etc.
 - [ ] Fix sitemap
 - [ ] Fix light and dark mode for website
-- [x] Remove siteConfig and replace it with a constants file
-- [x] Fix Popular Posts
 - [ ] Fix Outbound Link tracking
 - [ ] Fix WorkItem drop shadows
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
-- [ ] Add Comments with Disqus
 - [ ] Add post likes "claps" with Supabase
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage

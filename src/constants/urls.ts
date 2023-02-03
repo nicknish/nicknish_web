@@ -1,3 +1,4 @@
+export const SITE_URL = 'https://www.nicknish.co'
 export const HOME_URL = '/'
 export const BLOG_URL = '/blog'
 export const SERIES_URL = '/series'

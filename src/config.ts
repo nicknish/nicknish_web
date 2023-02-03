@@ -1,5 +1,7 @@
-const SITE_URL = 'https://www.nicknish.co'
+import { SITE_URL } from './constants/urls'
+
 const TWITTER_USERNAME = '@nickjnish'
+const DISQUS_SHORTNAME = 'nicknish'
 
 const siteConfig = {
   siteUrl: SITE_URL,
@@ -25,6 +27,9 @@ const siteConfig = {
   twitterUrl: `https://twitter.com/${TWITTER_USERNAME}`,
   newsletterUrl: 'https://nicknish.substack.com',
   resumeUrl: 'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume.pdf',
+
+  /* Other */
+  disqusShortname: DISQUS_SHORTNAME,
 }
 
 export default siteConfig
