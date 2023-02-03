@@ -1,10 +1,10 @@
-import { DefaultSiteTitle } from '@/components/layout/SEO/DefaultSiteTitle'
+import { SiteTitle } from '@/components/layout/SEO/SiteTitle'
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 
-export default function Head() {
+export default function RootHead() {
   return (
     <>
-      <DefaultSiteTitle />
+      <SiteTitle />
       <SiteMetadata />
       {/* TODO: DO we need <SEO/> */}
     </>

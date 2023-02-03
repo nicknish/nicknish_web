@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IProseContainerProps extends React.HTMLAttributes<any> {
-  children: JSX.Element
+  children: React.ReactNode
   element?: string
 }
 
@@ -12,7 +12,7 @@ export function ProseContainer(props: IProseContainerProps) {
   return (
     <Element
       // @ts-ignore
-      className={`md:text-lg max-w-prose mx-auto ${className}`}
+      className={`md:text-lg max-w-prose mx-auto ${className ?? ''}`}
       {...rest}
     />
   )

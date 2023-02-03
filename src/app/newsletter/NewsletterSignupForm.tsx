@@ -1,22 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/common/Button'
+import { API_NEWSLETTER_PATH } from '@/constants/urls'
+import { TextInput } from '@/components/common/form/TextInput'
+import { Label } from '@/components/common/form/Label'
+import { FormError } from '@/components/common/form/FormError'
 
 type FormData = {
   email: string
 }
 
 export const NewsletterSignupForm = () => {
-  const [showSuccess, updateShowSuccess] = useState(false)
+  const [showSuccess, updateShowSuccess] = React.useState(false)
   const { register, handleSubmit, formState, setError } = useForm<FormData>()
   const { errors, isValid, isSubmitting } = formState
 
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
     try {
-      fetch('/api/subscribe', {
+      fetch(API_NEWSLETTER_PATH, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json;charset=UTF-8' },
         body: JSON.stringify(data),
@@ -47,19 +51,18 @@ export const NewsletterSignupForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} data-testid="NewsletterSignupForm">
       <div className="mb-5">
-        <input
-          type="email"
-          defaultValue=""
-          placeholder="johnapple@gmail.com"
-          {...register('email', { required: 'Email address is required' })}
-          className="w-full md:w-1/2 border border-black-20 p-2 rounded text-black-100"
-          aria-invalid={errors.email ? 'true' : 'false'}
-        />
-        {errors.email && (
-          <div className="text-sm mt-1" data-testid="NewsletterSignupForm--error">
-            <span>{errors.email.message}</span>
-          </div>
-        )}
+        <Label label="Email">
+          <TextInput
+            type="email"
+            defaultValue=""
+            placeholder="johnapple@gmail.com"
+            {...register('email', { required: 'Email address is required' })}
+            aria-invalid={errors.email ? 'true' : 'false'}
+          />
+          {errors.email && (
+            <FormError label={errors.email.message} data-testid="NewsletterSignupForm--error" />
+          )}
+        </Label>
       </div>
       <div>
         <Button

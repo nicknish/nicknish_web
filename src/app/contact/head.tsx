@@ -1,11 +1,10 @@
 import { SiteTitle } from '@/components/layout/SEO/SiteTitle'
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 
-// TODO
-export default function ProjectPageHead() {
+export default function ContactPageHead() {
   return (
     <>
-      <SiteTitle pageTitle="Projects" />
+      <SiteTitle pageTitle="Contact" />
       <SiteMetadata />
     </>
   )

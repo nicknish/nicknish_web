@@ -28,10 +28,11 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Fix Popular Posts
 - [x] Make Start page
 - [x] Figure out images in Contentlayer
-- [ ] Add Comments with Disqus
+- [x] Add Comments with Disqus
+- [x] Contact me page
+- [ ] Fix newsletter page signing up for Mailchimp instead of Substack
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
 - [ ] Fix `post.body.raw`
-- [ ] Fix Contact page with lambda functions
 - [ ] Fix SEO for Posts, Projects, Work, etc.
 - [ ] Fix sitemap
 - [ ] Fix light and dark mode for website

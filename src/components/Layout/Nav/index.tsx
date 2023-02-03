@@ -4,7 +4,7 @@ import Link, { LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-import { HOME_URL, WORK_URL, START_HERE_URL } from '../../../constants/urls'
+import { HOME_PATH, WORK_PATH, START_PATH } from '../../../constants/urls'
 
 import styles from './Nav.module.css'
 
@@ -20,22 +20,22 @@ export const Nav: React.FC = () => {
   return (
     <nav className="flex w-full max-w-4xl px-4 py-8 mx-auto items-center justify-between">
       <Link
-        href={HOME_URL}
+        href={HOME_PATH}
         className={`${styles.logo} relative text-[22.5px] font-semibold dark:text-white-100`}
       >
         nicknish
       </Link>
       <div className="text-lg text-right">
-        <NavLink href={START_HERE_URL} isActive={isStart}>
+        <NavLink href={START_PATH} isActive={isStart}>
           Start Here
         </NavLink>
         <NavLink
-          href={HOME_URL} // This isn't a bug, the Homepage is the blog
+          href={HOME_PATH} // This isn't a bug, the Homepage is the blog
           isActive={isBlog || isBlogSeries}
         >
           Blog
         </NavLink>
-        <NavLink href={WORK_URL} isActive={isWork || isProject}>
+        <NavLink href={WORK_PATH} isActive={isWork || isProject}>
           Work
         </NavLink>
       </div>

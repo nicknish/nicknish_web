@@ -6,9 +6,9 @@ import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
 
 import siteConfig from '@/config'
-import { BLOG_URL, NEWSLETTER_URL, createPath } from '@/constants/urls'
+import { NEWSLETTER_PATH } from '@/constants/urls'
 import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
-import { type Post } from 'contentlayer/generated'
+import type { Post } from 'contentlayer/generated'
 import PROFILE_IMG from './profile.png'
 
 export default async function StartPage() {
@@ -87,7 +87,7 @@ function StartBio() {
         </p>
         <p>
           I publish Makers, a newsletter for creatives, technologists, and makers.{' '}
-          <Link href={NEWSLETTER_URL}>Subscribe here</Link> or{' '}
+          <Link href={NEWSLETTER_PATH}>Subscribe here</Link> or{' '}
           <OutboundLink href={siteConfig.newsletterUrl}>read the archive.</OutboundLink>
         </p>
         <p>Born and raised in Los Angeles.</p>

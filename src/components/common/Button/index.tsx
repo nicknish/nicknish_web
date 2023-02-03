@@ -46,7 +46,7 @@ export const Button = ({
     return (
       <Component
         {...componentProps}
-        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className}`}
+        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
       >
         {children}
       </Component>
@@ -57,7 +57,7 @@ export const Button = ({
     return (
       <Link
         {...linkProps}
-        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className}`}
+        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
       >
         {children}
       </Link>
@@ -66,7 +66,7 @@ export const Button = ({
 
   return (
     <button
-      className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className}`}
+      className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
       {...buttonProps}
     >
       <>{children}</>

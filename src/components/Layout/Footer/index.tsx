@@ -1,9 +1,10 @@
-import Link from 'next/link'
+import Link, { LinkProps } from 'next/link'
 import React from 'react'
 import { FaGithubAlt, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 import siteConfig from '@/config'
 import { IOutboundLinkProps, OutboundLink } from '@/components/common/OutboundLink'
+import { CONTACT_PATH } from '@/constants/urls'
 
 type SocialMediaLinks<T> = Record<'github' | 'twitter' | 'linkedin', T>
 
@@ -37,9 +38,16 @@ export const Footer = () => {
         </ul>
       </nav>
 
-      <nav className="flex justify-center max-w-xl mx-auto mb-7 text-center">
-        <FooterExternalTextLink href={siteConfig.newsletterUrl}>Newsletter</FooterExternalTextLink>
-        <FooterExternalTextLink href={siteConfig.resumeUrl}>Resume</FooterExternalTextLink>
+      <nav className="flex justify-center gap-x-3 max-w-xl mx-auto mb-7 text-center">
+        <FooterTextLink type="OutboundLink" linkProps={{ href: siteConfig.newsletterUrl }}>
+          Newsletter
+        </FooterTextLink>
+        <FooterTextLink type="OutboundLink" linkProps={{ href: siteConfig.resumeUrl }}>
+          Resume
+        </FooterTextLink>
+        <FooterTextLink type="default" linkProps={{ href: CONTACT_PATH }}>
+          Contact
+        </FooterTextLink>
       </nav>
 
       <div>&copy; Nick Nish {new Date().getFullYear()}</div>
@@ -47,13 +55,32 @@ export const Footer = () => {
   )
 }
 
-function FooterExternalTextLink(props: IOutboundLinkProps) {
-  return (
-    <OutboundLink
-      {...props}
-      className="mx-2 no-underline black-40 dark:white-80"
-      target="_blank"
-      rel="noopener noreferrer"
-    />
-  )
+interface IFooterTextLinkProps {
+  type: 'default'
+  linkProps: LinkProps
+  children: React.ReactNode
+}
+interface IFooterTextOutboundLinkProps {
+  type: 'OutboundLink'
+  linkProps: IOutboundLinkProps
+  children: React.ReactNode
+}
+
+function FooterTextLink(props: IFooterTextLinkProps | IFooterTextOutboundLinkProps) {
+  const { type, linkProps, ...rest } = props
+  const className = 'no-underline black-40 dark:white-80'
+
+  if (type === 'OutboundLink') {
+    return (
+      <OutboundLink
+        {...linkProps}
+        className={className}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...rest}
+      />
+    )
+  }
+
+  return <Link className={className} {...linkProps} {...rest} />
 }

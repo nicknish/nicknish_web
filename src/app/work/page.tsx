@@ -8,7 +8,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { allJobs, allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { sortItemsByDate } from '@/lib/jobs-projects'
-import { HOME_URL } from '@/constants/urls'
+import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 
 import { OutboundLink } from '@/components/common/OutboundLink'
@@ -55,7 +55,7 @@ export default async function WorkPage() {
             </p>
             <p className="mb-5">
               I also{' '}
-              <Link href={HOME_URL} className="underline">
+              <Link href={HOME_PATH} className="underline">
                 write
               </Link>{' '}
               occasionally and build{' '}
@@ -72,7 +72,7 @@ export default async function WorkPage() {
         <SectionTitle>Career</SectionTitle>
         <SectionGrid>
           {jobHistory.map(job => {
-            const { title, slug, startDate, endDate, current, excerpt } = job
+            const { title, url, startDate, endDate, current, excerpt } = job
             const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
             const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
 
@@ -142,7 +142,7 @@ function Section(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
 }
 function SectionTitle(props: React.HtmlHTMLAttributes<HTMLHeadingElement>) {
   const { className, ...rest } = props
-  return <h1 className={`text-4xl text-center font-bold mb-8 ${className}`} {...rest} />
+  return <h1 className={`text-4xl text-center font-bold mb-8 ${className ?? ''}`} {...rest} />
 }
 function SectionGrid(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
   return <div className="grid md:grid-cols-3 gap-x-2.5 gap-y-3" {...props} />

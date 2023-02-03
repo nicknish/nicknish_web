@@ -1,9 +1,11 @@
 import React from 'react'
 
 interface ILayoutProps {
-  children: JSX.Element
+  className?: string
+  children: React.ReactNode
 }
 
 export function PageLayout(props: ILayoutProps) {
-  return <main className="px-4 mx-auto max-w-4xl" {...props} />
+  const { className, ...rest } = props
+  return <main className={`px-4 mx-auto max-w-4xl ${className ?? ''}`} {...rest} />
 }

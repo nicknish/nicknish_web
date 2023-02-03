@@ -7,16 +7,14 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { removeEmptyItems, validateEmail } from '@/utils/api'
 
 /**
  * EDIT THESE ENV VARIABLES IN VERCEL
  */
-// TODO: Add env variables
 const mailChimpAPI = process.env.MAILCHIMP_API_KEY
 const mailChimpListID = process.env.MAILCHIMP_LIST_ID
 const mcRegion = process.env.MAILCHIMP_REGION
-
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
 type ResponseSuccess = {
   data: {
@@ -110,16 +108,7 @@ function validateParams(params: IValidateParams): { errors: IValidateParams } {
   const { email } = params
   return {
     errors: removeEmptyItems({
-      email: !email ? 'No email supplied' : EMAIL_REGEX.test(email) ? undefined : 'Invalid email',
+      email: !email ? 'No email provided' : validateEmail(email) ? undefined : 'Invalid email',
     }),
   }
-}
-
-function removeEmptyItems(obj: Record<string, any>): Record<string, any> {
-  for (let key in obj) {
-    if (obj[key] === undefined) {
-      delete obj[key]
-    }
-  }
-  return obj
 }
