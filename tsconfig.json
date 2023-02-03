@@ -26,15 +26,15 @@
       "cypress/*": ["./cypress/*"],
       "lib/*": ["./lib/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
-    }
+    },
+    "typeRoots": ["./src/types"]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".contentlayer/generated",
-    "src/@types"
+    ".contentlayer/generated"
   ],
   "exclude": ["node_modules"]
 }
