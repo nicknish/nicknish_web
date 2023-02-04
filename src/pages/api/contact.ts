@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import SendGrid from '@sendgrid/mail'
+import { verify as verifyCaptcha } from 'hcaptcha'
 
 import { removeEmptyItems, validateEmail } from '@/utils/api'
 
@@ -9,6 +10,7 @@ import { removeEmptyItems, validateEmail } from '@/utils/api'
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY as string
 const SENDGRID_MAIL_FROM = process.env.SENDGRID_MAIL_FROM as string
 const SENDGRID_MAIL_TO = process.env.SENDGRID_MAIL_TO as string
+const CAPTCHA_SECRET = process.env.HCAPTCHA_SECRET as string
 
 SendGrid.setApiKey(SENDGRID_API_KEY)
 
@@ -23,9 +25,9 @@ type ResponseError = {
     code: number
     message?: string
     fields?: Partial<{
-      name?: string
-      email?: string
-      message?: string
+      name: string
+      email: string
+      message: string
     }>
   }
 }
@@ -33,7 +35,7 @@ type ResponseError = {
 type Data = ResponseSuccess | ResponseError
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const errors = validateParams(req.body)
+  const errors = await validateParams(req)
 
   if (errors) {
     console.error('Contact Form Server Errors', JSON.stringify(errors))
@@ -76,17 +78,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 }
 
-function validateParams(params: any) {
-  const { name, email, message } = params
-  const errors = {
-    fields: removeEmptyItems({
-      name: !name ? 'No name provided' : null,
-      email: !email ? null : validateEmail(email) ? null : 'Invalid email' || null,
-      message: !message ? 'No message provided' : null,
-    }),
-  }
+async function validateParams(req: NextApiRequest) {
+  const { name, email, message, captcha } = req.body
 
-  if (Object.keys(errors.fields).length > 0) {
-    return errors
+  const captchaResponse = await verifyCaptcha(CAPTCHA_SECRET, captcha)
+
+  const fieldErrors: ResponseError['error']['fields'] = removeEmptyItems({
+    name: !name ? 'No name provided' : undefined,
+    email: !email ? undefined : validateEmail(email) ? undefined : 'Invalid email' || undefined,
+    message: !message ? 'No message provided' : undefined,
+    captcha: !captchaResponse.success ? captchaResponse['error-codes']?.[0] : undefined,
+  })
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fields: fieldErrors }
   }
 }

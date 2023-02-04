@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 
 import { Button } from '@/components/common/Button'
 import { FormError } from '@/components/common/form/FormError'
@@ -14,16 +15,20 @@ type FormData = {
   name: string
   email?: string
   message: string
+  captcha: string
   // This is a hack. react-hook-form has an issue where root.serverError isn't available despite the docs saying it is
   serverError?: string
 }
 
 export const ContactForm = () => {
   const [showSuccess, updateShowSuccess] = React.useState(false)
-  const { register, handleSubmit, formState, setError } = useForm<FormData>()
+  const captchaRef = React.useRef<HCaptcha>(null)
+  const { formState, register, handleSubmit, setValue, resetField, setError } = useForm<FormData>()
   const { errors, isValid, isSubmitting } = formState
 
-  const onSubmit: SubmitHandler<FormData> = (form: FormData) => {
+  register('captcha', { required: true })
+
+  const onSubmit: SubmitHandler<FormData> = async (form: FormData) => {
     try {
       fetch(API_CONTACT_PATH, {
         method: 'POST',
@@ -48,6 +53,9 @@ export const ContactForm = () => {
     } catch (error) {
       setError('serverError', { type: '400' })
     }
+
+    // Reset captcha
+    captchaRef.current?.resetCaptcha()
   }
 
   if (showSuccess) {
@@ -63,7 +71,7 @@ export const ContactForm = () => {
   }
 
   return (
-    <>
+    <main>
       <header className="mt-12">
         <h1 className="text-4xl font-bold mb-8">Contact Me</h1>
         <p className="mb-4">
@@ -98,12 +106,25 @@ export const ContactForm = () => {
               <TextField
                 defaultValue=""
                 placeholder=""
-                className="min-h-[6rem]"
+                className="block min-h-[6rem]"
                 {...register('message', { required: 'Message is required' })}
                 aria-invalid={errors.message ? 'true' : 'false'}
               />
               {errors.message && <FormError label={errors.message.message} />}
             </Label>
+          </div>
+
+          <div className="mt-6 mb-5">
+            <HCaptcha
+              sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY as string}
+              size="normal"
+              onVerify={value => setValue('captcha', value, { shouldValidate: true })}
+              onError={() => resetField('captcha')}
+              onExpire={() => resetField('captcha')}
+              onChalExpired={() => resetField('captcha')}
+              theme="dark"
+              ref={captchaRef}
+            />
           </div>
 
           {errors.serverError?.type === '400' && (
@@ -121,8 +142,14 @@ export const ContactForm = () => {
               Submit
             </Button>
           </div>
+
+          <footer className="mt-4 text-xs">
+            This site is protected by hCaptcha and its{' '}
+            <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and{' '}
+            <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
+          </footer>
         </form>
       </div>
-    </>
+    </main>
   )
 }
