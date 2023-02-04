@@ -36,7 +36,7 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Fix newsletter page signing up for Mailchimp instead of Substack
 - [x] Fix sitemap
 - [ ] Fix light and dark mode for website
-- [ ] Fix Outbound Link tracking
+- [x] Fix Outbound Link tracking
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [ ] Fix Post SEO
   - [ ] Fix `post.body.raw`

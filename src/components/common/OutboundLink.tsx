@@ -36,7 +36,6 @@ export function OutboundLink(props: IOutboundLinkProps) {
         if (props.target && props.target.toLowerCase() !== `_self`) {
           redirect = false
         }
-        // Fix Window typing
         if (window.ga) {
           window.ga(`send`, `event`, {
             eventCategory: eventCategory || `Outbound Link`,
