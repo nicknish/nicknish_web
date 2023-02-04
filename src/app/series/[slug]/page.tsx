@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   return allPostSeries.map(series => ({ slug: series.slug }))
 }
 
-interface IBlogPostSeriesProps {
+export interface IBlogPostSeriesProps {
   params: {
     slug: string
   }

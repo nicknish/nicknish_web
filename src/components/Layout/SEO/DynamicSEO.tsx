@@ -1,3 +1,4 @@
+/* TODO: This whole component needs a refactor */
 import React from 'react'
 import Script from 'next/script'
 

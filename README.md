@@ -30,6 +30,7 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Figure out images in Contentlayer
 - [x] Add Comments with Disqus
 - [x] Contact me page
+- [x] Fix SEO for Posts, Projects, Work, etc.
 - [ ] Fix newsletter page signing up for Mailchimp instead of Substack
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
 - [ ] Fix `post.body.raw`

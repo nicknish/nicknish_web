@@ -6,7 +6,6 @@ export default function RootHead() {
     <>
       <SiteTitle />
       <SiteMetadata />
-      {/* TODO: DO we need <SEO/> */}
     </>
   )
 }
