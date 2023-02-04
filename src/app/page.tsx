@@ -110,8 +110,7 @@ function PopularPostCard(post: Post) {
     >
       <div>
         <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
-        {/* TODO: post.body.raw is kind of jank */}
-        <p className="text-sm line-clamp-4">{post.description || post.body.raw.slice(0, 300)}</p>
+        <p className="text-sm line-clamp-4">{post.description}</p>
       </div>
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
         {format(parseISO(post.date), 'LLLL d, yyyy')}

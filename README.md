@@ -22,6 +22,8 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 
 ## TODO
 
+### P0
+
 - [x] Move Projects and Work to Contentlayer
 - [x] Fix Post Series
 - [x] Remove siteConfig and replace it with a constants file
@@ -37,7 +39,10 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [ ] Fix Outbound Link tracking
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [ ] Fix Post SEO
-- [ ] Fix `post.body.raw`
+  - [ ] Fix `post.body.raw`
+
+### P1
+
 - [ ] Fix WorkItem drop shadows
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
