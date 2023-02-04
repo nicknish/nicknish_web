@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @import './variables.css'; */
-/* @import './code-blocks.css'; */
-@import './code-blocks-2.css';
+@import './code-blocks.css';
 
 @layer base {
   :root {
@@ -32,18 +30,4 @@ a:hover,
 a:active {
   color: var(--color-primary-500);
   transition: color 150ms ease;
-}
-
-/* Dynamic Content from CMS */
-.content p {
-  margin: 1rem 0;
-}
-
-.content ul {
-  list-style: inherit;
-  padding-left: 1rem;
-}
-
-.content li {
-  margin-top: 0.5rem;
 }
