@@ -37,9 +37,7 @@ export default async function ProjectPage(props: IProjectPageProps) {
         title={project.title}
         description={project.body.code}
         date={formattedDate}
-        // TODO: Fix path?
-        // path={project.path}
-        external_url={project.url}
+        external_url={project.projectUrl}
         type={ShowTypes.PROJECT}
         image={project.bannerImage ? { url: project.bannerImage, description: 'Logo' } : undefined}
       />

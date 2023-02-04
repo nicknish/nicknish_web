@@ -33,9 +33,7 @@ export default function WorkPage(props: IWorkPageProps) {
         title={job.title}
         description={job.body.code}
         date={formattedDate}
-        // TODO: Fix path?
-        // path={job.path}
-        external_url={job.url}
+        external_url={job.jobUrl}
         type={ShowTypes.WORK}
         image={job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined}
       />

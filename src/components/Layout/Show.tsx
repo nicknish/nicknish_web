@@ -16,7 +16,6 @@ export enum ShowTypes {
 }
 
 interface IShowProps {
-  path?: string
   title: string
   description: string
   date: string
@@ -26,7 +25,6 @@ interface IShowProps {
 }
 
 export const Show = ({
-  path,
   title,
   description,
   date,
