@@ -89,20 +89,17 @@ export default async function WorkPage() {
         </SectionGrid>
 
         <div className="flex mt-6 md:mt-8 justify-center items-center">
-          <Button
-            component={OutboundLink}
-            componentProps={{
-              href: siteConfig.resumeUrl,
-              target: '_blank',
-              rel: 'noopener noreferrer',
-            }}
+          <Button.TrackingLink
+            href={siteConfig.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-lg inline-flex items-center justify-center"
             theme="primary"
             size="small"
           >
             See Resume
             <FaExternalLinkAlt className="align-middle top-[-1px] ml-2 text-sm relative" />
-          </Button>
+          </Button.TrackingLink>
         </div>
       </Section>
 

@@ -5,9 +5,9 @@ export function ContactFormSuccess() {
     <main className="px-5 mx-auto text-center">
       <h1 className="text-4xl my-5 font-bold">Thank you!</h1>
       <p className="text-lg mb-9">I will try to respond to your message within 24 hours.</p>
-      <Button theme="primary" size="small" linkProps={{ href: '/' }}>
+      <Button.InternalLink theme="primary" size="small" href="/">
         Go Home
-      </Button>
+      </Button.InternalLink>
     </main>
   )
 }

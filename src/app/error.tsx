@@ -22,9 +22,9 @@ export default function Error({ error, reset }: IErrorProps) {
   return (
     <div>
       <h2>Something went wrong!</h2>
-      <Button size="small" theme="primary" buttonProps={{ onClick: () => reset() }}>
+      <Button.Default size="small" theme="primary" onClick={() => reset()}>
         Try again
-      </Button>
+      </Button.Default>
     </div>
   )
 }

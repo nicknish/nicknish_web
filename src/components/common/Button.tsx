@@ -1,22 +1,7 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+import Link from 'next/link'
 
-import Link, { LinkProps } from 'next/link'
-
-export type ButtonThemes = 'primary'
-export type ButtonSizes = 'small'
-
-interface ButtonProps {
-  children: React.ReactNode
-  theme: ButtonThemes
-  size: ButtonSizes
-  className?: string
-  // TODO: Instead of linkProps can we just do component={<Link href="/" />}?
-  linkProps?: LinkProps
-  buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
-  // TODO: Typing could better enforce componentProps
-  component?: (props: any) => JSX.Element
-  componentProps?: any
-}
+import { OutboundLink, IOutboundLinkProps } from './OutboundLink'
 
 const themeClassNamesMap: { [T in ButtonThemes]: string } = {
   primary:
@@ -27,50 +12,71 @@ const sizeClassNamesMap: { [T in ButtonSizes]: string } = {
   small: 'text-sm py-[10px] px-5',
 }
 
-export const Button = ({
-  theme = 'primary',
-  size = 'small',
-  component,
-  componentProps,
-  children,
-  className,
-  linkProps,
-  buttonProps,
-}: ButtonProps) => {
+export const Button = {
+  Default: DefaultButton,
+  InternalLink: InternalLinkButton,
+  ExternalLink: ExternalLinkButton,
+  TrackingLink: OutboundTrackingLinkButton,
+}
+
+type ButtonThemes = 'primary'
+type ButtonSizes = 'small'
+
+export interface IButtonBaseProps {
+  theme: ButtonThemes
+  size: ButtonSizes
+}
+
+export interface IDefaultButtonProps
+  extends IButtonBaseProps,
+    React.ButtonHTMLAttributes<HTMLButtonElement> {}
+
+function DefaultButton(props: IDefaultButtonProps) {
+  const { theme, size, className, ...rest } = props
+  const allClassnames = getButtonClassNames({ theme, size, className })
+  return <button className={allClassnames} {...rest} />
+}
+
+export interface IInternalLinkButtonProps extends IButtonBaseProps {
+  href: string
+  className?: string
+  children?: React.ReactNode
+}
+
+function InternalLinkButton(props: IInternalLinkButtonProps) {
+  const { theme, size, className, ...rest } = props
+  const allClassnames = getButtonClassNames({ theme, size, className })
+  return <Link {...rest} className={allClassnames} />
+}
+
+export interface IExternalLinkButtonProps
+  extends IButtonBaseProps,
+    React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+
+function ExternalLinkButton(props: IExternalLinkButtonProps) {
+  const { theme, size, className, ...rest } = props
+  const allClassnames = getButtonClassNames({ theme, size, className })
+  return <a {...rest} className={allClassnames} />
+}
+
+export interface IOutboundTrackingLinkButtonProps extends IButtonBaseProps, IOutboundLinkProps {}
+
+function OutboundTrackingLinkButton(props: IOutboundTrackingLinkButtonProps) {
+  const { theme, size, className, ...rest } = props
+  const allClassnames = getButtonClassNames({ theme, size, className })
+  return <OutboundLink {...rest} className={allClassnames} />
+}
+
+function getButtonClassNames(args: {
+  theme: ButtonThemes
+  size: ButtonSizes
+  className?: string
+}): string {
+  const { theme, size, className } = args
   const defaultClassNames =
     'inline-block border-none rounded-sm no-underline tracking-wide font-semibold transition-all cursor-pointer'
   const themeClassNames = themeClassNamesMap[theme]
   const sizeClassNames = sizeClassNamesMap[size]
 
-  if (component) {
-    const Component = component
-    return (
-      <Component
-        {...componentProps}
-        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
-      >
-        {children}
-      </Component>
-    )
-  }
-
-  if (linkProps) {
-    return (
-      <Link
-        {...linkProps}
-        className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
-      >
-        {children}
-      </Link>
-    )
-  }
-
-  return (
-    <button
-      className={`${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`}
-      {...buttonProps}
-    >
-      <>{children}</>
-    </button>
-  )
+  return `${defaultClassNames} ${themeClassNames} ${sizeClassNames} ${className ?? ''}`
 }

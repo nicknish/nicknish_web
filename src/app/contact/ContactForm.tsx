@@ -127,13 +127,14 @@ export const ContactForm = () => {
           )}
 
           <div>
-            <Button
+            <Button.Default
               theme="primary"
               size="small"
-              buttonProps={{ type: 'submit', disabled: !(isValid || isSubmitting) }}
+              type="submit"
+              disabled={!(isValid || isSubmitting)}
             >
               Submit
-            </Button>
+            </Button.Default>
           </div>
 
           <footer className="mt-4 text-xs">
