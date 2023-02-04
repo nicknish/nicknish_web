@@ -10,6 +10,7 @@ interface ButtonProps {
   theme: ButtonThemes
   size: ButtonSizes
   className?: string
+  // TODO: Instead of linkProps can we just do component={<Link href="/" />}?
   linkProps?: LinkProps
   buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
   // TODO: Typing could better enforce componentProps

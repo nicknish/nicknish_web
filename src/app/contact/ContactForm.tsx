@@ -10,6 +10,7 @@ import { Label } from '@/components/common/form/Label'
 import { TextField } from '@/components/common/form/TextField'
 import { TextInput } from '@/components/common/form/TextInput'
 import { API_CONTACT_PATH } from '@/constants/urls'
+import { ContactFormSuccess } from './ContactFormSuccess'
 
 type FormData = {
   name: string
@@ -59,15 +60,7 @@ export const ContactForm = () => {
   }
 
   if (showSuccess) {
-    return (
-      <div className="px-5 mx-auto text-center">
-        <h1 className="text-4xl my-5 font-bold">Thank you!</h1>
-        <p className="text-lg mb-9">I will try to respond to your message within 24 hours.</p>
-        <Button theme="primary" size="small" linkProps={{ href: '/' }}>
-          Go Home
-        </Button>
-      </div>
-    )
+    return <ContactFormSuccess />
   }
 
   return (
