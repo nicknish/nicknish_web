@@ -1,5 +1,4 @@
-import { SITE_URL } from './constants/urls'
-
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL as string
 const TWITTER_USERNAME = '@nickjnish'
 const DISQUS_SHORTNAME = 'nicknish'
 

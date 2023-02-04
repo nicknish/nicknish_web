@@ -32,12 +32,12 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Contact me page
 - [x] Fix SEO for Posts, Projects, Work, etc.
 - [x] Fix newsletter page signing up for Mailchimp instead of Substack
+- [x] Fix sitemap
+- [ ] Fix light and dark mode for website
+- [ ] Fix Outbound Link tracking
 - [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [ ] Fix Post SEO
 - [ ] Fix `post.body.raw`
-- [ ] Fix sitemap
-- [ ] Fix light and dark mode for website
-- [ ] Fix Outbound Link tracking
 - [ ] Fix WorkItem drop shadows
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
@@ -45,4 +45,5 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
 - [ ] Cypress tests
+- [ ] Sentry error reporting
 - [ ] Fix Button disabled styles in dark mode
