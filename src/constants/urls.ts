@@ -11,5 +11,4 @@ export const CONTACT_PATH = '/contact'
 export const createPath = (type: string, slug: string) => `${type}/${slug}`
 
 const API_ROUTE = '/api'
-export const API_NEWSLETTER_PATH = `${API_ROUTE}/subscribe`
 export const API_CONTACT_PATH = `${API_ROUTE}/contact`
