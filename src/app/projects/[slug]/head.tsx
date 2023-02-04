@@ -4,10 +4,11 @@ import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
 
 import { IProjectPageProps } from './page'
-import { getProjectBySlug } from '@/lib/jobs-projects'
+import { allProjects } from 'contentlayer/generated'
+import { getItemBySlug } from '@/lib/utils'
 
 export default function ProjectPageHead(props: IProjectPageProps) {
-  const project = getProjectBySlug(props.params.slug)
+  const project = getItemBySlug(allProjects, props.params.slug)
   if (!project) {
     notFound()
   }

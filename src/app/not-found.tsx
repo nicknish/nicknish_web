@@ -1,5 +1,6 @@
 // NOTE: As of Feb 2023, this component is only used when notFound() is called
 // in a subroute.
+// Can we log what item was missing?
 // TODO: Complete styling
 export default function NotFound() {
   return (

@@ -7,15 +7,19 @@ import { Image } from '@/components/common/Image'
 
 import siteConfig from '@/config'
 import { NEWSLETTER_PATH } from '@/constants/urls'
-import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
-import type { Post } from 'contentlayer/generated'
+import { getPostsFromCollection } from '@/lib/posts'
+import { getItemBySlug } from '@/lib/utils'
+import { allPostCollections, Post } from 'contentlayer/generated'
+
 import PROFILE_IMG from './profile.png'
 
 export default async function StartPage() {
   const topTechnicalPosts = getPostsFromCollection(
-    getPostCollectionBySlug('popular-technical-posts')
+    getItemBySlug(allPostCollections, 'popular-technical-posts')
   )
-  const topProductPosts = getPostsFromCollection(getPostCollectionBySlug('popular-product-posts'))
+  const topProductPosts = getPostsFromCollection(
+    getItemBySlug(allPostCollections, 'popular-product-posts')
+  )
 
   return (
     <main className="px-4 mx-auto max-w-4xl">

@@ -4,8 +4,15 @@ import { compareDesc, format, parseISO } from 'date-fns'
 
 import { Image } from '@/components/common/Image'
 
-import { allPosts, allPostSeries, Post, PostSeries } from 'contentlayer/generated'
-import { getPostCollectionBySlug, getPostsFromCollection } from '@/lib/posts'
+import {
+  allPostCollections,
+  allPosts,
+  allPostSeries,
+  Post,
+  PostSeries,
+} from 'contentlayer/generated'
+import { getPostsFromCollection } from '@/lib/posts'
+import { getItemBySlug } from '@/lib/utils'
 
 function getPosts() {
   const posts = allPosts.sort((a, b) => {
@@ -20,7 +27,9 @@ function getPostSeries() {
 export default function Home() {
   const posts = getPosts()
   const postSeries = getPostSeries()
-  const popularPosts = getPostsFromCollection(getPostCollectionBySlug('homepage-popular-posts'))
+  const popularPosts = getPostsFromCollection(
+    getItemBySlug(allPostCollections, 'homepage-popular-posts')
+  )
 
   return (
     <main className="px-4 mx-auto max-w-4xl">

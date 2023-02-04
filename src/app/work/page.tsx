@@ -5,7 +5,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
-import { getJobs, sortItemsByDate } from '@/lib/jobs-projects'
+import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 
@@ -16,9 +16,9 @@ import { Button } from '@/components/common/Button'
 import HAPPY_IMG from './happy.svg'
 
 export default async function WorkPage() {
-  const jobHistory = sortItemsByDate(getJobs({ only: 'fulltime' }))
-  const contractJobHistory = sortItemsByDate(getJobs({ only: 'contract' }))
-  const projectHistory = sortItemsByDate(allProjects)
+  const jobHistory = sortProjectWorkItemsByStartDate(getJobs({ only: 'fulltime' }))
+  const contractJobHistory = sortProjectWorkItemsByStartDate(getJobs({ only: 'contract' }))
+  const projectHistory = sortProjectWorkItemsByStartDate(allProjects)
 
   return (
     <main className="px-4">

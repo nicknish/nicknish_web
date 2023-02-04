@@ -1,4 +1,4 @@
-import { type Project, type Job, allProjects, allJobs } from 'contentlayer/generated'
+import { type Project, type Job, allJobs } from 'contentlayer/generated'
 import { compareAsc, parseISO } from 'date-fns'
 
 export function getJobs(options: { only: 'fulltime' | 'contract' }) {
@@ -8,10 +8,6 @@ export function getJobs(options: { only: 'fulltime' | 'contract' }) {
   return allJobs
 }
 
-export function sortItemsByDate<Type extends Job | Project>(items: Type[]): Type[] {
+export function sortProjectWorkItemsByStartDate<Type extends Job | Project>(items: Type[]): Type[] {
   return items.sort((a, b) => compareAsc(parseISO(b.startDate), parseISO(a.startDate)))
-}
-
-export function getProjectBySlug(slug: Project['slug']): Project | undefined {
-  return allProjects.find(project => project.slug === slug)
 }

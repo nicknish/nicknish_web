@@ -5,7 +5,7 @@ import { Show, ShowTypes } from '@/components/layout/Show'
 
 import { getDate } from '@/utils/dates'
 import { allProjects, type Project } from 'contentlayer/generated'
-import { getProjectBySlug } from '@/lib/jobs-projects'
+import { getItemBySlug } from '@/lib/utils'
 
 export async function generateStaticParams() {
   return allProjects.map(project => ({ slug: project.slug }))
@@ -18,7 +18,7 @@ export interface IProjectPageProps {
 }
 
 export default async function ProjectPage(props: IProjectPageProps) {
-  const project = getProjectBySlug(props.params.slug)
+  const project = getItemBySlug(allProjects, props.params.slug)
   if (!project) {
     notFound()
   }

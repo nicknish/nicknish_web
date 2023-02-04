@@ -7,8 +7,8 @@ import { BlogPostComments } from './BlogPostComments'
 import { BlogPostCommentsCount } from './BlogPostCommentsCount'
 
 import { allPosts, Post } from 'contentlayer/generated'
-import { getBlogPostBySlug } from '@/lib/posts'
 import { formatIsoDate } from '@/utils/dates'
+import { getItemBySlug } from '@/lib/utils'
 
 export async function generateStaticParams() {
   return allPosts.map(post => ({ slug: post.slug }))
@@ -21,7 +21,7 @@ export interface IBlogPostProps {
 }
 
 export default function BlogPost(props: IBlogPostProps) {
-  const post = getBlogPostBySlug(props.params.slug)
+  const post = getItemBySlug(allPosts, props.params.slug)
   if (!post) {
     notFound()
   }

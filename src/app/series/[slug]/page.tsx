@@ -1,13 +1,16 @@
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+
 import { PageLayout } from '@/components/common/PageLayout'
 import { MDXBlock } from '@/components/common/MDXBlock'
-import { notFound } from 'next/navigation'
 import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
-import { getBlogPostSeriesBySlug, getPostsFromPostSeries } from '@/lib/posts'
-import { allPostSeries } from 'contentlayer/generated'
-import Link from 'next/link'
-import { formatIsoDate } from '@/utils/dates'
 import { Image } from '@/components/common/Image'
 import { ProseContainer } from '@/components/common/ProseContainer'
+
+import { getPostsFromPostSeries } from '@/lib/posts'
+import { allPostSeries } from 'contentlayer/generated'
+import { formatIsoDate } from '@/utils/dates'
+import { getItemBySlug } from '@/lib/utils'
 
 export async function generateStaticParams() {
   return allPostSeries.map(series => ({ slug: series.slug }))
@@ -20,7 +23,7 @@ export interface IBlogPostSeriesProps {
 }
 
 export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
-  const series = getBlogPostSeriesBySlug(props.params.slug)
+  const series = getItemBySlug(allPostSeries, props.params.slug)
   if (!series) {
     notFound()
   }
