@@ -66,7 +66,7 @@ export const Project = defineDocumentType(() => ({
   computedFields: {
     url: {
       type: 'string',
-      resolve: project => `/project/${project.slug}`,
+      resolve: project => `/projects/${project.slug}`,
     },
   },
 }))
