@@ -9,7 +9,7 @@ import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 
-import { OutboundLink } from '@/components/common/OutboundLink'
+import { WorkSideProjectsButton } from './WorkSideProjectsButton'
 import { WorkItem } from './WorkItem'
 import { Button } from '@/components/common/Button'
 
@@ -58,9 +58,12 @@ export default async function WorkPage() {
                 write
               </Link>{' '}
               occasionally and build{' '}
-              <a href="#projects" className="underline">
+              <WorkSideProjectsButton
+                className="underline hover:text-primary-500 transition-colors"
+                projectsSectionElementSelector={'[data-target="projects"]'}
+              >
                 side projects
-              </a>
+              </WorkSideProjectsButton>
               .
             </p>
           </div>
@@ -127,7 +130,7 @@ export default async function WorkPage() {
         </SectionGrid>
       </Section>
 
-      <Section data-testid="WorkSection--projects">
+      <Section data-testid="WorkSection--projects" data-target="projects">
         <SectionTitle id="projects">Projects</SectionTitle>
         <SectionGrid>
           {projectHistory.map(data => {

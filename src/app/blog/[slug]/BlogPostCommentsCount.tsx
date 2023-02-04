@@ -4,6 +4,7 @@ import { CommentCount } from 'disqus-react'
 
 import type { Post } from 'contentlayer/generated'
 import { useGetDisqusConfig } from './utils'
+import { isSmoothScrollSupported } from '@/utils/smoothScroll'
 
 interface IBlogPostCommentsCountProps {
   title: Post['title']
@@ -17,10 +18,13 @@ export function BlogPostCommentsCount(props: IBlogPostCommentsCountProps) {
 
   const handleClick = () => {
     const $blogPostSectionEl = document.querySelector(blogPostSectionElementSelector)
-
-    // Check element exists and scrollIntoView method is supported
-    if ($blogPostSectionEl && 'scrollIntoView' in $blogPostSectionEl) {
+    if (!$blogPostSectionEl) {
+      return
+    }
+    if (isSmoothScrollSupported()) {
       $blogPostSectionEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else {
+      $blogPostSectionEl.scrollIntoView(false)
     }
   }
 
