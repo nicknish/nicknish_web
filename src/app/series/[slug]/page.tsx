@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
-import { PageLayout } from '@/components/common/PageLayout'
-import { MDXBlock } from '@/components/common/MDXBlock'
-import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
+import { PageLayout } from '@/components/layout/PageLayout'
+import { MDXBlock } from '@/components/common/content/MDXBlock'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { Image } from '@/components/common/Image'
-import { ProseContainer } from '@/components/common/ProseContainer'
+import { ProseContainer } from '@/components/common/content/ProseContainer'
 
 import { getPostsFromPostSeries } from '@/lib/posts'
 import { allPostSeries } from 'contentlayer/generated'

@@ -1,8 +1,8 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
 
-import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
-import { MDXBlock } from '@/components/common/MDXBlock'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
+import { MDXBlock } from '@/components/common/content/MDXBlock'
 import { BlogPostComments } from './BlogPostComments'
 import { BlogPostCommentsCount } from './BlogPostCommentsCount'
 

@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { FaChevronLeft, FaExternalLinkAlt } from 'react-icons/fa'
 
-import { MDXBlock } from '@/components/common/MDXBlock'
-import { DynamicProseBlock } from '../../common/DynamicProseBlock'
-import { OutboundLink } from '../../common/OutboundLink'
-import { Image } from '../../common/Image'
+import { MDXBlock } from '@/components/common/content/MDXBlock'
+import { DynamicProseBlock } from '../common/content/DynamicProseBlock'
+import { OutboundLink } from '../common/OutboundLink'
+import { Image } from '../common/Image'
 
-import { WORK_PATH } from '../../../constants/urls'
-import { PageLayout } from '../../common/PageLayout'
-import { ProseContainer } from '../../common/ProseContainer'
+import { WORK_PATH } from '../../constants/urls'
+import { PageLayout } from './PageLayout'
+import { ProseContainer } from '../common/content/ProseContainer'
 
 export enum ShowTypes {
   PROJECT = 'project',

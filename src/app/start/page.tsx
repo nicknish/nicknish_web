@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { DynamicProseBlock } from '@/components/common/DynamicProseBlock'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { OutboundLink } from '@/components/common/OutboundLink'
 import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
