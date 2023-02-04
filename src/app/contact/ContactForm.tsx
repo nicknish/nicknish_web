@@ -98,6 +98,7 @@ export const ContactForm = () => {
               <TextField
                 defaultValue=""
                 placeholder=""
+                className="min-h-[6rem]"
                 {...register('message', { required: 'Message is required' })}
                 aria-invalid={errors.message ? 'true' : 'false'}
               />
