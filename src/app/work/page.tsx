@@ -9,7 +9,7 @@ import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 
-import { WorkSideProjectsButton } from './WorkSideProjectsButton'
+import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { WorkItem } from './WorkItem'
 import { Button } from '@/components/common/Button'
 
@@ -58,12 +58,12 @@ export default async function WorkPage() {
                 write
               </Link>{' '}
               occasionally and build{' '}
-              <WorkSideProjectsButton
+              <SmoothScrollButton
                 className="underline hover:text-primary-500 transition-colors"
-                projectsSectionElementSelector={'[data-target="projects"]'}
+                target="[data-target='projects']"
               >
                 side projects
-              </WorkSideProjectsButton>
+              </SmoothScrollButton>
               .
             </p>
           </div>

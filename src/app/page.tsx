@@ -1,8 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { compareDesc, format, parseISO } from 'date-fns'
-
-import { Image } from '@/components/common/Image'
 
 import {
   allPostCollections,
@@ -11,22 +8,16 @@ import {
   Post,
   PostSeries,
 } from 'contentlayer/generated'
-import { getPostsFromCollection } from '@/lib/posts'
+import { getPostsFromCollection, sortPostsByDate } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
+import { formatIsoDate } from '@/utils/dates'
 
-function getPosts() {
-  const posts = allPosts.sort((a, b) => {
-    return compareDesc(new Date(a.date), new Date(b.date))
-  })
-  return posts
-}
-function getPostSeries() {
-  return allPostSeries
-}
+import { Image } from '@/components/common/Image'
+import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 
 export default function Home() {
-  const posts = getPosts()
-  const postSeries = getPostSeries()
+  const posts = sortPostsByDate(allPosts)
+  const postSeries = allPostSeries
   const popularPosts = getPostsFromCollection(
     getItemBySlug(allPostCollections, 'homepage-popular-posts')
   )
@@ -48,12 +39,18 @@ export default function Home() {
           </div>
           <div className="mb-3">
             <span>👇</span>
-            <span className="ml-3">Or check out my latest writing</span>
+            <SmoothScrollButton
+              className="ml-3"
+              target="[data-target='blog-posts']"
+              scrollOptions={{ block: 'start' }}
+            >
+              Or check out my latest writing
+            </SmoothScrollButton>
           </div>
         </div>
       </header>
 
-      <section className="mb-12">
+      <section className="mb-12 scroll-m-4" data-target="blog-posts">
         <HomeSectionTitle>Popular Posts</HomeSectionTitle>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-x-3">
           {popularPosts.map((post, idx) => (
@@ -93,7 +90,7 @@ function PostCard(post: Post) {
   return (
     <div className="mb-6">
       <time dateTime={post.date} className="block text-sm text-black-50 dark:text-white-50">
-        {format(parseISO(post.date), 'LLLL d, yyyy')}
+        {formatIsoDate(post.date)}
       </time>
       <h3 className="text-lg">
         <Link href={post.url}>{post.title}</Link>
@@ -113,7 +110,7 @@ function PopularPostCard(post: Post) {
         <p className="text-sm line-clamp-4">{post.description}</p>
       </div>
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
-        {format(parseISO(post.date), 'LLLL d, yyyy')}
+        {formatIsoDate(post.date)}
       </time>
     </Link>
   )

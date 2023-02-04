@@ -10,7 +10,7 @@ export function getPostsFromPostSeries(series: PostSeries): Post[] {
   return sortPostsByDate(getPostsFromSlugs(series.posts))
 }
 
-function sortPostsByDate(posts: Post[]): Post[] {
+export function sortPostsByDate(posts: Post[]): Post[] {
   return posts.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)))
 }
 
