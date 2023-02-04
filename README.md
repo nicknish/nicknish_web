@@ -46,7 +46,6 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [ ] Fix WorkItem drop shadows
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
-- [ ] Add post likes "claps" with Supabase
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
 - [ ] Cypress tests
