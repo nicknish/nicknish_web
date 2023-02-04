@@ -16,6 +16,8 @@ export function BlogPostLikesButton({ likesCount, likesId }: IBlogPostLikesButto
   const likesIdRef = useRef(likesId)
   const [likesCountLocal, setLikesCountClient] = React.useState(likesCount)
 
+  // We know there are no dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdateLikes = React.useCallback(
     debounce(updateServerLikes, UPDATE_SERVER_LIKES_DEBOUNCE_MS),
     []
@@ -31,7 +33,7 @@ export function BlogPostLikesButton({ likesCount, likesId }: IBlogPostLikesButto
       debouncedUpdateLikes(likesCountLocal, likesIdRef.current)
     }
     return () => debouncedUpdateLikes.cancel()
-  }, [likesCountLocal])
+  }, [likesCountLocal, debouncedUpdateLikes])
 
   return (
     <div>

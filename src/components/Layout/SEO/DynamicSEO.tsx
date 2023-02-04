@@ -99,29 +99,35 @@ export interface SEOPropTypes {
   content: SEOPagePropTypes | SEOPostPropTypes
 }
 
-const getPageUrl = ({ siteUrl, path }) => {
+const getPageUrl = (args: { siteUrl: string; path: string }) => {
+  const { siteUrl, path } = args
   return path ? `${siteUrl}${path}` : siteUrl
 }
 
-const getPageTitle = ({ post, page, siteTitle, shortTitle }) => {
+// TODO: any
+const getPageTitle = (args: { post: any; page: any; siteTitle: string; shortTitle: string }) => {
+  const { post, page, siteTitle, shortTitle } = args
   if (page && page.title) return `${page.title} - ${shortTitle}`
   if (post && post.title) return `${post.title} - ${shortTitle}`
   return siteTitle
 }
 
-const getPageDescription = ({ page, post, siteDescription }) => {
+// TODO: any
+const getPageDescription = (args: { page: any; post: any; siteDescription: string }) => {
+  const { page, post, siteDescription } = args
   if (page && page.description) return page.description
   if (post && post.description) return post.description
   return siteDescription
 }
 
-const getPageImage = ({
-  siteUrl,
-  post,
-  defaultShareImage,
-  defaultShareImageWidth,
-  defaultShareImageHeight,
+const getPageImage = (args: {
+  siteUrl: string
+  post: any
+  defaultShareImage: string
+  defaultShareImageWidth: number
+  defaultShareImageHeight: number
 }) => {
+  const { siteUrl, post, defaultShareImage, defaultShareImageWidth, defaultShareImageHeight } = args
   let image
   let imgWidth
   let imgHeight
@@ -146,21 +152,37 @@ const getPageImage = ({
   return { image, imgWidth, imgHeight }
 }
 
-const getStructuredDataSchema = ({
-  page,
-  post,
-  title,
-  image,
-  imgWidth,
-  imgHeight,
-  pageUrl,
-  siteUrl,
-  siteTitle,
-  siteTitleAlt,
-  author,
-  authorUrl,
-  publisher,
+// TODO: any
+const getStructuredDataSchema = (args: {
+  page: any
+  post: any
+  title: string
+  image: string
+  imgWidth: string
+  imgHeight: string
+  pageUrl: string
+  siteUrl: string
+  siteTitle: string
+  siteTitleAlt: string
+  author: string
+  authorUrl: string
+  publisher: string
 }) => {
+  const {
+    page,
+    post,
+    title,
+    image,
+    imgWidth,
+    imgHeight,
+    pageUrl,
+    siteUrl,
+    siteTitle,
+    siteTitleAlt,
+    author,
+    authorUrl,
+    publisher,
+  } = args
   const schema: object[] = [
     {
       '@context': 'http://schema.org',
