@@ -1,13 +1,11 @@
-// TODO: Move to contentlayer
-
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
-import { allJobs, allProjects } from 'contentlayer/generated'
+import { allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
-import { sortItemsByDate } from '@/lib/jobs-projects'
+import { getJobs, sortItemsByDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 
@@ -18,7 +16,8 @@ import { Button } from '@/components/common/Button'
 import HAPPY_IMG from './happy.svg'
 
 export default async function WorkPage() {
-  const jobHistory = sortItemsByDate(allJobs)
+  const jobHistory = sortItemsByDate(getJobs({ only: 'fulltime' }))
+  const contractJobHistory = sortItemsByDate(getJobs({ only: 'contract' }))
   const projectHistory = sortItemsByDate(allProjects)
 
   return (
@@ -107,6 +106,30 @@ export default async function WorkPage() {
         </div>
       </Section>
 
+      <Section data-testid="WorkSection--contract">
+        <SectionTitle id="contract" element="h2">
+          Contract Work
+        </SectionTitle>
+        <SectionGrid gridColumns={Math.floor(contractJobHistory.length / 2)}>
+          {contractJobHistory.map(data => {
+            const { title, url, startDate, endDate, current, excerpt } = data
+            const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
+            const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
+
+            return (
+              <WorkItem
+                key={title}
+                href={url}
+                title={title}
+                // TODO
+                description={excerpt ?? ''}
+                footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
+              />
+            )
+          })}
+        </SectionGrid>
+      </Section>
+
       <Section data-testid="WorkSection--projects">
         <SectionTitle id="projects">Projects</SectionTitle>
         <SectionGrid>
@@ -140,10 +163,42 @@ function AboutSection(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
 function Section(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
   return <section className="my-10 md:my-16 mx-auto max-w-4xl" {...props} />
 }
-function SectionTitle(props: React.HtmlHTMLAttributes<HTMLHeadingElement>) {
-  const { className, ...rest } = props
-  return <h1 className={`text-4xl text-center font-bold mb-8 ${className ?? ''}`} {...rest} />
+
+interface ISectionTitleProps extends React.HtmlHTMLAttributes<HTMLHeadingElement> {
+  element?: string
 }
-function SectionGrid(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
-  return <div className="grid md:grid-cols-3 gap-x-2.5 gap-y-3" {...props} />
+
+function SectionTitle(props: ISectionTitleProps) {
+  const { className, element, ...rest } = props
+  const Element = element ?? 'h1'
+  const classNames = {
+    h1: 'text-4xl',
+    h2: 'text-3xl',
+    h3: 'text-2xl',
+    h4: 'text-xl',
+  }
+
+  return (
+    <Element
+      // @ts-ignore
+      className={`text-center font-bold mb-8 ${classNames[Element]} ${className ?? ''}`}
+      {...rest}
+    />
+  )
+}
+
+interface ISectionGridProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  gridColumns?: number
+}
+
+function SectionGrid(props: ISectionGridProps) {
+  const { gridColumns = 3, ...rest } = props
+  const gridColumnsNo = gridColumns > 4 ? 4 : gridColumns < 2 ? 2 : 3
+  const gridColumnClasses: Record<number, string> = {
+    2: 'md:grid-cols-2 gap-y-2',
+    3: 'md:grid-cols-3 gap-y-3',
+    4: 'md:grid-cols-4 gap-y-4',
+  }
+
+  return <div className={`grid gap-x-2.5 ${gridColumnClasses[gridColumnsNo]}`} {...rest} />
 }

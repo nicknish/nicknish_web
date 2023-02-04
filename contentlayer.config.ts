@@ -29,6 +29,7 @@ export const Job = defineDocumentType(() => ({
   fields: {
     title: { type: 'string', required: true },
     slug: { type: 'string', required: true },
+    fulltime: { type: 'boolean', required: true },
     startDate: { type: 'date', required: true },
     endDate: { type: 'date' },
     current: { type: 'boolean', required: true },
@@ -37,28 +38,6 @@ export const Job = defineDocumentType(() => ({
     thumbnail: { type: 'json' }, // TODO
     shareImage: { type: 'json' }, // TODO
     bannerImage: { type: 'string' },
-  },
-  computedFields: {
-    url: {
-      type: 'string',
-      resolve: job => `/work/${job.slug}`,
-    },
-  },
-}))
-
-export const ContractJob = defineDocumentType(() => ({
-  name: 'ContractJob',
-  contentType: 'mdx',
-  filePathPattern: 'contract-jobs/**/*.mdx',
-  fields: {
-    title: { type: 'string', required: true },
-    slug: { type: 'string', required: true },
-    startDate: { type: 'date', required: true },
-    endDate: { type: 'date' },
-    current: { type: 'boolean', required: true },
-    jobUrl: { type: 'string' },
-    excerpt: { type: 'string' },
-    thumbnail: { type: 'json' }, // TODO
   },
   computedFields: {
     url: {
@@ -124,7 +103,7 @@ export const PostSeries = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: './content',
-  documentTypes: [Post, PostCollection, PostSeries, Job, ContractJob, Project],
+  documentTypes: [Post, PostCollection, PostSeries, Job, Project],
   mdx: {
     remarkPlugins,
     rehypePlugins,
