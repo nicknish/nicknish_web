@@ -7,7 +7,9 @@ export const START_PATH = '/start'
 export const NEWSLETTER_PATH = '/newsletter'
 export const CONTACT_PATH = '/contact'
 
-export const createPath = (type: string, slug: string) => `${type}/${slug}`
-
 const API_ROUTE = '/api'
 export const API_CONTACT_PATH = `${API_ROUTE}/contact`
+
+export function createUrl(path: string) {
+  return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
+}

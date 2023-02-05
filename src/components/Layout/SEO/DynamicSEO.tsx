@@ -1,6 +1,5 @@
 /* TODO: This whole component needs a refactor */
 import React from 'react'
-import Script from 'next/script'
 
 import siteMetadata from '@/config'
 import {
@@ -35,16 +34,6 @@ export const SEO: React.FC<SEOPropTypes> = ({ type, content, path }) => {
     defaultShareImageWidth: shareImageWidth,
     defaultShareImageHeight: shareImageHeight,
   })
-  const schemaOrgJSONLD = getStructuredData({
-    page,
-    post,
-    pageUrl,
-    title,
-    image,
-    imgWidth,
-    imgHeight,
-    ...siteMetadata,
-  })
   const ogType = post ? 'article' : 'website'
 
   return (
@@ -54,14 +43,6 @@ export const SEO: React.FC<SEOPropTypes> = ({ type, content, path }) => {
       <link rel="canonical" href={pageUrl} />
       <meta name="image" content={image} />
       <meta name="description" content={description} />
-
-      {/* Schema.org tags */}
-      <Script
-        type="application/ld+json"
-        id="structured-data"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgJSONLD) }}
-        strategy="afterInteractive" // beforeInteractive causes errors in Next 13
-      />
 
       {/* OpenGraph tags */}
       <meta property="og:title" content={title} />
@@ -90,7 +71,7 @@ interface SEOPagePropTypes {
 interface SEOPostPropTypes {
   title: string
   description: string
-  publishedDate: string
+  datePublished: string
 }
 
 export interface SEOPropTypes {
