@@ -62,15 +62,17 @@ export default function HomePage() {
       <div className="md:grid md:grid-cols-3 md:gap-x-12">
         <section className="mb-12 md:col-span-2">
           <HomeSectionTitle>Latest Posts</HomeSectionTitle>
-          {/* TODO: Make better styling */}
-          {posts.map((post, idx) => (
-            <PostCard key={idx} {...post} />
-          ))}
+          <div className="flex flex-col gap-y-6 md:gap-y-8">
+            {/* TODO: Make better styling */}
+            {posts.map((post, idx) => (
+              <PostCard key={idx} {...post} />
+            ))}
+          </div>
         </section>
 
         <aside className="">
           <HomeSectionTitle>Post Series</HomeSectionTitle>
-          <div className="flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-4 md:gap-y-8">
             {postSeries.map((series, idx) => (
               <PostSeriesCard key={idx} {...series} />
             ))}
@@ -83,36 +85,40 @@ export default function HomePage() {
 
 function HomeSectionTitle(props: React.HtmlHTMLAttributes<HTMLHeadingElement>) {
   const { children } = props
-  return <h2 className="mb-3 uppercase tracking-wide">{children}</h2>
+  return (
+    <h2 className="mb-4 md:mb-5 uppercase tracking-wide text-black-80 dark:text-white-80">
+      {children}
+    </h2>
+  )
 }
 
 function PostCard(post: Post) {
   return (
-    <div className="mb-6">
-      <time dateTime={post.date} className="block text-sm text-black-50 dark:text-white-50">
-        {formatIsoDate(post.date)}
-      </time>
-      <h3 className="text-lg">
+    <article>
+      <h3 className="text-lg mb-2 font-semibold">
         <Link href={post.url}>{post.title}</Link>
       </h3>
-    </div>
+      <time dateTime={post.date} className="block mb-2 text-sm text-black-50 dark:text-white-50">
+        {formatIsoDate(post.date)}
+      </time>
+      <p className="text-black-80 dark:text-white-80 line-clamp-3">{post.description}</p>
+    </article>
   )
 }
 
 function PopularPostCard(post: Post) {
   return (
-    <Link
-      className="flex flex-col justify-between p-4 border-2 border-black-10 dark:border-white-10 rounded-sm"
-      href={post.url}
-    >
+    <div className="flex flex-col justify-between p-4 border-2 border-black-10 dark:border-white-10 rounded-sm">
       <div>
-        <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
+        <Link href={post.url}>
+          <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
+        </Link>
         <p className="text-sm line-clamp-4">{post.description}</p>
       </div>
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
         {formatIsoDate(post.date)}
       </time>
-    </Link>
+    </div>
   )
 }
 

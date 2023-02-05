@@ -1,4 +1,4 @@
-# nicknish.co
+\*\*\*\*# nicknish.co
 
 This portfolio version is built with NextJS, a static site generator. In this project, we use the
 JAMStack architecture using React, GraphQL, and Markdown files.
@@ -37,9 +37,9 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Fix sitemap
 - [ ] Fix light and dark mode for website
 - [x] Fix Outbound Link tracking
-- [ ] Fix Post descriptions (to show on Post Series pages and show as previews)
-  - [ ] Fix Post SEO
-  - [ ] Fix `post.body.raw`
+- [x] Fix Post descriptions (to show on Post Series pages and show as previews)
+  - [x] Fix Post SEO
+  - [x] Fix `post.body.raw`
 
 ### P1
 
