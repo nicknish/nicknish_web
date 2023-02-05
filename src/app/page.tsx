@@ -125,7 +125,7 @@ function PostSeriesCard(series: PostSeries) {
           alt={series.bannerImageCredit.raw}
           width="256"
           height="170"
-          className="w-full"
+          className="w-full h-auto"
         />
         <div className="absolute bg-black-50 top-0 w-full h-full group-hover:bg-black-60 transition-colors" />
       </div>
