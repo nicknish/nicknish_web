@@ -3,7 +3,13 @@ import React from 'react'
 import Script from 'next/script'
 
 import siteMetadata from '@/config'
-import { getPageDescription, getPageImage, getPageTitle, getPageUrl } from './utils'
+import {
+  getPageDescription,
+  getPageImage,
+  getPageTitle,
+  getPageUrl,
+  getStructuredData,
+} from './utils'
 
 const {
   siteUrl,
@@ -17,8 +23,8 @@ const {
 } = siteMetadata
 
 export const SEO: React.FC<SEOPropTypes> = ({ type, content, path }) => {
-  const page = type === SEOTypes.page ? content : null
-  const post = type === SEOTypes.post ? content : null
+  const page = type === 'page' ? content : null
+  const post = type === 'post' ? content : null
   const pageUrl = getPageUrl({ path, siteUrl })
   const title = getPageTitle({ page, post, siteTitle, shortTitle })
   const description = getPageDescription({ page, post, siteDescription })
@@ -29,7 +35,7 @@ export const SEO: React.FC<SEOPropTypes> = ({ type, content, path }) => {
     defaultShareImageWidth: shareImageWidth,
     defaultShareImageHeight: shareImageHeight,
   })
-  const schemaOrgJSONLD = getStructuredDataSchema({
+  const schemaOrgJSONLD = getStructuredData({
     page,
     post,
     pageUrl,
@@ -50,14 +56,12 @@ export const SEO: React.FC<SEOPropTypes> = ({ type, content, path }) => {
       <meta name="description" content={description} />
 
       {/* Schema.org tags */}
-      {/* TODO: Script throws runtime error with inline script */}
-      {/* <Script
+      <Script
         type="application/ld+json"
-        id=""
+        id="structured-data"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgJSONLD) }}
-        strategy="beforeInteractive"
-        async
-      /> */}
+        strategy="afterInteractive" // beforeInteractive causes errors in Next 13
+      />
 
       {/* OpenGraph tags */}
       <meta property="og:title" content={title} />
@@ -89,120 +93,8 @@ interface SEOPostPropTypes {
   publishedDate: string
 }
 
-export enum SEOTypes {
-  page = 'page',
-  post = 'post',
-}
-
 export interface SEOPropTypes {
   path: string
-  type: SEOTypes
+  type: 'page' | 'post'
   content: SEOPagePropTypes | SEOPostPropTypes
-}
-
-// TODO: any
-const getStructuredDataSchema = (args: {
-  page: any
-  post: any
-  title: string
-  image: string
-  imgWidth: string
-  imgHeight: string
-  pageUrl: string
-  siteUrl: string
-  siteTitle: string
-  siteTitleAlt: string
-  author: string
-  authorUrl: string
-  publisher: string
-}) => {
-  const {
-    page,
-    post,
-    title,
-    image,
-    imgWidth,
-    imgHeight,
-    pageUrl,
-    siteUrl,
-    siteTitle,
-    siteTitleAlt,
-    author,
-    authorUrl,
-    publisher,
-  } = args
-  const schema: object[] = [
-    {
-      '@context': 'http://schema.org',
-      '@type': 'WebSite',
-      url: siteUrl,
-      name: siteTitle,
-      alternateName: siteTitleAlt,
-    },
-  ]
-
-  if (page) {
-    schema.push({
-      '@context': 'http://schema.org',
-      '@type': 'WebPage',
-      url: pageUrl,
-      name: title,
-    })
-  }
-
-  // Blog Post Schema
-  if (post) {
-    schema.push(
-      {
-        '@context': 'http://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            item: {
-              '@id': siteUrl,
-              name: siteTitle,
-            },
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            item: {
-              '@id': pageUrl,
-              name: title,
-            },
-          },
-        ],
-      },
-      {
-        '@context': 'http://schema.org',
-        '@type': 'BlogPosting',
-        url: pageUrl,
-        name: title,
-        alternateName: siteTitleAlt,
-        headline: title,
-        image: {
-          '@type': 'ImageObject',
-          url: image,
-          width: imgWidth,
-          height: imgHeight,
-        },
-        author: {
-          '@type': 'Person',
-          name: author,
-          url: authorUrl,
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: publisher,
-          url: siteUrl,
-        },
-        datePublished: post.publishedDate,
-        mainEntityOfPage: pageUrl,
-      }
-    )
-  }
-
-  return schema
 }

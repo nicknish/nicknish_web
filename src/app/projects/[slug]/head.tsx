@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
 
 import { IProjectPageProps } from './page'
 import { allProjects } from 'contentlayer/generated'
@@ -17,8 +17,8 @@ export default function ProjectPageHead(props: IProjectPageProps) {
     <>
       <SiteMetadata />
       <SEO
+        type="post"
         path={project.url}
-        type={SEOTypes.page}
         content={{
           title: project.title,
           description: project.description,

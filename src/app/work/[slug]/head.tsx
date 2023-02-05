@@ -1,4 +1,4 @@
-import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 import { notFound } from 'next/navigation'
 
@@ -19,10 +19,11 @@ export default async function WorkPageHead(props: IWorkPageHeadProps) {
     <>
       <SiteMetadata />
       <SEO
+        type="post"
         path={job.url}
-        type={SEOTypes.page}
         content={{
           title: job.title,
+          description: job.description,
         }}
       />
     </>

@@ -1,11 +1,12 @@
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SiteTitle } from '@/components/layout/SEO/SiteTitle'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
+import { START_PATH } from '@/constants/urls'
 
 export default function StartPageHead() {
   return (
     <>
-      <SiteTitle pageTitle="Start Here" />
       <SiteMetadata />
+      <SEO type="page" path={START_PATH} content={{ title: 'Start Here' }} />
     </>
   )
 }

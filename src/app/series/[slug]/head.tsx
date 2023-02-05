@@ -1,5 +1,6 @@
-import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
+import { getPostsFromPostSeries } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { allPostSeries } from 'contentlayer/generated'
 import { notFound } from 'next/navigation'
@@ -10,14 +11,18 @@ export default function BlogPostSeriesPageHead(props: IBlogPostSeriesProps) {
   if (!series) {
     notFound()
   }
+  const recentPost = getPostsFromPostSeries(series).pop()
+
   return (
     <>
       <SiteMetadata />
       <SEO
-        type={SEOTypes.page}
+        type="post"
         path={series.url}
         content={{
           title: series.title,
+          description: series.description,
+          publishedDate: recentPost?.date,
         }}
       />
     </>

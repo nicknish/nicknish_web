@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { SEO, SEOTypes } from '@/components/layout/SEO/DynamicSEO'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
 
 import { type IBlogPostProps } from './page'
@@ -17,11 +17,10 @@ export default function BlogPostHead(props: IBlogPostProps) {
     <>
       <SiteMetadata />
       <SEO
+        type="post"
         path={post.url}
-        type={SEOTypes.post}
         content={{
           title: post.title,
-          // TODO
           description: post.description,
           publishedDate: post.date,
         }}

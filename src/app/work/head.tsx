@@ -1,11 +1,12 @@
 import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SiteTitle } from '@/components/layout/SEO/SiteTitle'
+import { SEO } from '@/components/layout/SEO/DynamicSEO'
+import { WORK_PATH } from '@/constants/urls'
 
 export default function WorkPageHead() {
   return (
     <>
-      <SiteTitle pageTitle="Career" />
       <SiteMetadata />
+      <SEO type="page" path={WORK_PATH} content={{ title: 'Career' }} />
     </>
   )
 }
