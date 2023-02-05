@@ -40,6 +40,7 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [x] Fix Post SEO
   - [x] Fix `post.body.raw`
+- [ ] Deploy new site
 
 ### P1
 
