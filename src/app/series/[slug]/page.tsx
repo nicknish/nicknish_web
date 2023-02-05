@@ -54,19 +54,16 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
         <MDXBlock code={series.body.code} />
       </DynamicProseBlock>
 
-      <ProseContainer className="grid grid-cols-1 gap-y-8">
+      <ProseContainer className="grid grid-cols-1 gap-y-6 mx-auto">
         {seriesPosts.map(post => (
           <Link
-            className="py-4 px-4 border dark:border-white-100 rounded-sm"
+            className="py-6 px-4 border dark:border-white-100 rounded-sm"
             href={post.url}
             key={post.slug}
           >
-            <h2 className="text-lg font-semibold">{post.title}</h2>
-            {post.description && <p className="mt-3">{post.description}</p>}
-            <time
-              dateTime={post.date}
-              className="block mt-2 text-sm text-black-50 dark:text-white-50"
-            >
+            <h2 className="text-xl mb-4 font-semibold">{post.title}</h2>
+            <p className="mb-3 text-black-80 dark:text-white-80">{post.description}</p>
+            <time dateTime={post.date} className="block text-sm text-black-50 dark:text-white-50">
               {formatIsoDate(post.date)}
             </time>
           </Link>

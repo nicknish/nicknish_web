@@ -14,6 +14,8 @@ import { WorkItem } from './WorkItem'
 import { Button } from '@/components/common/Button'
 
 import HAPPY_IMG from './happy.svg'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
+import { PageLayout } from '@/components/layout/PageLayout'
 
 export default async function WorkPage() {
   const jobHistory = sortProjectWorkItemsByStartDate(getJobs({ only: 'fulltime' }))
@@ -21,23 +23,22 @@ export default async function WorkPage() {
   const projectHistory = sortProjectWorkItemsByStartDate(allProjects)
 
   return (
-    <main className="px-4">
-      <div className="mx-auto max-w-4xl md:grid md:grid-cols-5 md:gap-x-8 items-center">
+    <PageLayout className="mt-8">
+      <div className="mx-auto md:grid md:grid-cols-5 md:gap-x-8 items-center">
         <div className="md:col-span-2 mb-8 md:mb-0">
-          {/* TODO: Figure out next/image better */}
           <Image
             src={HAPPY_IMG}
-            className="mx-auto max-w-100"
+            className="w-100 h-auto"
             alt="Illustration of man jumping with joy"
             priority
-            width={382}
-            height={374}
+            width="382"
+            height="374"
           />
         </div>
 
         <AboutSection data-testid="WorkSection--about">
           <SectionTitle className="md:text-left text-primary-500">About Me</SectionTitle>
-          <div className="text-lg">
+          <DynamicProseBlock>
             <p className="mb-5">
               Hello! My name is Nick Nish and I{"'"}m a Software Engineer with a particular love for
               Frontend Development.
@@ -59,14 +60,14 @@ export default async function WorkPage() {
               </Link>{' '}
               occasionally and build{' '}
               <SmoothScrollButton
-                className="underline hover:text-primary-500 transition-colors"
+                className="underline text-white-100 hover:text-primary-500 transition-colors"
                 target="[data-target='projects']"
               >
                 side projects
               </SmoothScrollButton>
               .
             </p>
-          </div>
+          </DynamicProseBlock>
         </AboutSection>
       </div>
 
@@ -151,7 +152,7 @@ export default async function WorkPage() {
           })}
         </SectionGrid>
       </Section>
-    </main>
+    </PageLayout>
   )
 }
 
@@ -161,7 +162,7 @@ function AboutSection(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
   )
 }
 function Section(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
-  return <section className="my-10 md:my-16 mx-auto max-w-4xl" {...props} />
+  return <section className="my-10 md:my-16 mx-auto" {...props} />
 }
 
 interface ISectionTitleProps extends React.HtmlHTMLAttributes<HTMLHeadingElement> {

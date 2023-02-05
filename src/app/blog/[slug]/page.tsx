@@ -28,7 +28,7 @@ export default function BlogPost(props: IBlogPostProps) {
 
   return (
     <main className="px-4 mx-auto max-w-3xl">
-      <article>
+      <section>
         <header className="my-12">
           <h1 className="mb-4 text-3xl md:text-4xl font-bold">{post.title}</h1>
           <div className="flex items-center gap-x-3 text-slate-600 dark:text-white-80">
@@ -61,7 +61,7 @@ export default function BlogPost(props: IBlogPostProps) {
             ))}
           </div>
         </footer>
-      </article>
+      </section>
 
       <div className="mt-8" data-target="comments">
         {/* TODO: Fix BlogPostLikes */}

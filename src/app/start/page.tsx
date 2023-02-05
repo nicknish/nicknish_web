@@ -12,6 +12,7 @@ import { getItemBySlug } from '@/lib/utils'
 import { allPostCollections, Post } from 'contentlayer/generated'
 
 import PROFILE_IMG from './profile.png'
+import { PageLayout } from '@/components/layout/PageLayout'
 
 export default async function StartPage() {
   const topTechnicalPosts = getPostsFromCollection(
@@ -22,7 +23,7 @@ export default async function StartPage() {
   )
 
   return (
-    <main className="px-4 mx-auto max-w-4xl">
+    <PageLayout className="mt-12">
       <StartHeader />
       <hr />
       <div className="text-center">
@@ -35,7 +36,7 @@ export default async function StartPage() {
         <hr />
         <StartNewsletter />
       </div>
-    </main>
+    </PageLayout>
   )
 }
 
@@ -54,7 +55,7 @@ function StartHeader() {
 
       <DynamicProseBlock className="md:col-span-3">
         <>
-          <h1 className="text-2xl md:text-3xl text-primary-500 font-bold">
+          <h1 className="text-4xl md:text-3xl text-primary-500 font-bold">
             Hi there, I{"'"}m Nick!
           </h1>
           <p>
@@ -84,23 +85,20 @@ function StartHeader() {
 function StartBio() {
   return (
     <StartSection>
-      <>
-        <h2 className="">Quick Bio</h2>
-        <p>
-          I{"'"}m a product-oriented engineer that loves startups. I currently work at Credit Karma.
-        </p>
-        <p>
-          I publish Makers, a newsletter for creatives, technologists, and makers.{' '}
-          <Link href={NEWSLETTER_PATH}>Subscribe here</Link> or{' '}
-          <OutboundLink href={siteConfig.newsletterUrl}>read the archive.</OutboundLink>
-        </p>
-        <p>Born and raised in Los Angeles.</p>
-        <p>Living in Portland, OR.</p>
-        <p>
-          Favorite book: <OutboundLink href="https://amzn.to/2XeHjMj">4-Hour Workweek</OutboundLink>
-          .
-        </p>
-      </>
+      <h2>Quick Bio</h2>
+      <p>
+        I{"'"}m a product-oriented engineer that loves startups. I currently work at Credit Karma.
+      </p>
+      <p>
+        I publish Makers, a newsletter for creatives, technologists, and makers.{' '}
+        <Link href={NEWSLETTER_PATH}>Subscribe here</Link> or{' '}
+        <OutboundLink href={siteConfig.newsletterUrl}>read the archive.</OutboundLink>
+      </p>
+      <p>Born and raised in Los Angeles.</p>
+      <p>Living in Portland, OR.</p>
+      <p>
+        Favorite book: <OutboundLink href="https://amzn.to/2XeHjMj">4-Hour Workweek</OutboundLink>.
+      </p>
     </StartSection>
   )
 }
@@ -114,13 +112,11 @@ function StartPopularPosts({
 }) {
   return (
     <StartSection>
-      <>
-        <h2>Popular Posts</h2>
-        <h3>Product</h3>
-        <StartPopularArticles posts={topProductPosts} />
-        <h3>Software Engineering</h3>
-        <StartPopularArticles posts={topTechnicalPosts} />
-      </>
+      <h2>Popular Posts</h2>
+      <h3>Product</h3>
+      <StartPopularArticles posts={topProductPosts} />
+      <h3>Software Engineering</h3>
+      <StartPopularArticles posts={topTechnicalPosts} />
     </StartSection>
   )
 }
@@ -128,21 +124,21 @@ function StartPopularPosts({
 function StartNewsletter() {
   return (
     <StartSection>
-      <>
-        <h2>Subscribe</h2>
-        <p>I publish Makers, an occasional newsletter for makers and creatives.</p>
-        <p>
-          It{"'"}s the best way to keep up with everything here, so drop your email below or{' '}
-          <OutboundLink href={siteConfig.newsletterUrl}>read the archive</OutboundLink>. I promise
-          to never do anything shady or send you spam.
-        </p>
+      <h2>Subscribe</h2>
+      <p>I publish Makers, an occasional newsletter for makers and creatives.</p>
+      <p>
+        It{"'"}s the best way to keep up with everything here, so drop your email below or{' '}
+        <OutboundLink href={siteConfig.newsletterUrl}>read the archive</OutboundLink>. I promise to
+        never do anything shady or send you spam.
+      </p>
+      <div className="max-w-xl mx-auto">
         <StartNewsletterSignupForm />
-      </>
+      </div>
     </StartSection>
   )
 }
 
-function StartSection({ children }: { children: JSX.Element }) {
+function StartSection({ children }: { children: React.ReactNode }) {
   return (
     <section className="my-8">
       <DynamicProseBlock className="mx-auto">{children}</DynamicProseBlock>

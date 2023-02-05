@@ -26,7 +26,7 @@ export default function HomePage() {
     <main className="px-4 mx-auto max-w-4xl">
       <header className="py-16">
         <div className="mx-auto max-w-xl text-lg">
-          <h1 className="mb-8 text-3xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
+          <h1 className="mb-8 text-4xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
           <p className="mb-8">
             Welcome to my blog where you{"'"}ll find writing on ideas, tutorials, and resources
             ranging on topics like startups, making products, and software engineering.
@@ -40,7 +40,7 @@ export default function HomePage() {
           <div className="mb-3">
             <span>👇</span>
             <SmoothScrollButton
-              className="ml-3"
+              className="ml-3 underline"
               target="[data-target='blog-posts']"
               scrollOptions={{ block: 'start' }}
             >
@@ -113,7 +113,7 @@ function PopularPostCard(post: Post) {
         <Link href={post.url}>
           <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
         </Link>
-        <p className="text-sm line-clamp-4">{post.description}</p>
+        <p className="text-sm line-clamp-4 text-black-80 dark:text-white-80">{post.description}</p>
       </div>
       <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
         {formatIsoDate(post.date)}

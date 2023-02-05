@@ -12,7 +12,7 @@ export function ProseContainer(props: IProseContainerProps) {
   return (
     <Element
       // @ts-ignore
-      className={`md:text-lg max-w-prose mx-auto ${className ?? ''}`}
+      className={`md:text-lg max-w-prose ${className ?? ''}`}
       {...rest}
     />
   )

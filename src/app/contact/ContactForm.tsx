@@ -11,6 +11,8 @@ import { TextField } from '@/components/common/form/TextField'
 import { TextInput } from '@/components/common/form/TextInput'
 import { API_CONTACT_PATH } from '@/constants/urls'
 import { ContactFormSuccess } from './ContactFormSuccess'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
+import { ProseContainer } from '@/components/common/content/ProseContainer'
 
 type FormData = {
   name: string
@@ -64,16 +66,16 @@ export const ContactForm = () => {
   }
 
   return (
-    <main>
-      <header className="mt-12">
-        <h1 className="text-4xl font-bold mb-8">Contact Me</h1>
-        <p className="mb-4">
+    <>
+      <DynamicProseBlock element="header" className="mt-12">
+        <h1 className="!text-4xl text-primary-500">Contact Me</h1>
+        <p>
           Howdy! If you{"'"}d like to reach me, simply fill out the form below and I{"'"}ll try to
           respond within 24 hours. Cheers!
         </p>
-      </header>
+      </DynamicProseBlock>
 
-      <div className="mt-8">
+      <ProseContainer className="mt-8">
         <form onSubmit={handleSubmit(onSubmit)} data-testid="NewsletterSignupForm">
           <div className="flex flex-col gap-y-5 mb-5">
             <Label label="Name *">
@@ -143,7 +145,7 @@ export const ContactForm = () => {
             <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
           </footer>
         </form>
-      </div>
-    </main>
+      </ProseContainer>
+    </>
   )
 }
