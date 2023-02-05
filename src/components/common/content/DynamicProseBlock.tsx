@@ -1,5 +1,7 @@
+import React from 'react'
+
 interface IDynamicProseBlock {
-  children: JSX.Element
+  children: React.ReactNode
   className?: string
 }
 

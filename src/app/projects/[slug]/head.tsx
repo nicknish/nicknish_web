@@ -21,7 +21,7 @@ export default function ProjectPageHead(props: IProjectPageProps) {
         type={SEOTypes.page}
         content={{
           title: project.title,
-          excerpt: project.excerpt,
+          description: project.description,
         }}
       />
     </>

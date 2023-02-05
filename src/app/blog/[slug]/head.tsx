@@ -22,7 +22,7 @@ export default function BlogPostHead(props: IBlogPostProps) {
         content={{
           title: post.title,
           // TODO
-          excerpt: post.description,
+          description: post.description,
           publishedDate: post.date,
         }}
       />

@@ -74,7 +74,7 @@ export default async function WorkPage() {
         <SectionTitle>Career</SectionTitle>
         <SectionGrid>
           {jobHistory.map(job => {
-            const { title, url, startDate, endDate, current, excerpt } = job
+            const { title, url, startDate, endDate, current, description } = job
             const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
             const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
 
@@ -84,7 +84,7 @@ export default async function WorkPage() {
                 href={url}
                 title={title}
                 // TODO
-                description={excerpt ?? ''}
+                description={description ?? ''}
                 footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
               />
             )
@@ -112,7 +112,7 @@ export default async function WorkPage() {
         </SectionTitle>
         <SectionGrid gridColumns={Math.floor(contractJobHistory.length / 2)}>
           {contractJobHistory.map(data => {
-            const { title, url, startDate, endDate, current, excerpt } = data
+            const { title, url, startDate, endDate, current, description } = data
             const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
             const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
 
@@ -122,7 +122,7 @@ export default async function WorkPage() {
                 href={url}
                 title={title}
                 // TODO
-                description={excerpt ?? ''}
+                description={description ?? ''}
                 footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
               />
             )
@@ -134,7 +134,7 @@ export default async function WorkPage() {
         <SectionTitle id="projects">Projects</SectionTitle>
         <SectionGrid>
           {projectHistory.map(data => {
-            const { title, url, startDate, endDate, current, excerpt } = data
+            const { title, url, startDate, endDate, current, description } = data
             const startDateFormatted = startDate ? formatIsoDate(startDate, 'MMM yyyy') : startDate
             const endDateFormatted = endDate ? formatIsoDate(endDate, 'MMM yyyy') : endDate
 
@@ -144,7 +144,7 @@ export default async function WorkPage() {
                 href={url}
                 title={title}
                 // TODO
-                description={excerpt ?? ''}
+                description={description ?? ''}
                 footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
               />
             )

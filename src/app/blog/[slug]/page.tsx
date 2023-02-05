@@ -43,6 +43,14 @@ export default function BlogPost(props: IBlogPostProps) {
         </header>
         <DynamicProseBlock>
           <MDXBlock code={post.body.code} />
+          <p>
+            Thanks for reading! You are my favorite person for sticking around until the end. 🍻
+          </p>
+          <p>
+            This blog is a constant work in progress, and I want to get better with your help! If
+            you have feedback or questions on this post, please leave a comment below, use my site’s
+            contact page, or reach out to me on Twitter.
+          </p>
         </DynamicProseBlock>
         <footer className="mt-8">
           <div className="flex items-center gap-x-2">

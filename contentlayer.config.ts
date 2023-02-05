@@ -10,7 +10,7 @@ export const Post = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     slug: { type: 'string', required: true },
     date: { type: 'date', required: true },
-    description: { type: 'string' },
+    description: { type: 'string', required: true },
     tags: { type: 'list', of: { type: 'string' } },
     shareImage: { type: 'json' }, // TODO
   },
@@ -34,7 +34,7 @@ export const Job = defineDocumentType(() => ({
     endDate: { type: 'date' },
     current: { type: 'boolean', required: true },
     jobUrl: { type: 'string' },
-    excerpt: { type: 'string' },
+    description: { type: 'string', required: true },
     thumbnail: { type: 'json' }, // TODO
     shareImage: { type: 'json' }, // TODO
     bannerImage: { type: 'string' },
@@ -58,7 +58,7 @@ export const Project = defineDocumentType(() => ({
     endDate: { type: 'date' },
     current: { type: 'boolean', required: true },
     projectUrl: { type: 'string' },
-    excerpt: { type: 'string' },
+    description: { type: 'string', required: true },
     thumbnail: { type: 'json' }, // TODO
     shareImage: { type: 'json' }, // TODO
     bannerImage: { type: 'string' },
@@ -90,6 +90,7 @@ export const PostSeries = defineDocumentType(() => ({
   filePathPattern: 'series/**/*.mdx',
   fields: {
     ...POST_COLLECTION_FIELDS,
+    description: { type: 'string', required: true },
     bannerImage: { type: 'string', required: true },
     bannerImageCredit: { type: 'markdown', required: true },
   },

@@ -84,7 +84,7 @@ interface SEOPagePropTypes {
 
 interface SEOPostPropTypes {
   title: string
-  excerpt: string
+  description: string
   publishedDate: string
 }
 
