@@ -43,7 +43,6 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 
 ### P1
 
-- [ ] Fix WorkItem drop shadows
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
 - [ ] Move all blog post images to locally stored ones and use Next Image
