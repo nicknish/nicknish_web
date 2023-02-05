@@ -1,4 +1,4 @@
-\*\*\*\*# nicknish.co
+# nicknish.co
 
 This portfolio version is built with NextJS, a static site generator. In this project, we use the
 JAMStack architecture using React, GraphQL, and Markdown files.
@@ -17,8 +17,12 @@ In production, some functionality (e.g. newsletter signup and contact form) will
 such as API keys. However, in development these features should work in a "developer mode" without
 hitting production endpoints.
 
-To test these features hitting production endpoints, duplicate the `.env.local.example` file with
-`cp .env.local.example .env.local` and update the values.
+To test these features hitting production endpoints, duplicate the `.env.local.example` file and
+update the values:
+
+```bash
+cp .env.local.example .env.local
+```
 
 ## TODO
 
@@ -40,6 +44,7 @@ To test these features hitting production endpoints, duplicate the `.env.local.e
 - [x] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [x] Fix Post SEO
   - [x] Fix `post.body.raw`
+- [ ] Add Google Analytics tracking
 - [ ] Deploy new site
 
 ### P1
