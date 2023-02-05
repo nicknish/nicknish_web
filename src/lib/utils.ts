@@ -8,6 +8,6 @@ export function getItemBySlug(
   collection: PostCollection[],
   slug: PostCollection['slug']
 ): PostCollection
-export function getItemBySlug(collection: any[], slug: string): T {
+export function getItemBySlug(collection: any[], slug: string) {
   return collection.find(item => item.slug === slug)
 }

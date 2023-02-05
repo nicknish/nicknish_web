@@ -15,8 +15,8 @@ import { formatIsoDate } from '@/utils/dates'
 import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 
-export default function Home() {
-  const posts = sortPostsByDate(allPosts)
+export default function HomePage() {
+  const posts = sortPostsByDate(allPosts, 'desc')
   const postSeries = allPostSeries
   const popularPosts = getPostsFromCollection(
     getItemBySlug(allPostCollections, 'homepage-popular-posts')

@@ -1,4 +1,4 @@
-import { compareAsc, parseISO } from 'date-fns'
+import { compareAsc, compareDesc, parseISO } from 'date-fns'
 
 import { allPosts, type PostSeries, type Post, type PostCollection } from 'contentlayer/generated'
 
@@ -7,11 +7,12 @@ export function getPostsFromCollection(collection: PostCollection): Post[] {
 }
 
 export function getPostsFromPostSeries(series: PostSeries): Post[] {
-  return sortPostsByDate(getPostsFromSlugs(series.posts))
+  return sortPostsByDate(getPostsFromSlugs(series.posts), 'asc')
 }
 
-export function sortPostsByDate(posts: Post[]): Post[] {
-  return posts.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)))
+export function sortPostsByDate(posts: Post[], order: 'asc' | 'desc'): Post[] {
+  const compareFn = order === undefined || order === 'asc' ? compareAsc : compareDesc
+  return posts.sort((a, b) => compareFn(parseISO(a.date), parseISO(b.date)))
 }
 
 function getPostsFromSlugs(slugs: Post['slug'][]): Post[] {
