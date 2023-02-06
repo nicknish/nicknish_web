@@ -1,6 +1,7 @@
 import React from 'react'
+import type { HtmlAttributes } from '@/types/elements'
 
-export interface IFormErrorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface IFormErrorProps extends HtmlAttributes<HTMLDivElement> {
   label: React.ReactNode
 }
 

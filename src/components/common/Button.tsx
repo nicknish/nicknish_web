@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 
+import type { HtmlAttributes } from '@/types/elements'
+
 import { OutboundLink, IOutboundLinkProps } from './Tracking/OutboundLink'
 
 const themeClassNamesMap: { [T in ButtonThemes]: string } = {
@@ -27,9 +29,7 @@ export interface IButtonBaseProps {
   size: ButtonSizes
 }
 
-export interface IDefaultButtonProps
-  extends IButtonBaseProps,
-    React.ButtonHTMLAttributes<HTMLButtonElement> {}
+export interface IDefaultButtonProps extends IButtonBaseProps, HtmlAttributes<HTMLButtonElement> {}
 
 function DefaultButton(props: IDefaultButtonProps) {
   const { theme, size, className, ...rest } = props
@@ -51,7 +51,7 @@ function InternalLinkButton(props: IInternalLinkButtonProps) {
 
 export interface IExternalLinkButtonProps
   extends IButtonBaseProps,
-    React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+    HtmlAttributes<HTMLAnchorElement> {}
 
 function ExternalLinkButton(props: IExternalLinkButtonProps) {
   const { theme, size, className, ...rest } = props

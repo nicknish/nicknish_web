@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 
 import {
@@ -11,6 +10,7 @@ import {
 import { getPostsFromCollection, sortPostsByDate } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { formatIsoDate } from '@/utils/dates'
+import type { HtmlAttributes } from '@/types/elements'
 
 import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
@@ -85,7 +85,7 @@ export default function HomePage() {
   )
 }
 
-function HomeSectionTitle(props: React.HtmlHTMLAttributes<HTMLHeadingElement>) {
+function HomeSectionTitle(props: HtmlAttributes<HTMLHeadingElement>) {
   const { children } = props
   return (
     <h2 className="mb-4 md:mb-5 uppercase tracking-wide text-black-80 dark:text-white-80">

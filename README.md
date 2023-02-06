@@ -59,3 +59,4 @@ cp .env.local.example .env.local
 - [ ] Cypress tests
 - [ ] Sentry error reporting
 - [ ] Fix Button disabled styles in dark mode
+- [x] Clean up with HtmlAttributes type

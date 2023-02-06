@@ -1,4 +1,3 @@
-import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -8,6 +7,7 @@ import { formatIsoDate, getDate } from '@/utils/dates'
 import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
+import type { HtmlAttributes } from '@/types/elements'
 
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { WorkItem } from './WorkItem'
@@ -165,16 +165,16 @@ export default async function WorkPage() {
   )
 }
 
-function AboutSection(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
+function AboutSection(props: HtmlAttributes<HTMLDivElement>) {
   return (
     <section className="md:col-span-3 mt-8 md:mt-0 mb-10 md:mb-0 mx-auto max-w-xl" {...props} />
   )
 }
-function Section(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
+function Section(props: HtmlAttributes<HTMLDivElement>) {
   return <section className="my-10 md:my-16 mx-auto" {...props} />
 }
 
-interface ISectionTitleProps extends React.HtmlHTMLAttributes<HTMLHeadingElement> {
+interface ISectionTitleProps extends HtmlAttributes<HTMLHeadingElement> {
   element?: string
 }
 
@@ -197,7 +197,7 @@ function SectionTitle(props: ISectionTitleProps) {
   )
 }
 
-interface ISectionGridProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+interface ISectionGridProps extends HtmlAttributes<HTMLDivElement> {
   gridColumns?: number
 }
 

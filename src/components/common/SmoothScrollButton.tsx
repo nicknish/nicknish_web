@@ -1,8 +1,9 @@
 'use client'
 
+import { HtmlAttributes } from '@/types/elements'
 import React from 'react'
 
-export interface ISmoothScrollButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ISmoothScrollButtonProps extends HtmlAttributes<HTMLButtonElement> {
   target: string
   scrollOptions?: ScrollIntoViewOptions
 }
