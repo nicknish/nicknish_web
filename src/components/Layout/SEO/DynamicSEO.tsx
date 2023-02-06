@@ -2,13 +2,7 @@
 import React from 'react'
 
 import siteMetadata from '@/config'
-import {
-  getPageDescription,
-  getPageImage,
-  getPageTitle,
-  getPageUrl,
-  getStructuredData,
-} from './utils'
+import { getPageDescription, getPageImage, getPageTitle, getPageUrl } from './utils'
 
 const {
   siteUrl,
