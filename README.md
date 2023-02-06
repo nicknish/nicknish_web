@@ -44,11 +44,14 @@ cp .env.local.example .env.local
 - [x] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [x] Fix Post SEO
   - [x] Fix `post.body.raw`
-- [ ] Add Google Analytics tracking
+- [x] Add Google Analytics tracking
+- [ ] Fix NextJS page transition scroll (not going to top)
 - [ ] Deploy new site
 
 ### P1
 
+- [ ] Remove Comment Count if it doesn't load
+- [x] Google Analytics: Add randomized memoized id to dedupe duplicate events?
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
 - [ ] Move all blog post images to locally stored ones and use Next Image

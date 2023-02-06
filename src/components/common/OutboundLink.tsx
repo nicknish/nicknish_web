@@ -1,5 +1,6 @@
 'use client'
 
+// TODO: Not really used usefully I think, esp in GA 4
 // Pulled from gatsby-plugin-google-analytics
 
 import { AnchorHTMLAttributes } from 'react'

@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation'
 
-import { Show, ShowTypes } from '@/components/layout/Show'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { allJobs, type Job } from 'contentlayer/generated'
 import { getJobBySlug } from './utils'
+
+import { Show, ShowTypes } from '@/components/layout/Show'
+import { TrackOnMount } from '@/components/common/Tracking'
 
 export async function generateStaticParams() {
   return allJobs.map(job => ({ slug: job.slug }))
@@ -28,15 +30,19 @@ export default function WorkPage(props: IWorkPageProps) {
   const formattedDate = getDate(formattedStartDate, formattedEndDate, job.current)
 
   return (
-    <main>
-      <Show
-        title={job.title}
-        description={job.body.code}
-        date={formattedDate}
-        external_url={job.jobUrl}
-        type={ShowTypes.WORK}
-        image={job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined}
-      />
-    </main>
+    <TrackOnMount trackingData={{ page: 'Job' }}>
+      <main>
+        <Show
+          title={job.title}
+          description={job.body.code}
+          date={formattedDate}
+          external_url={job.jobUrl}
+          type={ShowTypes.WORK}
+          image={
+            job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined
+          }
+        />
+      </main>
+    </TrackOnMount>
   )
 }

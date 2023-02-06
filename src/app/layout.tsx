@@ -1,7 +1,10 @@
 import '../css/global.css'
 import { Figtree, Fira_Code } from '@next/font/google'
+
 import { Nav } from '@/components/layout/Nav'
 import { Footer } from '@/components/layout/Footer'
+import { AppProviders } from './providers'
+import { LoadAnalyticsScripts } from '@/components/common/Tracking'
 
 const fontTitle = Figtree({
   subsets: ['latin'],
@@ -26,9 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       */}
       <head />
       <body className="site-container">
-        <Nav />
-        <div className="site-content">{children}</div>
-        <Footer />
+        <AppProviders>
+          <Nav />
+          <div className="site-content">{children}</div>
+          <Footer />
+          <LoadAnalyticsScripts />
+        </AppProviders>
       </body>
     </html>
   )

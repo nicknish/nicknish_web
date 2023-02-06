@@ -1,18 +1,19 @@
 import Link from 'next/link'
 
-import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
-import { OutboundLink } from '@/components/common/OutboundLink'
-import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
-import { Image } from '@/components/common/Image'
-
 import siteConfig from '@/config'
 import { NEWSLETTER_PATH } from '@/constants/urls'
 import { getPostsFromCollection } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { allPostCollections, Post } from 'contentlayer/generated'
 
-import PROFILE_IMG from './profile.png'
+import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
+import { OutboundLink } from '@/components/common/OutboundLink'
+import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
+import { Image } from '@/components/common/Image'
 import { PageLayout } from '@/components/layout/PageLayout'
+import { TrackOnMount } from '@/components/common/Tracking'
+
+import PROFILE_IMG from './profile.png'
 
 export default async function StartPage() {
   const topTechnicalPosts = getPostsFromCollection(
@@ -23,20 +24,22 @@ export default async function StartPage() {
   )
 
   return (
-    <PageLayout className="mt-12">
-      <StartHeader />
-      <hr />
-      <div className="text-center">
-        <StartBio />
+    <TrackOnMount trackingData={{ page: 'Start' }}>
+      <PageLayout className="mt-12">
+        <StartHeader />
         <hr />
-        <StartPopularPosts
-          topTechnicalPosts={topTechnicalPosts}
-          topProductPosts={topProductPosts}
-        />
-        <hr />
-        <StartNewsletter />
-      </div>
-    </PageLayout>
+        <div className="text-center">
+          <StartBio />
+          <hr />
+          <StartPopularPosts
+            topTechnicalPosts={topTechnicalPosts}
+            topProductPosts={topProductPosts}
+          />
+          <hr />
+          <StartNewsletter />
+        </div>
+      </PageLayout>
+    </TrackOnMount>
   )
 }
 

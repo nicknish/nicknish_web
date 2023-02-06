@@ -3,13 +3,15 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import HCaptcha from '@hcaptcha/react-hcaptcha'
+import { useTracking } from 'react-tracking'
+
+import { API_CONTACT_PATH } from '@/constants/urls'
 
 import { Button } from '@/components/common/Button'
 import { FormError } from '@/components/common/form/FormError'
 import { Label } from '@/components/common/form/Label'
 import { TextField } from '@/components/common/form/TextField'
 import { TextInput } from '@/components/common/form/TextInput'
-import { API_CONTACT_PATH } from '@/constants/urls'
 import { ContactFormSuccess } from './ContactFormSuccess'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { ProseContainer } from '@/components/common/content/ProseContainer'
@@ -28,6 +30,7 @@ export const ContactForm = () => {
   const captchaRef = React.useRef<HCaptcha>(null)
   const { formState, register, handleSubmit, setValue, resetField, setError } = useForm<FormData>()
   const { errors, isValid, isSubmitting } = formState
+  const { trackEvent } = useTracking()
 
   register('captcha', { required: true })
 
@@ -41,6 +44,7 @@ export const ContactForm = () => {
         .then(response => response.json())
         .then(({ data, error }) => {
           if (data && data.code < 300) {
+            trackEvent({ action: 'Contact Form Submit' })
             return updateShowSuccess(true)
           }
           if (error?.fields) {
