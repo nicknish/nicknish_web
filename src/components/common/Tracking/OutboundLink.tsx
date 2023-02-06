@@ -1,7 +1,6 @@
 'use client'
 
-// TODO: Not really used usefully I think, esp in GA 4
-// Pulled from gatsby-plugin-google-analytics
+// Amended from gatsby-plugin-google-analytics
 
 import { AnchorHTMLAttributes } from 'react'
 
@@ -37,23 +36,22 @@ export function OutboundLink(props: IOutboundLinkProps) {
         if (props.target && props.target.toLowerCase() !== `_self`) {
           redirect = false
         }
-        if (window.ga) {
-          window.ga(`send`, `event`, {
-            eventCategory: eventCategory || `Outbound Link`,
-            eventAction: eventAction || `click`,
-            eventLabel: eventLabel || props.href,
-            eventValue,
-            transport: redirect ? `beacon` : ``,
-            hitCallback: function () {
-              if (redirect) {
-                document.location = props.href
-              }
-            },
-          })
-        } else {
-          if (redirect) {
-            document.location = props.href
-          }
+
+        ;(window.dataLayer = window.dataLayer || []).push({
+          eventCategory: eventCategory || `Outbound Link`,
+          eventAction: eventAction || `click`,
+          eventLabel: eventLabel || props.href,
+          eventValue,
+          transport: redirect ? `beacon` : ``,
+          hitCallback: function () {
+            if (redirect) {
+              document.location = props.href
+            }
+          },
+        })
+
+        if (redirect) {
+          document.location = props.href
         }
 
         return false

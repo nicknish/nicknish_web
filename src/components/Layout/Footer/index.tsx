@@ -3,7 +3,7 @@ import React from 'react'
 import { FaGithubAlt, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 import siteConfig from '@/config'
-import { IOutboundLinkProps, OutboundLink } from '@/components/common/OutboundLink'
+import { IOutboundLinkProps, OutboundLink } from '@/components/common/Tracking/OutboundLink'
 import { CONTACT_PATH } from '@/constants/urls'
 
 type SocialMediaLinks<T> = Record<'github' | 'twitter' | 'linkedin', T>

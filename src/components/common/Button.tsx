@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { OutboundLink, IOutboundLinkProps } from './OutboundLink'
+import { OutboundLink, IOutboundLinkProps } from './Tracking/OutboundLink'
 
 const themeClassNamesMap: { [T in ButtonThemes]: string } = {
   primary:

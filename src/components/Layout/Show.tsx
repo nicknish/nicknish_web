@@ -3,7 +3,7 @@ import { FaChevronLeft, FaExternalLinkAlt } from 'react-icons/fa'
 
 import { MDXBlock } from '@/components/common/content/MDXBlock'
 import { DynamicProseBlock } from '../common/content/DynamicProseBlock'
-import { OutboundLink } from '../common/OutboundLink'
+import { OutboundLink } from '../common/Tracking'
 import { Image } from '../common/Image'
 
 import { WORK_PATH } from '../../constants/urls'

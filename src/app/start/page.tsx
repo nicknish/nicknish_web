@@ -7,7 +7,7 @@ import { getItemBySlug } from '@/lib/utils'
 import { allPostCollections, Post } from 'contentlayer/generated'
 
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
-import { OutboundLink } from '@/components/common/OutboundLink'
+import { OutboundLink } from '@/components/common/Tracking'
 import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
 import { PageLayout } from '@/components/layout/PageLayout'
