@@ -45,7 +45,7 @@ cp .env.local.example .env.local
   - [x] Fix Post SEO
   - [x] Fix `post.body.raw`
 - [x] Add Google Analytics tracking
-- [ ] Fix NextJS page transition scroll (not going to top)
+- [x] Fix NextJS page transition scroll (not going to top)
 - [ ] Deploy new site
 
 ### P1

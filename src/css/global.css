@@ -16,16 +16,6 @@ body {
   height: 100%;
 }
 
-.site-container {
-  display: flex;
-  min-height: 98vh;
-  flex-direction: column;
-}
-
-.site-content {
-  flex: 1;
-}
-
 a:hover,
 a:active {
   color: var(--color-primary-500);

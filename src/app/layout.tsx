@@ -21,17 +21,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${fontTitle.variable} ${fontCode.variable} dark:bg-[#2f2e36] dark:text-white-100`}
+      className={`h-full dark:bg-[#2f2e36] dark:text-white-100 scroll-smooth ${fontTitle.variable} ${fontCode.variable}`}
     >
       {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="site-container">
+      <body className="site-container h-full flex flex-col">
         <AppProviders>
           <Nav />
-          <div className="site-content">{children}</div>
+          <div className="site-content flex-1">{children}</div>
           <Footer />
           <LoadAnalyticsScripts />
         </AppProviders>
