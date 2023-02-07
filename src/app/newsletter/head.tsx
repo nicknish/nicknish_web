@@ -1,22 +1,20 @@
-import { createUrl, NEWSLETTER_PATH } from '@/constants/urls'
+import { createUrl } from '@/constants/urls'
+import { NEWSLETTER_PAGE_TITLE, NEWSLETTER_PATHNAME } from './constants'
 
-import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SEO } from '@/components/layout/SEO/DynamicSEO'
-import { StructuredData } from '@/components/layout/SEO/StructuredData'
-
-const PAGE_TITLE = 'Subscribe'
-const PATHNAME = NEWSLETTER_PATH
+import { SiteMetadata } from '@/components/Layout/SEO/SiteMetadata'
+import { SEO } from '@/components/Layout/SEO/DynamicSEO'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function NewsletterPageHead() {
   return (
     <>
       <SiteMetadata />
-      <SEO type="page" path={PATHNAME} content={{ title: PAGE_TITLE }} />
+      <SEO type="page" path={NEWSLETTER_PATHNAME} content={{ title: NEWSLETTER_PAGE_TITLE }} />
       <StructuredData
         type="Page"
         args={{
-          url: createUrl(PATHNAME),
-          title: PAGE_TITLE,
+          url: createUrl(NEWSLETTER_PATHNAME),
+          title: NEWSLETTER_PAGE_TITLE,
           description: '', // TODO
         }}
       />

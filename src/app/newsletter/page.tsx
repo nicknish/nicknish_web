@@ -1,11 +1,13 @@
+import { NEWSLETTER_PAGE_TITLE } from './constants'
+
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { TrackOnMount } from '@/components/common/Tracking'
-import { PageLayout } from '@/components/layout/PageLayout'
+import { PageLayout } from '@/components/Layout/PageLayout'
 import { NewsletterSignupForm } from './NewsletterSignupForm'
 
 export default function NewsletterPage() {
   return (
-    <TrackOnMount trackingData={{ page: 'Newsletter' }}>
+    <TrackOnMount trackingData={{ page: NEWSLETTER_PAGE_TITLE }}>
       <PageLayout className="mt-12">
         <DynamicProseBlock className="mb-6 md:mb-12">
           <h1 className="!text-3xl text-primary-500">Sign up for the Builders newsletter</h1>

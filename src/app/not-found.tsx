@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PageLayout } from '@/components/layout/PageLayout'
+import { PageLayout } from '@/components/Layout/PageLayout'
 import { ProseContainer } from '@/components/common/content/ProseContainer'
 import { Button } from '@/components/common/Button'
 import { ReportNotFoundError } from '@/components/pages/not-found/ReportNotFoundError'

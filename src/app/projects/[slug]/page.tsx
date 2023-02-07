@@ -5,7 +5,7 @@ import { getDate } from '@/utils/dates'
 import { allProjects, type Project } from 'contentlayer/generated'
 import { getItemBySlug } from '@/lib/utils'
 
-import { Show, ShowTypes } from '@/components/layout/Show'
+import { Show, ShowTypes } from '@/components/Layout/Show'
 import { TrackOnMount } from '@/components/common/Tracking'
 
 export async function generateStaticParams() {
@@ -34,18 +34,14 @@ export default async function ProjectPage(props: IProjectPageProps) {
 
   return (
     <TrackOnMount trackingData={{ page: 'Project' }}>
-      <main>
-        <Show
-          title={project.title}
-          description={project.body.code}
-          date={formattedDate}
-          external_url={project.projectUrl}
-          type={ShowTypes.PROJECT}
-          image={
-            project.bannerImage ? { url: project.bannerImage, description: 'Logo' } : undefined
-          }
-        />
-      </main>
+      <Show
+        title={project.title}
+        description={project.body.code}
+        date={formattedDate}
+        external_url={project.projectUrl}
+        type={ShowTypes.PROJECT}
+        image={project.bannerImage ? { url: project.bannerImage, description: 'Logo' } : undefined}
+      />
     </TrackOnMount>
   )
 }

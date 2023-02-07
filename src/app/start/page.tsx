@@ -10,7 +10,7 @@ import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock
 import { OutboundLink } from '@/components/common/Tracking'
 import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
-import { PageLayout } from '@/components/layout/PageLayout'
+import { PageLayout } from '@/components/Layout/PageLayout'
 import { TrackOnMount } from '@/components/common/Tracking'
 
 import PROFILE_IMG from './profile.png'

@@ -7,7 +7,7 @@ import { formatIsoDate } from '@/utils/dates'
 import { getItemBySlug } from '@/lib/utils'
 
 import { TrackOnMount } from '@/components/common/Tracking'
-import { PageLayout } from '@/components/layout/PageLayout'
+import { PageLayout } from '@/components/Layout/PageLayout'
 import { MDXBlock } from '@/components/common/content/MDXBlock'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { Image } from '@/components/common/Image'

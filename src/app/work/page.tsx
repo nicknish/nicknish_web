@@ -8,12 +8,13 @@ import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { HOME_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 import type { HtmlAttributes } from '@/types/elements'
+import { WORK_PAGE_TITLE } from './constants'
 
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { WorkItem } from './WorkItem'
 import { Button } from '@/components/common/Button'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
-import { PageLayout } from '@/components/layout/PageLayout'
+import { PageLayout } from '@/components/Layout/PageLayout'
 import { TrackOnMount } from '@/components/common/Tracking'
 
 import HAPPY_IMG from './happy.svg'
@@ -24,7 +25,7 @@ export default async function WorkPage() {
   const projectHistory = sortProjectWorkItemsByStartDate(allProjects)
 
   return (
-    <TrackOnMount trackingData={{ page: 'Career' }}>
+    <TrackOnMount trackingData={{ page: WORK_PAGE_TITLE }}>
       <PageLayout className="mt-8">
         <div className="mx-auto md:grid md:grid-cols-5 md:gap-x-8 items-center">
           <div className="md:col-span-2 mb-8 md:mb-0">

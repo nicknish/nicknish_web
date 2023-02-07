@@ -5,11 +5,11 @@ import { getItemBySlug } from '@/lib/utils'
 import { allPosts } from 'contentlayer/generated'
 import { createUrl } from '@/constants/urls'
 import siteConfig from '@/config'
-import { getMeAuthorStructuredData } from '@/components/layout/SEO/StructuredData/structuredDataUtils'
+import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
 
-import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SEO } from '@/components/layout/SEO/DynamicSEO'
-import { StructuredData } from '@/components/layout/SEO/StructuredData'
+import { SiteMetadata } from '@/components/Layout/SEO/SiteMetadata'
+import { SEO } from '@/components/Layout/SEO/DynamicSEO'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function BlogPostHead(props: IBlogPostProps) {
   const post = getItemBySlug(allPosts, props.params.slug)

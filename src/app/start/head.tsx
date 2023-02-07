@@ -1,22 +1,20 @@
-import { createUrl, START_PATH } from '@/constants/urls'
+import { createUrl } from '@/constants/urls'
+import { START_PAGE_PATHNAME, START_PAGE_TITLE } from './constants'
 
-import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { SEO } from '@/components/layout/SEO/DynamicSEO'
-import { StructuredData } from '@/components/layout/SEO/StructuredData'
-
-const PAGE_TITLE = 'Start Here'
-const PATHNAME = START_PATH
+import { SiteMetadata } from '@/components/Layout/SEO/SiteMetadata'
+import { SEO } from '@/components/Layout/SEO/DynamicSEO'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function StartPageHead() {
   return (
     <>
       <SiteMetadata />
-      <SEO type="page" path={PATHNAME} content={{ title: PAGE_TITLE }} />
+      <SEO type="page" path={START_PAGE_PATHNAME} content={{ title: START_PAGE_TITLE }} />
       <StructuredData
         type="Page"
         args={{
-          url: createUrl(PATHNAME),
-          title: PAGE_TITLE,
+          url: createUrl(START_PAGE_PATHNAME),
+          title: START_PAGE_TITLE,
           description: '', // TODO
         }}
       />

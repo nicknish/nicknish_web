@@ -1,15 +1,15 @@
 import { notFound } from 'next/navigation'
 
-import { getMeAuthorStructuredData } from '@/components/layout/SEO/StructuredData/structuredDataUtils'
+import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
 import { createUrl } from '@/constants/urls'
 import { getPostsFromPostSeries } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { allPostSeries } from 'contentlayer/generated'
 import type { IBlogPostSeriesProps } from './page'
 
-import { SEO } from '@/components/layout/SEO/DynamicSEO'
-import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { StructuredData } from '@/components/layout/SEO/StructuredData'
+import { SEO } from '@/components/Layout/SEO/DynamicSEO'
+import { SiteMetadata } from '@/components/Layout/SEO/SiteMetadata'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function BlogPostSeriesPageHead(props: IBlogPostSeriesProps) {
   const series = getItemBySlug(allPostSeries, props.params.slug)

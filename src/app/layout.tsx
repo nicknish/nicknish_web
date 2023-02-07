@@ -2,11 +2,11 @@ import '../css/global.css'
 
 import { fontTitle, fontCode } from '@/utils/fonts'
 
-import { Nav } from '@/components/layout/Nav'
-import { Footer } from '@/components/layout/Footer'
+import { Nav } from '@/components/Layout/Nav'
+import { Footer } from '@/components/Layout/Footer'
 import { AppProviders } from './providers'
 import { LoadAnalyticsScripts } from '@/components/common/Tracking'
-import { ErrorReporting } from '@/components/layout/ErrorReporting'
+import { ErrorReporting } from '@/components/Layout/ErrorReporting'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

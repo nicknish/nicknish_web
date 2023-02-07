@@ -4,7 +4,7 @@ import { formatIsoDate, getDate } from '@/utils/dates'
 import { allJobs, type Job } from 'contentlayer/generated'
 import { getJobBySlug } from './utils'
 
-import { Show, ShowTypes } from '@/components/layout/Show'
+import { Show, ShowTypes } from '@/components/Layout/Show'
 import { TrackOnMount } from '@/components/common/Tracking'
 
 export async function generateStaticParams() {
@@ -31,18 +31,14 @@ export default function WorkPage(props: IWorkPageProps) {
 
   return (
     <TrackOnMount trackingData={{ page: 'Job' }}>
-      <main>
-        <Show
-          title={job.title}
-          description={job.body.code}
-          date={formattedDate}
-          external_url={job.jobUrl}
-          type={ShowTypes.WORK}
-          image={
-            job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined
-          }
-        />
-      </main>
+      <Show
+        title={job.title}
+        description={job.body.code}
+        date={formattedDate}
+        external_url={job.jobUrl}
+        type={ShowTypes.WORK}
+        image={job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined}
+      />
     </TrackOnMount>
   )
 }

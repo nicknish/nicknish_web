@@ -9,6 +9,7 @@ const siteConfig = {
   themeColor: '#ff8061',
 
   /* SEO */
+  author: 'Nick Nish',
   shortTitle: 'Nick Nish', // App manifest, e.g. Mobile Home Screen
   shareImage: 'logos/share.png', // OpenGraph Default Share Image (recommended: 1200x1200)
   shareImageWidth: 1200,

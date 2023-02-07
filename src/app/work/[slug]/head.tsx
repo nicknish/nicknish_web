@@ -1,6 +1,6 @@
-import { SEO } from '@/components/layout/SEO/DynamicSEO'
-import { SiteMetadata } from '@/components/layout/SEO/SiteMetadata'
-import { StructuredData } from '@/components/layout/SEO/StructuredData'
+import { SEO } from '@/components/Layout/SEO/DynamicSEO'
+import { SiteMetadata } from '@/components/Layout/SEO/SiteMetadata'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 import { createUrl } from '@/constants/urls'
 import { notFound } from 'next/navigation'
 
