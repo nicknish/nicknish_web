@@ -1,6 +1,6 @@
 {
-  "name": "nicknish.co-nextjs",
-  "version": "0.1.0",
+  "name": "nicknish_web",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
