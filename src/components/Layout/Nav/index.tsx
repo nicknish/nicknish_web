@@ -18,13 +18,8 @@ export const Nav: React.FC = () => {
   const isStart = pathname?.includes('/start')
 
   return (
-    <nav className="flex w-full max-w-4xl px-4 py-8 mx-auto items-center justify-between">
-      <Link
-        href={HOME_PATH}
-        className={`${styles.logo} relative text-[22.5px] font-semibold dark:text-white-100`}
-      >
-        nicknish
-      </Link>
+    <nav className="flex w-full max-w-4xl px-4 py-8 mx-auto items-center justify-between dark:text-white-100">
+      <NavLogo />
       <div className="text-lg text-right">
         <NavLink href={START_PATH} isActive={isStart}>
           Start Here
@@ -43,6 +38,14 @@ export const Nav: React.FC = () => {
   )
 }
 
+function NavLogo() {
+  return (
+    <Link href={HOME_PATH} className={`${styles.logo} relative text-[22.5px] font-semibold`}>
+      nicknish
+    </Link>
+  )
+}
+
 interface INavLinkProps extends LinkProps {
   children: React.ReactNode
   isActive?: boolean
@@ -52,9 +55,7 @@ function NavLink({ href, isActive, ...linkProps }: INavLinkProps) {
   return (
     <Link
       href={href}
-      className={`mx-2 black-50 font-bold ${
-        isActive ? 'text-primary-500' : 'text-black-100 dark:text-white-100'
-      }`}
+      className={`mx-2 font-bold ${isActive ? 'text-primary-500' : ''}`}
       data-testid={`NavLink--${href}`}
       {...linkProps}
     />

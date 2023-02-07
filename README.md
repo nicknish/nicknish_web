@@ -39,7 +39,7 @@ cp .env.local.example .env.local
 - [x] Fix SEO for Posts, Projects, Work, etc.
 - [x] Fix newsletter page signing up for Mailchimp instead of Substack
 - [x] Fix sitemap
-- [ ] Fix light and dark mode for website
+- [x] Fix light and dark mode for website
 - [x] Fix Outbound Link tracking
 - [x] Fix Post descriptions (to show on Post Series pages and show as previews)
   - [x] Fix Post SEO

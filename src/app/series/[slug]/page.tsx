@@ -59,12 +59,14 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
         <ProseContainer className="grid grid-cols-1 gap-y-6 mx-auto">
           {seriesPosts.map(post => (
             <Link
-              className="py-6 px-4 border dark:border-white-100 rounded-sm"
+              className="group py-6 px-4 border dark:border-white-100 rounded-sm shadow-sm hover:shadow-md hover:text-inherit transition-all"
               href={post.url}
               key={post.slug}
             >
-              <h2 className="text-xl mb-4 font-semibold">{post.title}</h2>
-              <p className="mb-3 text-black-80 dark:text-white-80">{post.description}</p>
+              <h2 className="text-xl mb-4 font-semibold group-hover:text-primary-500">
+                {post.title}
+              </h2>
+              <p className="mb-3 dark:text-white-80">{post.description}</p>
               <time dateTime={post.date} className="block text-sm text-black-50 dark:text-white-50">
                 {formatIsoDate(post.date)}
               </time>

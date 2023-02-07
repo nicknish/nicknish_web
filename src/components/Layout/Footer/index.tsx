@@ -22,14 +22,14 @@ const ICONS: SocialMediaLinks<React.ReactElement> = {
 
 export const Footer = () => {
   return (
-    <footer className="w-full py-9 px-5 md:mt-9 text-center text-black-30 dark:text-white-70">
-      <nav className="mb-3">
+    <footer className="w-full py-9 px-5 md:mt-9 text-center text-black-50 dark:text-white-70">
+      <nav className="mb-5">
         <ul className="flex items-center justify-center p-0 m-0 list-none">
           {Object.keys(socialMediaUrls).map(key => (
             <li className="inline-flex" key={key}>
               <Link
                 href={socialMediaUrls[key as keyof SocialMediaLinks<string>]}
-                className="inline-block text-2xl p-2 m-1 text-black-30 dark:text-white-100"
+                className="inline-block text-2xl p-2 m-1 text-dark-30 dark:text-white-100"
               >
                 {ICONS[key as keyof SocialMediaLinks<React.ReactElement>]}
               </Link>
@@ -38,7 +38,7 @@ export const Footer = () => {
         </ul>
       </nav>
 
-      <nav className="flex justify-center gap-x-3 max-w-xl mx-auto mb-7 text-center">
+      <nav className="flex justify-center gap-x-3 max-w-xl mx-auto mb-8 text-center">
         <FooterTextLink type="OutboundLink" linkProps={{ href: siteConfig.newsletterUrl }}>
           Newsletter
         </FooterTextLink>

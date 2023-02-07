@@ -4,6 +4,7 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { useTracking } from 'react-tracking'
+import { useDarkMode } from 'usehooks-ts'
 
 import { API_CONTACT_PATH } from '@/constants/urls'
 
@@ -31,6 +32,7 @@ export const ContactForm = () => {
   const { formState, register, handleSubmit, setValue, resetField, setError } = useForm<FormData>()
   const { errors, isValid, isSubmitting } = formState
   const { trackEvent } = useTracking()
+  const { isDarkMode } = useDarkMode()
 
   register('captcha', { required: true })
 
@@ -121,7 +123,7 @@ export const ContactForm = () => {
               onError={() => resetField('captcha')}
               onExpire={() => resetField('captcha')}
               onChalExpired={() => resetField('captcha')}
-              theme="dark"
+              theme={isDarkMode ? 'dark' : 'light'}
               ref={captchaRef}
             />
           </div>
@@ -132,10 +134,10 @@ export const ContactForm = () => {
             </div>
           )}
 
-          <div>
+          <div className="mt-8">
             <Button.Default
               theme="primary"
-              size="small"
+              size="default"
               type="submit"
               disabled={!(isValid || isSubmitting)}
             >
@@ -143,7 +145,7 @@ export const ContactForm = () => {
             </Button.Default>
           </div>
 
-          <footer className="mt-4 text-xs">
+          <footer className="mt-4 text-xs text-black-40 dark:text-white-70">
             This site is protected by hCaptcha and its{' '}
             <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and{' '}
             <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.

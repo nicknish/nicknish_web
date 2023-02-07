@@ -16,12 +16,14 @@ export const WorkItem = ({
   return (
     <Link
       href={href}
-      className="flex flex-col justify-between p-5 rounded border border-black-20 dark:border-white-20 hover:text-primary-500 shadow-sm"
+      className="group flex flex-col justify-between p-5 rounded border border-black-20 dark:border-white-20 hover:text-inherit hover:shadow-lg shadow-sm transition-all"
       data-testid={`WorkItem--${href}`}
     >
       <div className="mb-3">
-        <p className="mb-3 text-xl font-semibold">{title}</p>
-        <p className="line-clamp-3 text-black-80 dark:text-white-80">{description}</p>
+        <p className="mb-3 text-xl font-semibold group-hover:text-primary-500 transition-colors">
+          {title}
+        </p>
+        <p className="line-clamp-3 dark:text-white-80">{description}</p>
       </div>
       <span className="text-sm text-black-50 dark:text-white-50">{footerSubtitle}</span>
     </Link>

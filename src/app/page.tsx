@@ -88,7 +88,7 @@ export default function HomePage() {
 function HomeSectionTitle(props: HtmlAttributes<HTMLHeadingElement>) {
   const { children } = props
   return (
-    <h2 className="mb-4 md:mb-5 uppercase tracking-wide text-black-80 dark:text-white-80">
+    <h2 className="mb-4 md:mb-5 uppercase tracking-wide text-black-50 dark:text-white-80">
       {children}
     </h2>
   )
@@ -100,10 +100,10 @@ function PostCard(post: Post) {
       <h3 className="text-lg mb-2 font-semibold">
         <Link href={post.url}>{post.title}</Link>
       </h3>
-      <time dateTime={post.date} className="block mb-2 text-sm text-black-50 dark:text-white-50">
+      <time dateTime={post.date} className="block mb-2 text-sm text-black-40 dark:text-white-50">
         {formatIsoDate(post.date)}
       </time>
-      <p className="text-black-80 dark:text-white-80 line-clamp-3">{post.description}</p>
+      <p className="dark:text-white-80 line-clamp-3">{post.description}</p>
     </article>
   )
 }
@@ -115,9 +115,9 @@ function PopularPostCard(post: Post) {
         <Link href={post.url}>
           <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
         </Link>
-        <p className="text-sm line-clamp-4 text-black-80 dark:text-white-80">{post.description}</p>
+        <p className="text-sm line-clamp-4 dark:text-white-80">{post.description}</p>
       </div>
-      <time dateTime={post.date} className="block mt-4 text-sm text-black-50 dark:text-white-50">
+      <time dateTime={post.date} className="block mt-4 text-sm dark:text-white-50">
         {formatIsoDate(post.date)}
       </time>
     </div>
@@ -135,9 +135,9 @@ function PostSeriesCard(series: PostSeries) {
           height="170"
           className="w-full h-auto"
         />
-        <div className="absolute bg-black-50 top-0 w-full h-full group-hover:bg-black-60 transition-colors" />
+        <div className="absolute bg-black-30 dark:bg-black-50 top-0 w-full h-full group-hover:bg-black-60 transition-colors" />
       </div>
-      <h3 className="relative w-full px-4 text-center dark:text-white-100 font-bold text-lg">
+      <h3 className="relative w-full px-4 text-center text-white-100 font-bold text-lg">
         {series.title}
       </h3>
     </Link>

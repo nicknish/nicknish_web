@@ -10,6 +10,7 @@ import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock
 import { MDXBlock } from '@/components/common/content/MDXBlock'
 import { BlogPostComments } from './BlogPostComments'
 import { BlogPostCommentsCount } from './BlogPostCommentsCount'
+import { BlogPostTags } from './BlogPostTags'
 
 export async function generateStaticParams() {
   return allPosts.map(post => ({ slug: post.slug }))
@@ -54,15 +55,11 @@ export default function BlogPost(props: IBlogPostProps) {
               site’s contact page, or reach out to me on Twitter.
             </p>
           </DynamicProseBlock>
-          <footer className="mt-8">
-            <div className="flex items-center gap-x-2">
-              {post.tags?.map((tag, idx) => (
-                <div className="px-2 py-2 dark:bg-black-30" key={idx}>
-                  {tag}
-                </div>
-              ))}
-            </div>
-          </footer>
+          {post.tags && (
+            <footer className="mt-8">
+              <BlogPostTags tags={post.tags} />
+            </footer>
+          )}
         </section>
 
         <div className="mt-8" data-target="comments">

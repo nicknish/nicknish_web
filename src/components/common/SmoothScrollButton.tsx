@@ -37,5 +37,11 @@ export function SmoothScrollButton(props: ISmoothScrollButtonProps) {
     return <span className={className ?? ''}>{rest.children}</span>
   }
 
-  return <button {...rest} className={className ?? ''} onClick={handleClick} />
+  return (
+    <button
+      {...rest}
+      className={`hover:text-primary-600 transition-colors ${className ?? ''}`}
+      onClick={handleClick}
+    />
+  )
 }

@@ -53,7 +53,7 @@ export const Show = ({
         </div>
         <h1 className="text-5xl font-bold mb-3">{title}</h1>
         <div className="text-lg">
-          <span className="text-black-80 dark:text-white-80">{date}</span>
+          <span className="text-black-60 dark:text-white-80">{date}</span>
           {external_url && (
             <OutboundLink
               href={external_url}

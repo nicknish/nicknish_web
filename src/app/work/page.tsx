@@ -103,7 +103,7 @@ export default async function WorkPage() {
               rel="noopener noreferrer"
               className="text-lg inline-flex items-center justify-center"
               theme="primary"
-              size="small"
+              size="default"
             >
               See Resume
               <FaExternalLinkAlt className="align-middle top-[-1px] ml-2 text-sm relative" />
