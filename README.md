@@ -58,6 +58,6 @@ cp .env.local.example .env.local
 - [ ] Update Resume link
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
-- [ ] Fix Button disabled styles in dark mode
+- [x] Fix Button disabled styles in dark mode
 - [ ] Add page animations
 - [ ] Fix code block highlight styling

@@ -1,17 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
 
-import type { HtmlAttributes } from '@/types/elements'
+import type { HtmlButtonAttributes } from '@/types/elements'
 
 import { OutboundLink, IOutboundLinkProps } from './Tracking/OutboundLink'
 
 const themeClassNamesMap: { [T in ButtonThemes]: string } = {
   primary:
-    'bg-primary-500 text-white-100 hover:bg-primary-600 hover:text-white-90 dark:bg-white-90 dark:text-black-70 hover:dark:bg-white-60 hover:dark:text-black-70',
+    'bg-primary-500 text-white-100 enabled:hover:bg-primary-600 dark:text-white-80 disabled:opacity-80 transition-colors',
 }
 
 const sizeClassNamesMap: { [T in ButtonSizes]: string } = {
   small: 'text-sm py-[10px] px-5',
+  default: 'text-base py-[12px] px-6',
 }
 
 export const Button = {
@@ -22,14 +23,16 @@ export const Button = {
 }
 
 type ButtonThemes = 'primary'
-type ButtonSizes = 'small'
+type ButtonSizes = 'small' | 'default'
 
 export interface IButtonBaseProps {
   theme: ButtonThemes
   size: ButtonSizes
 }
 
-export interface IDefaultButtonProps extends IButtonBaseProps, HtmlAttributes<HTMLButtonElement> {}
+export interface IDefaultButtonProps
+  extends IButtonBaseProps,
+    HtmlButtonAttributes<HTMLButtonElement> {}
 
 function DefaultButton(props: IDefaultButtonProps) {
   const { theme, size, className, ...rest } = props
@@ -51,7 +54,7 @@ function InternalLinkButton(props: IInternalLinkButtonProps) {
 
 export interface IExternalLinkButtonProps
   extends IButtonBaseProps,
-    HtmlAttributes<HTMLAnchorElement> {}
+    HtmlButtonAttributes<HTMLAnchorElement> {}
 
 function ExternalLinkButton(props: IExternalLinkButtonProps) {
   const { theme, size, className, ...rest } = props
