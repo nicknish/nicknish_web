@@ -1,11 +1,22 @@
+import React from 'react'
+
+import { PageLayout } from '@/components/layout/PageLayout'
+import { ProseContainer } from '@/components/common/content/ProseContainer'
+import { Button } from '@/components/common/Button'
+import { ReportNotFoundError } from '@/components/pages/not-found/ReportNotFoundError'
+
 // NOTE: As of Feb 2023, this component is only used when notFound() is called
 // in a subroute.
-// Can we log what item was missing?
-// TODO: Complete styling
 export default function NotFound() {
   return (
-    <main className="px-4 mx-auto max-w-4xl">
-      <div>Not found</div>
-    </main>
+    <PageLayout className="tc">
+      <ProseContainer>
+        <h2>Not found</h2>
+      </ProseContainer>
+      <Button.InternalLink theme="primary" size="default" href="/">
+        Go Home
+      </Button.InternalLink>
+      <ReportNotFoundError />
+    </PageLayout>
   )
 }

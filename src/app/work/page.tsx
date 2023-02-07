@@ -88,8 +88,7 @@ export default async function WorkPage() {
                   key={title}
                   href={url}
                   title={title}
-                  // TODO
-                  description={description ?? ''}
+                  description={description}
                   footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
                 />
               )
@@ -128,8 +127,7 @@ export default async function WorkPage() {
                   key={title}
                   href={url}
                   title={title}
-                  // TODO
-                  description={description ?? ''}
+                  description={description}
                   footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
                 />
               )
@@ -152,8 +150,7 @@ export default async function WorkPage() {
                   key={title}
                   href={url}
                   title={title}
-                  // TODO
-                  description={description ?? ''}
+                  description={description}
                   footerSubtitle={getDate(startDateFormatted, endDateFormatted, current)}
                 />
               )

@@ -2,8 +2,7 @@ export {}
 
 declare global {
   interface Window {
-    ga?: Function
+    // Google Analytics: Queue of events to transmit to GA-4
     dataLayer?: any[]
-    Sentry?: any // TODO
   }
 }

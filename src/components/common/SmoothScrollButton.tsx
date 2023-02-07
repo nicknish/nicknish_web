@@ -1,6 +1,7 @@
 'use client'
 
 import { HtmlAttributes } from '@/types/elements'
+import { isBrowser } from '@/utils/environment'
 import React from 'react'
 
 export interface ISmoothScrollButtonProps extends HtmlAttributes<HTMLButtonElement> {
@@ -26,9 +27,8 @@ export function SmoothScrollButton(props: ISmoothScrollButtonProps) {
     }
   }
 
-  // TODO: Find a more performant way to check this once for all users
   React.useEffect(() => {
-    if ('scrollBehavior' in document.documentElement.style) {
+    if (isBrowser() && 'scrollBehavior' in document.documentElement.style) {
       setIsSupported(true)
     }
   }, [])

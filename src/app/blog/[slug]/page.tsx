@@ -63,8 +63,6 @@ export default function BlogPost(props: IBlogPostProps) {
         </section>
 
         <div className="mt-8" data-target="comments">
-          {/* TODO: Fix BlogPostLikes */}
-          {/* <BlogPostLikes slug={slug} /> */}
           <BlogPostComments title={post.title} identifier={post.slug} />
         </div>
       </main>

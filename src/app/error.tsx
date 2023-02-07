@@ -1,7 +1,11 @@
 'use client'
 
-import { Button } from '@/components/common/Button'
 import React from 'react'
+import { usePathname } from 'next/navigation'
+
+import { reportError } from '@/utils/reporting'
+
+import { Button } from '@/components/common/Button'
 
 interface IErrorProps {
   error: Error
@@ -9,15 +13,11 @@ interface IErrorProps {
 }
 
 export default function Error({ error, reset }: IErrorProps) {
+  const pathname = usePathname()
+
   React.useEffect(() => {
-    // TODO: Is there any more error data we can scope to Sentry?
-    // window.Sentry.configureScope(scope => {
-    //   Object.keys(errorInfo).forEach(key => {
-    //     scope.setExtra(key, errorInfo[key])
-    //   })
-    // })
-    window.Sentry.captureException(error)
-  }, [error])
+    reportError(error, { extra: { pathname: pathname } })
+  }, [error, pathname])
 
   return (
     <div>
