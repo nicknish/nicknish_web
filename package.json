@@ -13,6 +13,8 @@
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@next/font": "13.1.2",
     "@sendgrid/mail": "^7.7.0",
+    "@sentry/react": "^7.36.0",
+    "@sentry/tracing": "^7.36.0",
     "date-fns": "^2.29.3",
     "disqus-react": "^1.1.5",
     "hcaptcha": "^0.1.1",

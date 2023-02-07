@@ -57,7 +57,7 @@ cp .env.local.example .env.local
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
 - [ ] Cypress tests
-- [ ] Sentry error reporting
+- [x] Sentry error reporting
 - [ ] Fix Button disabled styles in dark mode
 - [x] Clean up with HtmlAttributes type
 - [ ] Add page animations

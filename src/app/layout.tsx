@@ -6,6 +6,7 @@ import { Nav } from '@/components/layout/Nav'
 import { Footer } from '@/components/layout/Footer'
 import { AppProviders } from './providers'
 import { LoadAnalyticsScripts } from '@/components/common/Tracking'
+import { ErrorReporting } from '@/components/layout/ErrorReporting'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="site-content flex-1">{children}</div>
           <Footer />
           <LoadAnalyticsScripts />
+          <ErrorReporting />
         </AppProviders>
       </body>
     </html>
