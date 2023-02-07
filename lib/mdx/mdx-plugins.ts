@@ -3,7 +3,7 @@ import rehypeCodeTitles from 'rehype-code-titles'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import { rehypePrettyCode, rehypePrettyCodeOptions } from './mdx/code-blocks'
+import { rehypePrettyCode, rehypePrettyCodeOptions } from './code-blocks'
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 
 export const remarkPlugins: Pluggable[] = [

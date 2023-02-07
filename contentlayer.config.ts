@@ -1,6 +1,6 @@
 // Styled after https://github.com/kfirfitousi/blog
 import { defineDocumentType, type FieldDefs, makeSource } from 'contentlayer/source-files'
-import { rehypePlugins, remarkPlugins } from './lib/mdx-plugins'
+import { rehypePlugins, remarkPlugins } from './lib/mdx/mdx-plugins'
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
