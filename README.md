@@ -50,7 +50,7 @@ cp .env.local.example .env.local
 
 ### P1
 
-- [ ] Remove Comment Count if it doesn't load
+- [x] Remove Comment Count if it doesn't load
 - [x] Google Analytics: Add randomized memoized id to dedupe duplicate events?
 - [ ] Update Resume link
 - [ ] Fix code block highlight styling
