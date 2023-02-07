@@ -2,9 +2,9 @@
 
 // Amended from gatsby-plugin-google-analytics
 
-import type { HtmlAttributes } from '@/types/elements'
+import type { HtmlAnchorAttributes } from '@/types/elements'
 
-export interface IOutboundLinkProps extends HtmlAttributes<HTMLAnchorElement> {
+export interface IOutboundLinkProps extends HtmlAnchorAttributes<HTMLAnchorElement> {
   href: string
   target?: string
   eventCategory?: string

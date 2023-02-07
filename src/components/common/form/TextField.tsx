@@ -1,7 +1,7 @@
 import React from 'react'
-import type { HtmlAttributes } from '@/types/elements'
+import type { HtmlTextareaAttributes } from '@/types/elements'
 
-export interface ITextFieldProps extends HtmlAttributes<HTMLTextAreaElement> {}
+export interface ITextFieldProps extends HtmlTextareaAttributes<HTMLTextAreaElement> {}
 
 export const TextField = React.forwardRef<HTMLTextAreaElement, ITextFieldProps>(function TextField(
   props: ITextFieldProps,
