@@ -52,12 +52,12 @@ cp .env.local.example .env.local
 
 - [x] Remove Comment Count if it doesn't load
 - [x] Google Analytics: Add randomized memoized id to dedupe duplicate events?
+- [x] Sentry error reporting
+- [x] Clean up with HtmlAttributes type
+- [ ] Cypress tests
 - [ ] Update Resume link
-- [ ] Fix code block highlight styling
 - [ ] Move all blog post images to locally stored ones and use Next Image
 - [ ] Redesign Homepage
-- [ ] Cypress tests
-- [x] Sentry error reporting
 - [ ] Fix Button disabled styles in dark mode
-- [x] Clean up with HtmlAttributes type
 - [ ] Add page animations
+- [ ] Fix code block highlight styling
