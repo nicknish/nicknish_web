@@ -1,21 +1,11 @@
 import '../css/global.css'
-import { Figtree, Fira_Code } from '@next/font/google'
+
+import { fontTitle, fontCode } from '@/utils/fonts'
 
 import { Nav } from '@/components/layout/Nav'
 import { Footer } from '@/components/layout/Footer'
 import { AppProviders } from './providers'
 import { LoadAnalyticsScripts } from '@/components/common/Tracking'
-
-const fontTitle = Figtree({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  weight: 'variable',
-})
-const fontCode = Fira_Code({
-  subsets: ['latin'],
-  variable: '--font-code',
-  weight: 'variable',
-})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
