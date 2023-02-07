@@ -13,6 +13,7 @@ const nextConfig = {
       },
     ],
   },
+  productionBrowserSourceMaps: true,
   async redirects() {
     return [
       {
