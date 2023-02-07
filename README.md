@@ -60,3 +60,4 @@ cp .env.local.example .env.local
 - [ ] Sentry error reporting
 - [ ] Fix Button disabled styles in dark mode
 - [x] Clean up with HtmlAttributes type
+- [ ] Add page animations
