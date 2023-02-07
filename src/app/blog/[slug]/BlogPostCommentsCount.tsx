@@ -19,7 +19,7 @@ export function BlogPostCommentsCount(props: IBlogPostCommentsCountProps) {
 
   return (
     <SmoothScrollButton target={blogPostSectionElementSelector}>
-      <CommentCount {...disqusConfig} />
+      <CommentCount {...disqusConfig} /> Comments
     </SmoothScrollButton>
   )
 }
