@@ -58,7 +58,7 @@ export default async function WorkPage() {
               </p>
               <p className="mb-5">
                 I also{' '}
-                <Link href={HOME_PATH} className="underline">
+                <Link href={HOME_PATH} className="underline" prefech={false}>
                   write
                 </Link>{' '}
                 occasionally and build{' '}

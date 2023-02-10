@@ -30,6 +30,7 @@ export const Footer = () => {
               <Link
                 href={socialMediaUrls[key as keyof SocialMediaLinks<string>]}
                 className="inline-block text-2xl p-2 m-1 text-dark-30 dark:text-white-100"
+                prefetch={false}
               >
                 {ICONS[key as keyof SocialMediaLinks<React.ReactElement>]}
               </Link>
@@ -82,5 +83,5 @@ function FooterTextLink(props: IFooterTextLinkProps | IFooterTextOutboundLinkPro
     )
   }
 
-  return <Link className={className} {...linkProps} {...rest} />
+  return <Link className={className} prefetch={false} {...linkProps} {...rest} />
 }

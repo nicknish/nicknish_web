@@ -18,6 +18,7 @@ export const WorkItem = ({
       href={href}
       className="group flex flex-col justify-between p-5 rounded border border-black-20 dark:border-white-20 hover:text-inherit hover:shadow-lg shadow-sm transition-all"
       data-testid={`WorkItem--${href}`}
+      prefetch={false}
     >
       <div className="mb-3">
         <p className="mb-3 text-xl font-semibold group-hover:text-primary-500 transition-colors">

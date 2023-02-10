@@ -94,8 +94,10 @@ function StartBio() {
       </p>
       <p>
         I publish Makers, a newsletter for creatives, technologists, and makers.{' '}
-        <Link href={NEWSLETTER_PATH}>Subscribe here</Link> or{' '}
-        <OutboundLink href={siteConfig.newsletterUrl}>read the archive.</OutboundLink>
+        <Link href={NEWSLETTER_PATH} prefetch={false}>
+          Subscribe here
+        </Link>{' '}
+        or <OutboundLink href={siteConfig.newsletterUrl}>read the archive.</OutboundLink>
       </p>
       <p>Born and raised in Los Angeles.</p>
       <p>Living in Portland, OR.</p>
@@ -154,7 +156,9 @@ function StartPopularArticles({ posts }: { posts: Post[] }) {
     <ul className="list-none !pl-0">
       {posts.map((post, idx) => (
         <li className="!pl-0" key={idx}>
-          <Link href={post.url}>{post.title}</Link>
+          <Link href={post.url} prefetch={false}>
+            {post.title}
+          </Link>
         </li>
       ))}
     </ul>

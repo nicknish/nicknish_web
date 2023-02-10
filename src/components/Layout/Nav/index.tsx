@@ -40,7 +40,11 @@ export const Nav: React.FC = () => {
 
 function NavLogo() {
   return (
-    <Link href={HOME_PATH} className={`${styles.logo} relative text-[22.5px] font-semibold`}>
+    <Link
+      href={HOME_PATH}
+      className={`${styles.logo} relative text-[22.5px] font-semibold`}
+      prefetch={false}
+    >
       nicknish
     </Link>
   )
@@ -57,6 +61,7 @@ function NavLink({ href, isActive, ...linkProps }: INavLinkProps) {
       href={href}
       className={`mx-2 font-bold ${isActive ? 'text-primary-500' : ''}`}
       data-testid={`NavLink--${href}`}
+      prefetch={false}
       {...linkProps}
     />
   )

@@ -35,7 +35,7 @@ export default function HomePage() {
             </p>
             <div className="mb-3">
               <span>👉</span>
-              <Link href="/start" className="ml-3 font-bold underline">
+              <Link href="/start" className="ml-3 font-bold underline" prefetch={false}>
                 Start here
               </Link>
             </div>
@@ -98,7 +98,9 @@ function PostCard(post: Post) {
   return (
     <article>
       <h3 className="text-lg mb-2 font-semibold">
-        <Link href={post.url}>{post.title}</Link>
+        <Link href={post.url} prefetch={false}>
+          {post.title}
+        </Link>
       </h3>
       <time dateTime={post.date} className="block mb-2 text-sm text-black-40 dark:text-white-50">
         {formatIsoDate(post.date)}
@@ -112,7 +114,7 @@ function PopularPostCard(post: Post) {
   return (
     <div className="flex flex-col justify-between p-4 border-2 border-black-10 dark:border-white-10 rounded-sm">
       <div>
-        <Link href={post.url}>
+        <Link href={post.url} prefetch={false}>
           <h3 className="mb-3 text-lg font-bold line-clamp-2">{post.title}</h3>
         </Link>
         <p className="text-sm line-clamp-4 dark:text-white-80">{post.description}</p>
@@ -126,7 +128,11 @@ function PopularPostCard(post: Post) {
 
 function PostSeriesCard(series: PostSeries) {
   return (
-    <Link href={series.url} className="group relative flex items-center h-40 rounded-sm">
+    <Link
+      href={series.url}
+      className="group relative flex items-center h-40 rounded-sm"
+      prefetch={false}
+    >
       <div className="absolute top-0 w-full h-full overflow-hidden">
         <Image
           src={series.bannerImage}

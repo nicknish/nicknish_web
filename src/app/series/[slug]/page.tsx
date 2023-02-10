@@ -62,6 +62,7 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
               className="group py-6 px-4 border dark:border-white-100 rounded-sm shadow-sm hover:shadow-md hover:text-inherit transition-all"
               href={post.url}
               key={post.slug}
+              prefetch={false}
             >
               <h2 className="text-xl mb-4 font-semibold group-hover:text-primary-500">
                 {post.title}

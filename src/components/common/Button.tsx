@@ -49,7 +49,7 @@ export interface IInternalLinkButtonProps extends IButtonBaseProps {
 function InternalLinkButton(props: IInternalLinkButtonProps) {
   const { theme, size, className, ...rest } = props
   const allClassnames = getButtonClassNames({ theme, size, className })
-  return <Link {...rest} className={allClassnames} />
+  return <Link {...rest} className={allClassnames} prefetch={false} />
 }
 
 export interface IExternalLinkButtonProps

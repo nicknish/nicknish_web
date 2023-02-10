@@ -46,6 +46,7 @@ export const Show = ({
             href={backUrl}
             className="inline-flex items-center p-1 pl-0 mb-8"
             data-testid="ShowBackLink"
+            prefetch={false}
           >
             <FaChevronLeft className="mr-1 align-middle" />
             <span>{backLinkText}</span>
