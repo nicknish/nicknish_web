@@ -6,24 +6,14 @@ import Script from 'next/script'
 const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 export function LoadAnalyticsScripts() {
-  const params = useSearchParams()
+  const analyticsFlag = useSearchParams().get('analytics')
+  const isOptedOut = analyticsFlag === 'false'
 
   console.log('**************************************************************************\n\n')
-  console.log(`DEBUG ~ LoadAnalyticsScripts.tsx:L10`, `params`, params)
-  console.log('\n\n**************************************************************************')
-
-  const isOptedOut = params.has('analytics') === false
-
-  console.log('**************************************************************************\n\n')
-  console.log(
-    `DEBUG ~ LoadAnalyticsScripts.tsx:L16`,
-    `params.has('analytics')`,
-    params.has('analytics')
-  )
-  console.log('\n\n**************************************************************************')
-
-  console.log('**************************************************************************\n\n')
-  console.log(`DEBUG ~ LoadAnalyticsScripts.tsx:L16`, `isOptedOut`, isOptedOut)
+  console.log(`DEBUG ~ LoadAnalyticsScripts.tsx:L16`, `{isOptedOut, analyticsFlag}`, {
+    isOptedOut,
+    analyticsFlag,
+  })
   console.log('\n\n**************************************************************************')
 
   if (isOptedOut) {
