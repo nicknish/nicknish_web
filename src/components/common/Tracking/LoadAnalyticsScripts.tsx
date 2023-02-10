@@ -1,8 +1,17 @@
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 import Script from 'next/script'
 
 const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 export function LoadAnalyticsScripts() {
+  const isOptedOut = useSearchParams().get('analytics') === 'false'
+
+  if (isOptedOut) {
+    return null
+  }
+
   return (
     <>
       <Script
