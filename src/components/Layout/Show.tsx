@@ -48,7 +48,7 @@ export const Show = ({
             data-testid="ShowBackLink"
             prefetch={false}
           >
-            <FaChevronLeft className="mr-1 align-middle" />
+            <FaChevronLeft className="mr-1 align-middle" title="Chevron left" />
             <span>{backLinkText}</span>
           </Link>
         </div>
@@ -63,7 +63,7 @@ export const Show = ({
               rel="noopener noreferrer"
             >
               <span>See it here</span>
-              <FaExternalLinkAlt className="text-sm ml-2" />
+              <FaExternalLinkAlt className="text-sm ml-2" title="External link" />
             </OutboundLink>
           )}
         </div>

@@ -106,7 +106,10 @@ export default async function WorkPage() {
               size="default"
             >
               See Resume
-              <FaExternalLinkAlt className="align-middle top-[-1px] ml-2 text-sm relative" />
+              <FaExternalLinkAlt
+                className="align-middle top-[-1px] ml-2 text-sm relative"
+                title="External link"
+              />
             </Button.TrackingLink>
           </div>
         </Section>
