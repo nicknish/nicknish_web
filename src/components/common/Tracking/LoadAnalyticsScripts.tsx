@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import Script from 'next/script'
+import { Analytics as NextAnalytics } from '@vercel/analytics/react'
 
 const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
@@ -25,6 +26,7 @@ export function LoadAnalyticsScripts() {
           gtag('js', new Date());
           gtag('config', '${GOOGLE_ANALYTICS_ID}');`}
       </Script>
+      <NextAnalytics />
     </>
   )
 }
