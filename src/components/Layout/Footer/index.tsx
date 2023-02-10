@@ -15,9 +15,9 @@ const socialMediaUrls: SocialMediaLinks<string> = {
 }
 
 const ICONS: SocialMediaLinks<React.ReactElement> = {
-  github: <FaGithubAlt />,
-  twitter: <FaTwitter />,
-  linkedin: <FaLinkedin />,
+  github: <FaGithubAlt title="GitHub Profile" />,
+  twitter: <FaTwitter title="Twitter Profile" />,
+  linkedin: <FaLinkedin title="LinkedIn Profile" />,
 }
 
 export const Footer = () => {
