@@ -1,0 +1,48 @@
+---
+title: 'Smooth Scrolling in 2023'
+slug: 'smooth-scrolling-in-2023'
+date: '2023-02-13'
+tags:
+  - 'javascript'
+  - 'react'
+  - 'dev'
+description: Using the Smooth Scroll browser APIs, implementing "smooth scrolling" to smoothly scroll from one place on the page to another can be surprisingly simple to implement in web applications.
+---
+
+Implementing “smooth scrolling” to smoothly scroll from one place on the page to another can be surprisingly simple to implement in web applications with the Smooth Scroll APIs.
+
+Oftentimes when we build applications, we want to build shortcuts in our UI so users can jump from one place on the screen to another. You might know of the age old trick of using an anchor `<a>` tag with the `href` attribute to jump from one place on the page to another. 
+
+```html
+<a href="#target">Jump to Comments</a>
+```
+
+However, this results in a jarring jump from one part of the page to the target. What about if we want to smoothly scroll until the target is in view?
+
+If you Google search “smooth scroll javascript”, you get a lot of results about jQuery’s `animate()` and complex animation libraries. This can be intimidating and require we install more packages into our application, which increase the JavaScript code the user has to download. 
+
+Luckily, implementing a simple feature where we smoothly scroll the page to bring an element into view is really easy with modern browsers thanks to the Smooth Scroll browser proposals. 
+
+Check it out:
+
+```javascript
+const el = document.querySelector('#comments-section')
+el.scrollIntoView({
+	block: 'center',
+	behavior: 'smooth'
+})
+```
+
+You can see this in action on my blog post page header. If you’re on reading this on a supported browser and you click on the page header’s “Comments” button, the browser will smoothly scroll to the bottom of the page where the comments section is. 
+
+Pretty easy, right?
+
+To learn more about `scrollIntoView` and a few other useful methods, check out the following resources:
+
+This great tutorial *Native Smooth Scroll with pure CSS and JS* by Lucas Paganini was an easy read and consolidates information on a handful of smooth scroll methods at your disposal.
+
+[Native Smooth Scroll with pure CSS and JS | Academy | Lucas Paganini](https://www.lucaspaganini.com/academy/native-smooth-scroll-with-pure-css-and-js)
+
+Additionally, *Smooth Scrolling* by CSS-Tricks is a fantastic resource and even links to a useful article on Smooth Scrolling with accessibility in mind:
+
+[Smooth Scrolling | CSS-Tricks](https://css-tricks.com/snippets/jquery/smooth-scrolling/)
