@@ -7,7 +7,7 @@ import { getItemBySlug } from '@/lib/utils'
 
 import { TrackOnMount } from '@/components/common/Tracking'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
-import { MDXBlock } from '@/components/common/content/MDXBlock'
+import { BlogPostContent } from './BlogPostContent'
 import { BlogPostComments } from './BlogPostComments'
 import { BlogPostCommentsCount } from './BlogPostCommentsCount'
 import { BlogPostTags } from './BlogPostTags'
@@ -45,7 +45,7 @@ export default function BlogPost(props: IBlogPostProps) {
             </div>
           </header>
           <DynamicProseBlock>
-            <MDXBlock code={post.body.code} />
+            <BlogPostContent post={post} />
             <p>
               Thanks for reading! You are my favorite person for sticking around until the end. 🍻
             </p>
