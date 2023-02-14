@@ -21,7 +21,7 @@ const siteConfig = {
   linkedinUrl: 'https://linkedin.com/in/nicknish',
   twitterUrl: `https://twitter.com/${TWITTER_USERNAME}`,
   newsletterUrl: 'https://nicknish.substack.com',
-  resumeUrl: 'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume.pdf',
+  resumeUrl: 'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume_public.pdf',
 
   /* Other */
   disqusShortname: DISQUS_SHORTNAME,
