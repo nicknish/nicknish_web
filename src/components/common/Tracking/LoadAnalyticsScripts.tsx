@@ -7,7 +7,7 @@ import { Analytics as NextAnalytics } from '@vercel/analytics/react'
 const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 export function LoadAnalyticsScripts() {
-  const isOptedOut = useSearchParams().get('analytics') === 'false'
+  const isOptedOut = useSearchParams()?.get('analytics') === 'false'
 
   if (isOptedOut || process.env.NODE_ENV !== 'production') {
     return null

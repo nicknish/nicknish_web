@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -5,10 +6,10 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { allProjects } from 'contentlayer/generated'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
-import { HOME_PATH } from '@/constants/urls'
+import { createUrl, HOME_PATH, WORK_PATH } from '@/constants/urls'
 import siteConfig from '@/config'
 import type { HtmlAttributes } from '@/types/elements'
-import { WORK_PAGE_TITLE } from './constants'
+import { WORK_PAGE_PATHNAME, WORK_PAGE_TITLE } from './constants'
 
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { WorkItem } from './WorkItem'
@@ -18,6 +19,17 @@ import { PageLayout } from '@/components/Layout/PageLayout'
 import { TrackOnMount } from '@/components/common/Tracking'
 
 import HAPPY_IMG from './happy.svg'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
+
+export const metadata: Metadata = {
+  title: WORK_PAGE_TITLE,
+  openGraph: {
+    url: createUrl(WORK_PAGE_PATHNAME),
+  },
+  twitter: {
+    site: createUrl(WORK_PAGE_PATHNAME),
+  },
+}
 
 export default async function WorkPage() {
   const jobHistory = sortProjectWorkItemsByStartDate(getJobs({ only: 'fulltime' }))
@@ -161,6 +173,16 @@ export default async function WorkPage() {
             })}
           </SectionGrid>
         </Section>
+
+        <StructuredData
+          type="Page"
+          args={{
+            title: WORK_PAGE_TITLE,
+            url: createUrl(WORK_PAGE_PATHNAME),
+            // TODO
+            description: '',
+          }}
+        />
       </PageLayout>
     </TrackOnMount>
   )

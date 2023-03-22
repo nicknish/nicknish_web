@@ -19,7 +19,7 @@ Here's a non-exhaustive list of technologies and integrations this webapp contai
 
 - Optimized client JavaScript bundles and server-side rendering with React 18 Server/Client
   components (NextJS 13)
-- Optimized font sizes and loading (`@next/font`)
+- Optimized font sizes and loading (`next/font`)
 - Optimized search engine metadata for SEO (`next-sitemap`)
 - Optimized image sizes and loading (`@next/image`)
 
@@ -47,10 +47,11 @@ Here's a non-exhaustive list of technologies and integrations this webapp contai
 To get acquainted, check out the `package.json` first or use one of these commands:
 
 ```bash
-npm run dev   # run development server with React Fast Refresh
-npm run build # create production build with app and netlify functions
-npm run start # start server for testing build site
-npm run lint  # lint codebase
+yarn       # install dependencies
+yarn dev   # run development server with React Fast Refresh
+yarn build # create production build with app and netlify functions
+yarn start # start server for testing build site
+yarn lint  # lint codebase
 ```
 
 ### Environment Variables

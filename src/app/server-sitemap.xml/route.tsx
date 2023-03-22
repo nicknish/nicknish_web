@@ -1,5 +1,4 @@
 import { getServerSideSitemap, type ISitemapField } from 'next-sitemap'
-import { GetServerSideProps } from 'next'
 
 import siteConfig from '@/config'
 import {
@@ -15,7 +14,7 @@ import { getPostsFromPostSeries } from '@/lib/posts'
 const SITE_URL = siteConfig.siteUrl
 
 // Add any new routes to sitemap
-export const getServerSideProps: GetServerSideProps = async ctx => {
+export async function GET(request: Request) {
   const fields: ISitemapField[] = [
     buildSitemapField(SITE_URL, { changefreq: 'daily' }),
     buildSitemapField(`${SITE_URL}${CONTACT_PATH}`, { changefreq: 'monthly' }),
@@ -36,10 +35,8 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     ...allJobs.map(job => buildSitemapField(job.url, { changefreq: 'monthly' })),
   ]
 
-  return getServerSideSitemap(ctx, fields)
+  return getServerSideSitemap(fields)
 }
-
-export default function SitemapIndex() {}
 
 function buildSitemapField(loc: string, config: Partial<ISitemapField>): ISitemapField {
   return {
@@ -48,3 +45,5 @@ function buildSitemapField(loc: string, config: Partial<ISitemapField>): ISitema
     ...config,
   }
 }
+
+export default function SitemapIndex() {}

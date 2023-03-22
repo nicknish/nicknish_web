@@ -1,12 +1,15 @@
 import '../css/global.css'
 
 import { fontTitle, fontCode } from '@/utils/fonts'
+import { DEFAULT_METADATA, Metadata } from '@/constants/seo'
 
 import { Nav } from '@/components/Layout/Nav'
 import { Footer } from '@/components/Layout/Footer'
 import { AppProviders } from './providers'
 import { LoadAnalyticsScripts } from '@/components/common/Tracking'
 import { ErrorReporting } from '@/components/Layout/ErrorReporting'
+
+export const metadata: Metadata = DEFAULT_METADATA
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

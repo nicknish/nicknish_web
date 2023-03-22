@@ -1,4 +1,4 @@
-import { Figtree, Fira_Code } from '@next/font/google'
+import { Figtree, Fira_Code } from 'next/font/google'
 
 export const fontTitle = Figtree({
   subsets: ['latin'],

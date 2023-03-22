@@ -11,10 +11,13 @@ import { getPostsFromCollection, sortPostsByDate } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { formatIsoDate } from '@/utils/dates'
 import type { HtmlAttributes } from '@/types/elements'
+import { createUrl, HOME_PATH } from '@/constants/urls'
+import siteConfig from '@/config'
 
 import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { TrackOnMount } from '@/components/common/Tracking'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function HomePage() {
   const posts = sortPostsByDate(allPosts, 'desc')
@@ -24,64 +27,74 @@ export default function HomePage() {
   )
 
   return (
-    <TrackOnMount trackingData={{ page: 'Homepage' }}>
-      <main className="px-4 mx-auto max-w-4xl">
-        <header className="py-16">
-          <div className="mx-auto max-w-xl text-lg">
-            <h1 className="mb-8 text-4xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
-            <p className="mb-8">
-              Welcome to my blog where you{"'"}ll find writing on ideas, tutorials, and resources
-              ranging on topics like startups, making products, and software engineering.
-            </p>
-            <div className="mb-3">
-              <span>👉</span>
-              <Link href="/start" className="ml-3 font-bold underline" prefetch={false}>
-                Start here
-              </Link>
+    <>
+      <TrackOnMount trackingData={{ page: 'Homepage' }}>
+        <main className="px-4 mx-auto max-w-4xl">
+          <header className="py-16">
+            <div className="mx-auto max-w-xl text-lg">
+              <h1 className="mb-8 text-4xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
+              <p className="mb-8">
+                Welcome to my blog where you{"'"}ll find writing on ideas, tutorials, and resources
+                ranging on topics like startups, making products, and software engineering.
+              </p>
+              <div className="mb-3">
+                <span>👉</span>
+                <Link href="/start" className="ml-3 font-bold underline" prefetch={false}>
+                  Start here
+                </Link>
+              </div>
+              <div className="mb-3">
+                <span>👇</span>
+                <SmoothScrollButton
+                  className="ml-3 underline"
+                  target="[data-target='blog-posts']"
+                  scrollOptions={{ block: 'start' }}
+                >
+                  Or check out my latest writing
+                </SmoothScrollButton>
+              </div>
             </div>
-            <div className="mb-3">
-              <span>👇</span>
-              <SmoothScrollButton
-                className="ml-3 underline"
-                target="[data-target='blog-posts']"
-                scrollOptions={{ block: 'start' }}
-              >
-                Or check out my latest writing
-              </SmoothScrollButton>
-            </div>
-          </div>
-        </header>
+          </header>
 
-        <section className="mb-12 scroll-m-4" data-target="blog-posts">
-          <HomeSectionTitle>Popular Posts</HomeSectionTitle>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-x-3">
-            {popularPosts.map((post, idx) => (
-              <PopularPostCard key={idx} {...post} />
-            ))}
-          </div>
-        </section>
-
-        <div className="md:grid md:grid-cols-3 md:gap-x-12">
-          <section className="mb-12 md:col-span-2">
-            <HomeSectionTitle>Latest Posts</HomeSectionTitle>
-            <div className="flex flex-col gap-y-6 md:gap-y-8">
-              {posts.map((post, idx) => (
-                <PostCard key={idx} {...post} />
+          <section className="mb-12 scroll-m-4" data-target="blog-posts">
+            <HomeSectionTitle>Popular Posts</HomeSectionTitle>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-x-3">
+              {popularPosts.map((post, idx) => (
+                <PopularPostCard key={idx} {...post} />
               ))}
             </div>
           </section>
 
-          <aside className="">
-            <HomeSectionTitle>Post Series</HomeSectionTitle>
-            <div className="flex flex-col gap-y-4 md:gap-y-8">
-              {postSeries.map((series, idx) => (
-                <PostSeriesCard key={idx} {...series} />
-              ))}
-            </div>
-          </aside>
-        </div>
-      </main>
-    </TrackOnMount>
+          <div className="md:grid md:grid-cols-3 md:gap-x-12">
+            <section className="mb-12 md:col-span-2">
+              <HomeSectionTitle>Latest Posts</HomeSectionTitle>
+              <div className="flex flex-col gap-y-6 md:gap-y-8">
+                {posts.map((post, idx) => (
+                  <PostCard key={idx} {...post} />
+                ))}
+              </div>
+            </section>
+
+            <aside className="">
+              <HomeSectionTitle>Post Series</HomeSectionTitle>
+              <div className="flex flex-col gap-y-4 md:gap-y-8">
+                {postSeries.map((series, idx) => (
+                  <PostSeriesCard key={idx} {...series} />
+                ))}
+              </div>
+            </aside>
+          </div>
+        </main>
+      </TrackOnMount>
+      <StructuredData
+        type="Page"
+        args={{
+          url: createUrl(HOME_PATH),
+          title: siteConfig.siteTitle,
+          description: siteConfig.siteDescription,
+        }}
+      />
+    </>
   )
 }
 

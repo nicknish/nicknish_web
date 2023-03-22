@@ -1,7 +1,9 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 
 import siteConfig from '@/config'
-import { NEWSLETTER_PATH } from '@/constants/urls'
+import { createUrl, NEWSLETTER_PATH } from '@/constants/urls'
+import { START_PAGE_PATHNAME, START_PAGE_TITLE } from './constants'
 import { getPostsFromCollection } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { allPostCollections, Post } from 'contentlayer/generated'
@@ -12,8 +14,19 @@ import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
 import { PageLayout } from '@/components/Layout/PageLayout'
 import { TrackOnMount } from '@/components/common/Tracking'
+import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 import PROFILE_IMG from './profile.png'
+
+export const metadata: Metadata = {
+  title: START_PAGE_TITLE,
+  openGraph: {
+    url: createUrl(START_PAGE_PATHNAME),
+  },
+  twitter: {
+    site: createUrl(START_PAGE_PATHNAME),
+  },
+}
 
 export default async function StartPage() {
   const topTechnicalPosts = getPostsFromCollection(
@@ -38,6 +51,14 @@ export default async function StartPage() {
           <hr />
           <StartNewsletter />
         </div>
+        <StructuredData
+          type="Page"
+          args={{
+            url: createUrl(START_PAGE_PATHNAME),
+            title: START_PAGE_TITLE,
+            description: '', // TODO
+          }}
+        />
       </PageLayout>
     </TrackOnMount>
   )
