@@ -12,7 +12,7 @@
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@sendgrid/mail": "^7.7.0",
-    "@sentry/react": "^7.36.0",
+    "@sentry/react": "^7.47.0",
     "@sentry/tracing": "^7.44.2",
     "@vercel/analytics": "^0.1.8",
     "date-fns": "^2.29.3",
