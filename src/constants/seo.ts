@@ -47,7 +47,7 @@ export const DEFAULT_METADATA: Metadata = {
     // shrinkToFit: 'no',
   },
   icons: {
-    icon: '/favicon-32x32.png',
+    icon: ['/favicon.ico', '/favicon-16x16.png', '/favicon-32x32.png'],
     shortcut: '/favicon-32x32.png',
     apple: '/apple-touch-icon.png',
     other: {
