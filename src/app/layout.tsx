@@ -3,9 +3,10 @@ import '../css/global.css'
 import { fontTitle, fontCode } from '@/utils/fonts'
 import { DEFAULT_METADATA, Metadata } from '@/constants/seo'
 
+import { AppProviders } from './providers'
 import { Nav } from '@/components/Layout/Nav'
 import { Footer } from '@/components/Layout/Footer'
-import { AppProviders } from './providers'
+import { SecretConsoleMessage } from '@/components/common/SecretConsoleMessage'
 import { LoadAnalyticsScripts } from '@/components/common/Tracking'
 import { ErrorReporting } from '@/components/Layout/ErrorReporting'
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Nav />
           <div className="site-content flex-1">{children}</div>
           <Footer />
+          <SecretConsoleMessage />
           <LoadAnalyticsScripts />
           <ErrorReporting />
         </AppProviders>

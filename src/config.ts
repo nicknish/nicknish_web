@@ -19,9 +19,11 @@ const siteConfig = {
   /* Site Navigation */
   githubUrl: 'https://github.com/nicknish',
   linkedinUrl: 'https://linkedin.com/in/nicknish',
+  twitterUsername: TWITTER_USERNAME,
   twitterUrl: `https://twitter.com/${TWITTER_USERNAME}`,
   newsletterUrl: 'https://nicknish.substack.com',
-  resumeUrl: 'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume_public.pdf',
+  resumeUrl:
+    'https://s3-us-west-1.amazonaws.com/nicknish-experiments/resume/nick_nish_resume_public.pdf',
 
   /* Other */
   disqusShortname: DISQUS_SHORTNAME,
