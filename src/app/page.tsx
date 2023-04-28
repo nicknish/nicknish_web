@@ -1,3 +1,6 @@
+'use client'
+
+import React from 'react'
 import Link from 'next/link'
 
 import {
@@ -25,6 +28,13 @@ export default function HomePage() {
   const popularPosts = getPostsFromCollection(
     getItemBySlug(allPostCollections, 'homepage-popular-posts')
   )
+
+  React.useEffect(() => {
+    getData('https://jsonplaceholder.typicode.com/todos/1')
+      .then(response => response.json())
+      .then(data => console.log('data in then', data))
+    console.log('=========================')
+  }, [])
 
   return (
     <>
@@ -161,4 +171,92 @@ function PostSeriesCard(series: PostSeries) {
       </h3>
     </Link>
   )
+}
+
+const CACHE_NAME = 'test'
+const MAX_CACHE_AGE_HEADER = 'max-cache-age'
+// const MAX_CACHE_AGE = 10 * 60 * 1000 // 10 minutes
+const MAX_CACHE_AGE = 10 * 1000 // 10 seconds
+
+/**
+ * getData fetches data from the network and caches it. If the browser doesn't
+ * support Cache API, then just fetch the data.
+ *
+ * @param url {String}
+ * @param options {Object}
+ * @param options.expiry {Number} - Max age of the cached data in milliseconds
+ * @returns response {Response}
+ */
+async function getData(url: string, options: { expiry: number } = { expiry: MAX_CACHE_AGE }) {
+  const { expiry } = options
+
+  // If the browser doesn't support Cache API, then just fetch the data
+  if (!('caches' in self)) {
+    return fetch(url)
+  }
+
+  // Cache API is supported, game on! Get the previous response from the cache.
+  let cache = await caches.open(CACHE_NAME)
+  let prevResponse = await cache.match(url)
+
+  if (!prevResponse) {
+    // Cache miss, so fetch the response and put it in the cache
+    console.log('response not in cache, fetching')
+    return await addResponseToCache(url, await fetch(url), cache)
+  }
+
+  const cachedTime = prevResponse.headers.get(MAX_CACHE_AGE_HEADER)
+  if (!cachedTime || isDataStale(cachedTime, expiry)) {
+    // If the cached response is older than the max age or there is no time
+    // header, then fetch the data again and update the cache
+    console.log('response in cache is stale, fetching again')
+    return await addResponseToCache(url, await fetch(url), cache)
+  }
+
+  console.log('response in cache is fresh, returning cached response')
+  return prevResponse
+}
+
+/**
+ * addResponseToCache creates a new Response based on the existing response. It
+ * adds a max-cache-age header before adding the new response to the cache. In
+ * getData, we use max-cache-age to see if the response is stale, and if it is,
+ * we refetch the data.
+ *
+ * @param url {String}
+ * @param response {Response}
+ * @param cache {Cache}
+ * @returns newResponse {Response}
+ */
+async function addResponseToCache(url: string, response: Response, cache: Cache) {
+  const data = await response.json()
+
+  // Headers are immutable, so we have to copy the response headers and create a
+  // new Response with a custom header 'cached-time' so we can see when the
+  // response was cached.
+  const newHeaders = new Headers(response.headers)
+  newHeaders.set(MAX_CACHE_AGE_HEADER, Date.now().toString())
+
+  const newResponse = new Response(JSON.stringify(data), { headers: newHeaders })
+  console.log('putting response in cache')
+  cache.put(url, newResponse.clone())
+
+  return newResponse
+}
+
+/**
+ * isDataStale checks if the data is older than the max age.
+ * @param cachedTime {String} - Time the data was cached
+ * @param maxAge {Number} - Max age of the cached data in milliseconds
+ */
+function isDataStale(cachedTime: string, maxAge: number) {
+  const parsedTime = parseInt(cachedTime)
+  const now = new Date().getTime()
+  const cachedAt = new Date(parsedTime).getTime()
+
+  if (Number.isNaN(parsedTime)) {
+    return true
+  }
+
+  return Math.abs(now - cachedAt) > maxAge
 }
