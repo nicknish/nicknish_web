@@ -2,7 +2,6 @@
 
 import React from 'react'
 import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 
 import { isBrowser } from '@/utils/environment'
 
@@ -33,7 +32,7 @@ function initErrorReporting() {
   if (isBrowser()) {
     Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-      integrations: [new BrowserTracing()],
+      integrations: [new Sentry.BrowserTracing()],
       tracesSampleRate: 1.0,
       environment: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     })
