@@ -46,7 +46,7 @@
     "rehype-accessible-emojis": "^0.3.2",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-code-titles": "^1.1.0",
-    "rehype-pretty-code": "^0.9.3",
+    "rehype-pretty-code": "^0.9.5",
     "rehype-slug": "^5.1.0",
     "remark-gfm": "^3.0.1",
     "schema-dts": "^1.1.0",
