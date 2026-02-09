@@ -337,10 +337,14 @@ export function SnakeGame() {
       }
     }
 
+    const preventScroll = (e: TouchEvent) => e.preventDefault()
+
     canvas.addEventListener('touchstart', onTouchStart, { passive: true })
+    canvas.addEventListener('touchmove', preventScroll, { passive: false })
     canvas.addEventListener('touchend', onTouchEnd, { passive: true })
     return () => {
       canvas.removeEventListener('touchstart', onTouchStart)
+      canvas.removeEventListener('touchmove', preventScroll)
       canvas.removeEventListener('touchend', onTouchEnd)
     }
   }, [gameState, startGame, changeDirection])

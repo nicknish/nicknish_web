@@ -78,6 +78,12 @@ export default async function HomePage() {
             </div>
           </section>
 
+          {allExperiments.length > 0 && (
+            <div className="mb-12 scroll-m-4" data-target="lab-experiments">
+              <LabExperimentsSection experiments={allExperiments.slice(0, 3)} />
+            </div>
+          )}
+
           <div className="md:grid md:grid-cols-3 md:gap-x-12">
             <section className="mb-12 md:col-span-2">
               <HomeSectionTitle>Latest Posts</HomeSectionTitle>
@@ -97,12 +103,6 @@ export default async function HomePage() {
               </div>
             </aside>
           </div>
-
-          {allExperiments.length > 0 && (
-            <div className="mt-12 scroll-m-4" data-target="lab-experiments">
-              <LabExperimentsSection experiments={allExperiments.slice(0, 3)} />
-            </div>
-          )}
         </main>
       <StructuredData
         type="Page"
