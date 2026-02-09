@@ -9,6 +9,7 @@ export interface Post {
   body: {
     raw: string
   }
+  source?: 'mdx' | 'notion'
 }
 
 export interface Job {

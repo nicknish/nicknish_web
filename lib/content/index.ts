@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import type { Post, Job, Project, PostCollection, PostSeries } from './types'
+import { fetchNotionPosts } from 'lib/notion/fetcher'
+import { notionPostToPost } from 'lib/notion/adapter'
 
 const contentDir = path.join(process.cwd(), 'content')
 
@@ -39,7 +41,7 @@ function simpleMarkdownToHtml(md: string): string {
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
 }
 
-function getPosts(): Post[] {
+function getMdxPosts(): Post[] {
   return readMdxFiles('posts').map(({ frontmatter, content }) => ({
     title: frontmatter.title,
     slug: frontmatter.slug,
@@ -49,7 +51,44 @@ function getPosts(): Post[] {
     shareImage: frontmatter.shareImage,
     url: `/blog/${frontmatter.slug}`,
     body: { raw: content },
+    source: 'mdx' as const,
   }))
+}
+
+async function getNotionPosts(): Promise<Post[]> {
+  try {
+    const notionPosts = await fetchNotionPosts()
+    return notionPosts.map(notionPostToPost)
+  } catch (error) {
+    console.warn('[Content] Failed to fetch Notion posts:', error)
+    return []
+  }
+}
+
+let _postsCache: Post[] | null = null
+
+export async function getPosts(): Promise<Post[]> {
+  if (_postsCache) return _postsCache
+
+  const [mdxPosts, notionPosts] = await Promise.all([
+    Promise.resolve(getMdxPosts()),
+    getNotionPosts(),
+  ])
+
+  // Check for slug collisions
+  const slugs = new Set<string>()
+  for (const post of [...mdxPosts, ...notionPosts]) {
+    if (slugs.has(post.slug)) {
+      throw new Error(`Duplicate post slug found: "${post.slug}". Each post must have a unique slug across MDX and Notion sources.`)
+    }
+    slugs.add(post.slug)
+  }
+
+  const allPosts = [...mdxPosts, ...notionPosts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+  _postsCache = allPosts
+  return _postsCache
 }
 
 function getJobs(): Job[] {
@@ -113,16 +152,10 @@ function getPostSeries(): PostSeries[] {
 }
 
 // Cache the results so we don't re-read files on every import
-let _allPosts: Post[] | null = null
 let _allJobs: Job[] | null = null
 let _allProjects: Project[] | null = null
 let _allPostCollections: PostCollection[] | null = null
 let _allPostSeries: PostSeries[] | null = null
-
-export const allPosts: Post[] = (() => {
-  if (!_allPosts) _allPosts = getPosts()
-  return _allPosts
-})()
 
 export const allJobs: Job[] = (() => {
   if (!_allJobs) _allJobs = getJobs()

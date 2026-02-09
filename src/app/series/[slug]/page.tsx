@@ -75,7 +75,7 @@ export default async function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
   if (!series) {
     notFound()
   }
-  const seriesPosts = getPostsFromPostSeries(series)
+  const seriesPosts = await getPostsFromPostSeries(series)
   const recentPost = seriesPosts[seriesPosts.length - 1]
 
   return (

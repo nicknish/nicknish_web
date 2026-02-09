@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import {
   allPostCollections,
-  allPosts,
+  getPosts,
   allPostSeries,
   type Post,
   type PostSeries,
@@ -18,10 +18,11 @@ import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const allPosts = await getPosts()
   const posts = sortPostsByDate(allPosts, 'desc')
   const postSeries = allPostSeries
-  const popularPosts = getPostsFromCollection(
+  const popularPosts = await getPostsFromCollection(
     getItemBySlug(allPostCollections, 'homepage-popular-posts')
   )
 

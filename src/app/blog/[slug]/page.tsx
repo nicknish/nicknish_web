@@ -2,7 +2,7 @@ import React from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { allPosts, type Post } from 'lib/content'
+import { getPosts, type Post } from 'lib/content'
 import { formatIsoDate } from '@/utils/dates'
 import { getItemBySlug } from '@/lib/utils'
 import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
@@ -16,12 +16,16 @@ import { BlogPostCommentsCount } from './BlogPostCommentsCount'
 import { BlogPostTags } from './BlogPostTags'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
+  const allPosts = await getPosts()
   return allPosts.map(post => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: IBlogPostProps): Promise<Metadata> {
   const { slug } = await params
+  const allPosts = await getPosts()
   const post = getItemBySlug(allPosts, slug)
   if (!post) {
     throw new Error('Post not found when generating metadata')
@@ -73,6 +77,7 @@ export interface IBlogPostProps {
 
 export default async function BlogPost(props: IBlogPostProps) {
   const { slug } = await props.params
+  const allPosts = await getPosts()
   const post = getItemBySlug(allPosts, slug)
   if (!post) {
     notFound()
@@ -102,7 +107,7 @@ export default async function BlogPost(props: IBlogPostProps) {
               <p>
                 This blog is a constant work in progress, and I want to get better with your help!
                 If you have feedback or questions on this post, please leave a comment below, use my
-                site’s contact page, or reach out to me on Twitter.
+                site{"'"}s contact page, or reach out to me on Twitter.
               </p>
             </DynamicProseBlock>
             {post.tags && (

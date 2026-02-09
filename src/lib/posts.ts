@@ -1,13 +1,13 @@
 import { compareAsc, compareDesc, parseISO } from 'date-fns'
 
-import { allPosts, type PostSeries, type Post, type PostCollection } from 'lib/content'
+import { getPosts, type PostSeries, type Post, type PostCollection } from 'lib/content'
 
-export function getPostsFromCollection(collection: PostCollection): Post[] {
+export async function getPostsFromCollection(collection: PostCollection): Promise<Post[]> {
   return getPostsFromSlugs(collection.posts)
 }
 
-export function getPostsFromPostSeries(series: PostSeries): Post[] {
-  return sortPostsByDate(getPostsFromSlugs(series.posts), 'asc')
+export async function getPostsFromPostSeries(series: PostSeries): Promise<Post[]> {
+  return sortPostsByDate(await getPostsFromSlugs(series.posts), 'asc')
 }
 
 export function sortPostsByDate(posts: Post[], order: 'asc' | 'desc'): Post[] {
@@ -15,7 +15,8 @@ export function sortPostsByDate(posts: Post[], order: 'asc' | 'desc'): Post[] {
   return posts.sort((a, b) => compareFn(parseISO(a.date), parseISO(b.date)))
 }
 
-function getPostsFromSlugs(slugs: Post['slug'][]): Post[] {
+async function getPostsFromSlugs(slugs: Post['slug'][]): Promise<Post[]> {
+  const allPosts = await getPosts()
   const postsMap = allPosts.reduce((accumulator, post) => {
     if (slugs.includes(post.slug)) {
       accumulator[post.slug] = post

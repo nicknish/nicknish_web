@@ -28,10 +28,10 @@ export const metadata: Metadata = {
 }
 
 export default async function StartPage() {
-  const topTechnicalPosts = getPostsFromCollection(
+  const topTechnicalPosts = await getPostsFromCollection(
     getItemBySlug(allPostCollections, 'popular-technical-posts')
   )
-  const topProductPosts = getPostsFromCollection(
+  const topProductPosts = await getPostsFromCollection(
     getItemBySlug(allPostCollections, 'popular-product-posts')
   )
 
