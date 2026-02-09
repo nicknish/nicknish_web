@@ -4,7 +4,6 @@ import { NEWSLETTER_PAGE_TITLE, NEWSLETTER_PATHNAME } from './constants'
 import { createUrl } from '@/constants/urls'
 
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
-import { TrackOnMount } from '@/components/common/Tracking'
 import { PageLayout } from '@/components/Layout/PageLayout'
 import { NewsletterSignupForm } from './NewsletterSignupForm'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
@@ -16,8 +15,7 @@ export const metadata: Metadata = {
 export default function NewsletterPage() {
   return (
     <>
-      <TrackOnMount trackingData={{ page: NEWSLETTER_PAGE_TITLE }}>
-        <PageLayout className="mt-12">
+      <PageLayout className="mt-12">
           <DynamicProseBlock className="mb-6 md:mb-12">
             <h1 className="!text-3xl text-primary-500">Sign up for the Builders newsletter</h1>
             <p>
@@ -29,7 +27,6 @@ export default function NewsletterPage() {
             <NewsletterSignupForm />
           </div>
         </PageLayout>
-      </TrackOnMount>
       <StructuredData
         type="Page"
         args={{

@@ -1,15 +1,34 @@
-'use client'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import remarkGfm from 'remark-gfm'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCodeTitles from 'rehype-code-titles'
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { rehypePrettyCodeOptions } from 'lib/mdx/code-blocks'
 
-import React from 'react'
-import { useMDXComponent } from 'next-contentlayer/hooks'
-import { type MDXContentProps } from 'mdx-bundler/dist/types'
-import { type MDX } from '@contentlayer/core'
-
-interface IMDXBlockProps extends MDXContentProps {
-  code: MDX['code']
+interface IMDXBlockProps {
+  source: string
+  components?: Record<string, React.ComponentType<any>>
 }
 
-export function MDXBlock({ code, ...props }: IMDXBlockProps) {
-  const MDXComponent = useMDXComponent(code)
-  return <MDXComponent {...props} />
+export function MDXBlock({ source, components }: IMDXBlockProps) {
+  return (
+    <MDXRemote
+      source={source}
+      options={{
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+          rehypePlugins: [
+            rehypeSlug,
+            rehypeAutolinkHeadings,
+            rehypeCodeTitles,
+            rehypeAccessibleEmojis,
+            [rehypePrettyCode, rehypePrettyCodeOptions],
+          ],
+        },
+      }}
+      components={components}
+    />
+  )
 }

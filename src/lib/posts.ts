@@ -1,6 +1,6 @@
 import { compareAsc, compareDesc, parseISO } from 'date-fns'
 
-import { allPosts, type PostSeries, type Post, type PostCollection } from 'contentlayer/generated'
+import { allPosts, type PostSeries, type Post, type PostCollection } from 'lib/content'
 
 export function getPostsFromCollection(collection: PostCollection): Post[] {
   return getPostsFromSlugs(collection.posts)

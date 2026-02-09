@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@sentry/nextjs'
 import { isBrowser } from './environment'
 
 export function reportError(...params: Parameters<typeof Sentry.captureException>) {

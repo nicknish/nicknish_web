@@ -1,10 +1,6 @@
-const { withContentlayer } = require('next-contentlayer')
+import type { NextConfig } from 'next'
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -25,4 +21,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withContentlayer(nextConfig)
+export default nextConfig

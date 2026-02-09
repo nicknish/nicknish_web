@@ -6,14 +6,13 @@ import { createUrl, NEWSLETTER_PATH } from '@/constants/urls'
 import { START_PAGE_PATHNAME, START_PAGE_TITLE } from './constants'
 import { getPostsFromCollection } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
-import { allPostCollections, Post } from 'contentlayer/generated'
+import { allPostCollections, type Post } from 'lib/content'
 
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { OutboundLink } from '@/components/common/Tracking'
 import { NewsletterSignupForm } from '../newsletter/NewsletterSignupForm'
 import { Image } from '@/components/common/Image'
 import { PageLayout } from '@/components/Layout/PageLayout'
-import { TrackOnMount } from '@/components/common/Tracking'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 import PROFILE_IMG from './profile.png'
@@ -37,8 +36,7 @@ export default async function StartPage() {
   )
 
   return (
-    <TrackOnMount trackingData={{ page: 'Start' }}>
-      <PageLayout className="mt-12">
+    <PageLayout className="mt-12">
         <StartHeader />
         <hr />
         <div className="text-center">
@@ -60,7 +58,6 @@ export default async function StartPage() {
           }}
         />
       </PageLayout>
-    </TrackOnMount>
   )
 }
 

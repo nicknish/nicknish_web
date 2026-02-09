@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@sentry/nextjs'
 
 import { isBrowser } from '@/utils/environment'
 
@@ -32,7 +32,7 @@ function initErrorReporting() {
   if (isBrowser()) {
     Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-      integrations: [new Sentry.BrowserTracing()],
+      integrations: [Sentry.browserTracingIntegration()],
       tracesSampleRate: 1.0,
       environment: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     })

@@ -1,6 +1,3 @@
-// TODO: As of Feb 13, 2023, Contentlayer has an issue passing React components to MDX files
-// See https://github.com/contentlayerdev/contentlayer/issues/309
-
 import React from 'react'
 
 interface IBookmarkLinkProps {

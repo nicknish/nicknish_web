@@ -1,4 +1,4 @@
-import type { Post, Job, Project, PostSeries, PostCollection } from 'contentlayer/generated'
+import type { Post, Job, Project, PostSeries, PostCollection } from 'lib/content'
 
 export function getItemBySlug(collection: Post[], slug: Post['slug']): Post
 export function getItemBySlug(collection: Job[], slug: Job['slug']): Job

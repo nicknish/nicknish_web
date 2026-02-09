@@ -3,13 +3,12 @@ import { notFound } from 'next/navigation'
 import { format, parseISO } from 'date-fns'
 
 import { getDate } from '@/utils/dates'
-import { allProjects, type Project } from 'contentlayer/generated'
+import { allProjects, type Project } from 'lib/content'
 import { getItemBySlug } from '@/lib/utils'
 import { createUrl } from '@/constants/urls'
 import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
 
 import { Show, ShowTypes } from '@/components/Layout/Show'
-import { TrackOnMount } from '@/components/common/Tracking'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export async function generateStaticParams() {
@@ -17,7 +16,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: IProjectPageProps): Promise<Metadata> {
-  const project = getItemBySlug(allProjects, params.slug)
+  const { slug } = await params
+  const project = getItemBySlug(allProjects, slug)
   if (!project) {
     throw new Error('Project not found when generating metadata')
   }
@@ -59,13 +59,14 @@ export async function generateMetadata({ params }: IProjectPageProps): Promise<M
 }
 
 export interface IProjectPageProps {
-  params: {
+  params: Promise<{
     slug: Project['slug']
-  }
+  }>
 }
 
 export default async function ProjectPage(props: IProjectPageProps) {
-  const project = getItemBySlug(allProjects, props.params.slug)
+  const { slug } = await props.params
+  const project = getItemBySlug(allProjects, slug)
   if (!project) {
     notFound()
   }
@@ -80,10 +81,9 @@ export default async function ProjectPage(props: IProjectPageProps) {
 
   return (
     <>
-      <TrackOnMount trackingData={{ page: 'Project' }}>
-        <Show
+      <Show
           title={project.title}
-          description={project.body.code}
+          description={project.body.raw}
           date={formattedDate}
           external_url={project.projectUrl}
           type={ShowTypes.PROJECT}
@@ -91,7 +91,6 @@ export default async function ProjectPage(props: IProjectPageProps) {
             project.bannerImage ? { url: project.bannerImage, description: 'Logo' } : undefined
           }
         />
-      </TrackOnMount>
       <StructuredData
         type="Project"
         args={{

@@ -2,7 +2,7 @@
 
 import { CommentCount } from 'disqus-react'
 
-import type { Post } from 'contentlayer/generated'
+import type { Post } from 'lib/content'
 import { useGetDisqusConfig } from './utils'
 
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
-import { allProjects } from 'contentlayer/generated'
+import { allProjects } from 'lib/content'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { createUrl, HOME_PATH, WORK_PATH } from '@/constants/urls'
@@ -16,7 +16,6 @@ import { WorkItem } from './WorkItem'
 import { Button } from '@/components/common/Button'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { PageLayout } from '@/components/Layout/PageLayout'
-import { TrackOnMount } from '@/components/common/Tracking'
 
 import HAPPY_IMG from './happy.svg'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
@@ -37,8 +36,7 @@ export default async function WorkPage() {
   const projectHistory = sortProjectWorkItemsByStartDate(allProjects)
 
   return (
-    <TrackOnMount trackingData={{ page: WORK_PAGE_TITLE }}>
-      <PageLayout className="mt-8">
+    <PageLayout className="mt-8">
         <div className="mx-auto md:grid md:grid-cols-5 md:gap-x-8 items-center">
           <div className="md:col-span-2 mb-8 md:mb-0">
             <Image
@@ -184,7 +182,6 @@ export default async function WorkPage() {
           }}
         />
       </PageLayout>
-    </TrackOnMount>
   )
 }
 

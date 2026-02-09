@@ -1,4 +1,4 @@
-import { type Project, type Job, allJobs } from 'contentlayer/generated'
+import { type Project, type Job, allJobs } from 'lib/content'
 import { compareAsc, parseISO } from 'date-fns'
 
 export function getJobs(options: { only: 'fulltime' | 'contract' }) {

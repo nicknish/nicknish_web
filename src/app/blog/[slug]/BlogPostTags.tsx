@@ -1,4 +1,4 @@
-import type { Post } from 'contentlayer/generated'
+import type { Post } from 'lib/content'
 
 interface IBlogPostTagsProps {
   tags: Post['tags']

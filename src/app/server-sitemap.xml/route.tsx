@@ -8,7 +8,7 @@ import {
   START_PATH,
   WORK_PATH,
 } from '@/constants/urls'
-import { allJobs, allPosts, allPostSeries, allProjects } from 'contentlayer/generated'
+import { allJobs, allPosts, allPostSeries, allProjects } from 'lib/content'
 import { getPostsFromPostSeries } from '@/lib/posts'
 
 const SITE_URL = siteConfig.siteUrl
@@ -45,5 +45,3 @@ function buildSitemapField(loc: string, config: Partial<ISitemapField>): ISitema
     ...config,
   }
 }
-
-export default function SitemapIndex() {}

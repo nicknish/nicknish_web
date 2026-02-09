@@ -31,7 +31,7 @@ export const Show = ({
   external_url,
   type,
   image,
-}: IShowProps): JSX.Element => {
+}: IShowProps) => {
   const { backUrl, backLinkText, headerText } = prepareShowData(type)
 
   return (
@@ -86,7 +86,7 @@ export const Show = ({
       <div className="md:text-lg max-w-prose mx-auto">
         <h3 className="text-2xl font-bold mb-4">{headerText}</h3>
         <DynamicProseBlock>
-          <MDXBlock code={description} />
+          <MDXBlock source={description} />
         </DynamicProseBlock>
       </div>
     </PageLayout>

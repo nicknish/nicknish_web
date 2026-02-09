@@ -4,9 +4,9 @@ import {
   allPostCollections,
   allPosts,
   allPostSeries,
-  Post,
-  PostSeries,
-} from 'contentlayer/generated'
+  type Post,
+  type PostSeries,
+} from 'lib/content'
 import { getPostsFromCollection, sortPostsByDate } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
 import { formatIsoDate } from '@/utils/dates'
@@ -16,7 +16,6 @@ import siteConfig from '@/config'
 
 import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
-import { TrackOnMount } from '@/components/common/Tracking'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export default function HomePage() {
@@ -28,8 +27,7 @@ export default function HomePage() {
 
   return (
     <>
-      <TrackOnMount trackingData={{ page: 'Homepage' }}>
-        <main className="px-4 mx-auto max-w-4xl">
+      <main className="px-4 mx-auto max-w-4xl">
           <header className="py-16">
             <div className="mx-auto max-w-xl text-lg">
               <h1 className="mb-8 text-4xl font-bold text-primary-500">Hi, I{"'"}m Nick Nish.</h1>
@@ -85,7 +83,6 @@ export default function HomePage() {
             </aside>
           </div>
         </main>
-      </TrackOnMount>
       <StructuredData
         type="Page"
         args={{

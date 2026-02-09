@@ -3,7 +3,6 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import HCaptcha from '@hcaptcha/react-hcaptcha'
-import { useTracking } from 'react-tracking'
 import { useDarkMode } from 'usehooks-ts'
 
 import { API_CONTACT_PATH } from '@/constants/urls'
@@ -31,7 +30,6 @@ export const ContactForm = () => {
   const captchaRef = React.useRef<HCaptcha>(null)
   const { formState, register, handleSubmit, setValue, resetField, setError } = useForm<FormData>()
   const { errors, isValid, isSubmitting } = formState
-  const { trackEvent } = useTracking()
   const { isDarkMode } = useDarkMode()
 
   register('captcha', { required: true })
@@ -46,7 +44,6 @@ export const ContactForm = () => {
         .then(response => response.json())
         .then(({ data, error }) => {
           if (data && data.code < 300) {
-            trackEvent({ action: 'Contact Form Submit' })
             return updateShowSuccess(true)
           }
           if (error?.fields) {

@@ -3,13 +3,12 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
 import { getPostsFromPostSeries } from '@/lib/posts'
-import { allPostSeries } from 'contentlayer/generated'
+import { allPostSeries } from 'lib/content'
 import { formatIsoDate } from '@/utils/dates'
 import { getItemBySlug } from '@/lib/utils'
 import { createUrl } from '@/constants/urls'
 import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
 
-import { TrackOnMount } from '@/components/common/Tracking'
 import { PageLayout } from '@/components/Layout/PageLayout'
 import { MDXBlock } from '@/components/common/content/MDXBlock'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
@@ -22,7 +21,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: IBlogPostSeriesProps): Promise<Metadata> {
-  const series = getItemBySlug(allPostSeries, params.slug)
+  const { slug } = await params
+  const series = getItemBySlug(allPostSeries, slug)
   if (!series) {
     throw new Error('Series not found when generating metadata')
   }
@@ -64,13 +64,14 @@ export async function generateMetadata({ params }: IBlogPostSeriesProps): Promis
 }
 
 export interface IBlogPostSeriesProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
-  const series = getItemBySlug(allPostSeries, props.params.slug)
+export default async function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
+  const { slug } = await props.params
+  const series = getItemBySlug(allPostSeries, slug)
   if (!series) {
     notFound()
   }
@@ -79,8 +80,7 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
 
   return (
     <>
-      <TrackOnMount trackingData={{ page: 'Blog Post Series' }}>
-        <PageLayout>
+      <PageLayout>
           <header className="mb-12">
             <DynamicProseBlock className="mx-auto mt-12 mb-12">
               <h1 className="!text-3xl">{series.title}</h1>
@@ -101,7 +101,7 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
           </header>
 
           <DynamicProseBlock className="mb-12 mx-auto">
-            <MDXBlock code={series.body.code} />
+            <MDXBlock source={series.body.raw} />
           </DynamicProseBlock>
 
           <ProseContainer className="grid grid-cols-1 gap-y-6 mx-auto">
@@ -126,7 +126,6 @@ export default function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
             ))}
           </ProseContainer>
         </PageLayout>
-      </TrackOnMount>
       <StructuredData
         type="PostSeries"
         args={{

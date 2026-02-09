@@ -2,13 +2,12 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { formatIsoDate, getDate } from '@/utils/dates'
-import { allJobs, type Job } from 'contentlayer/generated'
+import { allJobs, type Job } from 'lib/content'
 import { getJobBySlug } from './utils'
 import { WORK_PAGE_PATHNAME } from '../constants'
 import { createUrl } from '@/constants/urls'
 
 import { Show, ShowTypes } from '@/components/Layout/Show'
-import { TrackOnMount } from '@/components/common/Tracking'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export async function generateStaticParams() {
@@ -16,7 +15,7 @@ export async function generateStaticParams() {
 }
 
 interface IWorkPageProps {
-  params: IWorkPageParams
+  params: Promise<IWorkPageParams>
 }
 
 export interface IWorkPageParams {
@@ -24,7 +23,8 @@ export interface IWorkPageParams {
 }
 
 export async function generateMetadata({ params }: IWorkPageProps): Promise<Metadata> {
-  const job = getJobBySlug(params.slug)
+  const { slug } = await params
+  const job = getJobBySlug(slug)
   if (!job) {
     throw new Error('Job not found when generating metadata')
   }
@@ -41,8 +41,9 @@ export async function generateMetadata({ params }: IWorkPageProps): Promise<Meta
   }
 }
 
-export default function WorkPage(props: IWorkPageProps) {
-  const job = getJobBySlug(props.params.slug)
+export default async function WorkPage(props: IWorkPageProps) {
+  const { slug } = await props.params
+  const job = getJobBySlug(slug)
   if (!job) {
     notFound()
   }
@@ -53,10 +54,9 @@ export default function WorkPage(props: IWorkPageProps) {
 
   return (
     <>
-      <TrackOnMount trackingData={{ page: 'Job' }}>
-        <Show
+      <Show
           title={job.title}
-          description={job.body.code}
+          description={job.body.raw}
           date={formattedDate}
           external_url={job.jobUrl}
           type={ShowTypes.WORK}
@@ -64,7 +64,6 @@ export default function WorkPage(props: IWorkPageProps) {
             job.bannerImage ? { url: job.bannerImage, description: 'Company logo' } : undefined
           }
         />
-      </TrackOnMount>
       <StructuredData
         type="Job"
         args={{

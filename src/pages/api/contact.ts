@@ -85,7 +85,7 @@ async function validateParams(req: NextApiRequest) {
 
   const fieldErrors: ResponseError['error']['fields'] = removeEmptyItems({
     name: !name ? 'No name provided' : undefined,
-    email: !email ? undefined : validateEmail(email) ? undefined : 'Invalid email' || undefined,
+    email: !email ? undefined : validateEmail(email) ? undefined : 'Invalid email',
     message: !message ? 'No message provided' : undefined,
     captcha: !captchaResponse.success ? captchaResponse['error-codes']?.[0] : undefined,
   })

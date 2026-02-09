@@ -2,14 +2,13 @@ import React from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { allPosts, Post } from 'contentlayer/generated'
+import { allPosts, type Post } from 'lib/content'
 import { formatIsoDate } from '@/utils/dates'
 import { getItemBySlug } from '@/lib/utils'
 import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredData/structuredDataUtils'
 import { createUrl } from '@/constants/urls'
 import siteConfig from '@/config'
 
-import { TrackOnMount } from '@/components/common/Tracking'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { BlogPostContent } from './BlogPostContent'
 import { BlogPostComments } from './BlogPostComments'
@@ -22,7 +21,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: IBlogPostProps): Promise<Metadata> {
-  const post = getItemBySlug(allPosts, params.slug)
+  const { slug } = await params
+  const post = getItemBySlug(allPosts, slug)
   if (!post) {
     throw new Error('Post not found when generating metadata')
   }
@@ -66,21 +66,21 @@ export async function generateMetadata({ params }: IBlogPostProps): Promise<Meta
 }
 
 export interface IBlogPostProps {
-  params: {
+  params: Promise<{
     slug: Post['slug']
-  }
+  }>
 }
 
-export default function BlogPost(props: IBlogPostProps) {
-  const post = getItemBySlug(allPosts, props.params.slug)
+export default async function BlogPost(props: IBlogPostProps) {
+  const { slug } = await props.params
+  const post = getItemBySlug(allPosts, slug)
   if (!post) {
     notFound()
   }
 
   return (
     <>
-      <TrackOnMount trackingData={{ page: 'Blog Post' }}>
-        <main className="px-4 mx-auto max-w-3xl">
+      <main className="px-4 mx-auto max-w-3xl">
           <section>
             <header className="my-12">
               <h1 className="mb-4 text-3xl md:text-4xl font-bold">{post.title}</h1>
@@ -116,7 +116,6 @@ export default function BlogPost(props: IBlogPostProps) {
             <BlogPostComments title={post.title} identifier={post.slug} />
           </div>
         </main>
-      </TrackOnMount>
       <StructuredData
         type="Post"
         args={{

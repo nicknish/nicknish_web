@@ -12,7 +12,7 @@ export const WorkItem = ({
   title,
   description,
   footerSubtitle,
-}: IWorkItemProps): JSX.Element => {
+}: IWorkItemProps) => {
   return (
     <Link
       href={href}

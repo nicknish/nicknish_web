@@ -1,8 +1,6 @@
-import { Metadata } from "next";
+import type { Metadata, Viewport } from 'next'
 
 import config from '@/config'
-
-export type { Metadata }
 
 const DEFAULT_IMAGE = {
   url: config.shareImage,
@@ -16,11 +14,17 @@ const DEFAULT_TITLE = {
   template: `%s | ${config.shortTitle}`
 }
 
+export const DEFAULT_VIEWPORT: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: config.themeColor,
+}
+
 export const DEFAULT_METADATA: Metadata = {
   title: DEFAULT_TITLE,
   description: config.siteDescription,
-  // @ts-expect-error
-  metadataBase: config.siteUrl,
+  metadataBase: new URL(config.siteUrl || 'https://www.nicknish.co'),
   authors: { name: config.author },
   openGraph: {
     title: DEFAULT_TITLE,
@@ -39,13 +43,6 @@ export const DEFAULT_METADATA: Metadata = {
     card: 'summary_large_image',
     images: [DEFAULT_IMAGE]
   },
-  /**** NON-CONTENT META TAGS ****/
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    // shrinkToFit: 'no',
-  },
   icons: {
     icon: ['/favicon.ico', '/favicon-16x16.png', '/favicon-32x32.png'],
     shortcut: '/favicon-32x32.png',
@@ -56,7 +53,6 @@ export const DEFAULT_METADATA: Metadata = {
     }
   },
   manifest: '/manifest.json',
-  themeColor: config.themeColor,
   verification: {
     google: 'ZsR7DBayXkYHUqgVqkePKJRLeQXzkri7m-s5CFZzMG4',
   }
