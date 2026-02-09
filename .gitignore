@@ -41,6 +41,9 @@ next-env.d.ts
 cypress/screenshots/
 cypress/videos/
 
+# plans
+.plans/
+
 # SEO, sitemap, etc.
 robots.txt
 public/sitemap*.xml
