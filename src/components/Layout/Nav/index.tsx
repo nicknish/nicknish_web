@@ -4,7 +4,7 @@ import Link, { LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-import { HOME_PATH, WORK_PATH, START_PATH } from '../../../constants/urls'
+import { HOME_PATH, LAB_PATH, WORK_PATH, START_PATH } from '../../../constants/urls'
 
 import styles from './Nav.module.css'
 
@@ -13,6 +13,7 @@ export const Nav: React.FC = () => {
 
   const isBlog = pathname?.includes('/blog') || pathname === '/'
   const isBlogSeries = pathname?.includes('/series')
+  const isLab = pathname?.includes('/lab')
   const isWork = pathname?.includes('/work')
   const isProject = pathname?.includes('/projects')
   const isStart = pathname?.includes('/start')
@@ -27,8 +28,12 @@ export const Nav: React.FC = () => {
         <NavLink
           href={HOME_PATH} // This isn't a bug, the Homepage is the blog
           isActive={isBlog || isBlogSeries}
+          className="hidden md:inline"
         >
           Blog
+        </NavLink>
+        <NavLink href={LAB_PATH} isActive={isLab}>
+          Lab
         </NavLink>
         <NavLink href={WORK_PATH} isActive={isWork || isProject}>
           Work
@@ -53,13 +58,14 @@ function NavLogo() {
 interface INavLinkProps extends LinkProps {
   children: React.ReactNode
   isActive?: boolean
+  className?: string
 }
 
-function NavLink({ href, isActive, ...linkProps }: INavLinkProps) {
+function NavLink({ href, isActive, className, ...linkProps }: INavLinkProps) {
   return (
     <Link
       href={href}
-      className={`mx-2 font-bold ${isActive ? 'text-primary-500' : ''}`}
+      className={`mx-2 font-bold ${isActive ? 'text-primary-500' : ''} ${className ?? ''}`}
       data-testid={`NavLink--${href}`}
       prefetch={false}
       {...linkProps}

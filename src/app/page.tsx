@@ -4,6 +4,7 @@ import {
   allPostCollections,
   getPosts,
   allPostSeries,
+  allExperiments,
   type Post,
   type PostSeries,
 } from 'lib/content'
@@ -17,6 +18,7 @@ import siteConfig from '@/config'
 import { Image } from '@/components/common/Image'
 import { SmoothScrollButton } from '@/components/common/SmoothScrollButton'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
+import { LabExperimentsSection } from '@/components/Lab/LabExperimentsSection'
 
 export default async function HomePage() {
   const allPosts = await getPosts()
@@ -52,6 +54,18 @@ export default async function HomePage() {
                   Or check out my latest writing
                 </SmoothScrollButton>
               </div>
+              {allExperiments.length > 0 && (
+                <div className="mb-3">
+                  <span>🧪</span>
+                  <SmoothScrollButton
+                    className="ml-3 underline"
+                    target="[data-target='lab-experiments']"
+                    scrollOptions={{ block: 'start' }}
+                  >
+                    Or check out my latest AI experiments
+                  </SmoothScrollButton>
+                </div>
+              )}
             </div>
           </header>
 
@@ -83,6 +97,12 @@ export default async function HomePage() {
               </div>
             </aside>
           </div>
+
+          {allExperiments.length > 0 && (
+            <div className="mt-12 scroll-m-4" data-target="lab-experiments">
+              <LabExperimentsSection experiments={allExperiments.slice(0, 3)} />
+            </div>
+          )}
         </main>
       <StructuredData
         type="Page"

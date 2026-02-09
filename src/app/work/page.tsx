@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
-import { allProjects } from 'lib/content'
+import { allProjects, allExperiments } from 'lib/content'
 import { formatIsoDate, getDate } from '@/utils/dates'
 import { getJobs, sortProjectWorkItemsByStartDate } from '@/lib/jobs-projects'
 import { createUrl, HOME_PATH, WORK_PATH } from '@/constants/urls'
@@ -19,6 +19,7 @@ import { PageLayout } from '@/components/Layout/PageLayout'
 
 import HAPPY_IMG from './happy.svg'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
+import { LabExperimentsSection } from '@/components/Lab/LabExperimentsSection'
 
 export const metadata: Metadata = {
   title: WORK_PAGE_TITLE,
@@ -148,6 +149,12 @@ export default async function WorkPage() {
             })}
           </SectionGrid>
         </Section>
+
+        {allExperiments.length > 0 && (
+          <Section>
+            <LabExperimentsSection experiments={allExperiments.slice(0, 3)} />
+          </Section>
+        )}
 
         <Section data-testid="WorkSection--projects" data-target="projects">
           <SectionTitle id="projects">Projects</SectionTitle>

@@ -3,12 +3,13 @@ import { getServerSideSitemap, type ISitemapField } from 'next-sitemap'
 import siteConfig from '@/config'
 import {
   CONTACT_PATH,
+  LAB_PATH,
   NEWSLETTER_PATH,
   PROJECTS_PATH,
   START_PATH,
   WORK_PATH,
 } from '@/constants/urls'
-import { allJobs, getPosts, allPostSeries, allProjects } from 'lib/content'
+import { allJobs, getPosts, allPostSeries, allProjects, allExperiments } from 'lib/content'
 import { getPostsFromPostSeries } from '@/lib/posts'
 
 const SITE_URL = siteConfig.siteUrl
@@ -33,8 +34,12 @@ export async function GET(request: Request) {
     buildSitemapField(`${SITE_URL}${PROJECTS_PATH}`, { changefreq: 'monthly' }),
     buildSitemapField(`${SITE_URL}${START_PATH}`, { changefreq: 'monthly' }),
     buildSitemapField(`${SITE_URL}${WORK_PATH}`, { changefreq: 'monthly' }),
+    buildSitemapField(`${SITE_URL}${LAB_PATH}`, { changefreq: 'weekly' }),
     ...allPosts.map(post =>
       buildSitemapField(post.url, { lastmod: post.date, changefreq: 'daily' })
+    ),
+    ...allExperiments.map(experiment =>
+      buildSitemapField(experiment.url, { lastmod: experiment.date, changefreq: 'monthly' })
     ),
     ...allProjects.map(project =>
       buildSitemapField(project.url, { lastmod: project.endDate, changefreq: 'monthly' })

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import type { Post, Job, Project, PostCollection, PostSeries } from './types'
+import type { Post, Job, Project, PostCollection, PostSeries, Experiment } from './types'
 import { fetchNotionPosts } from 'lib/notion/fetcher'
 import { notionPostToPost } from 'lib/notion/adapter'
 
@@ -151,11 +151,25 @@ function getPostSeries(): PostSeries[] {
   }))
 }
 
+function getExperimentsMdx(): Experiment[] {
+  return readMdxFiles('experiments').map(({ frontmatter, content }) => ({
+    title: frontmatter.title,
+    slug: frontmatter.slug,
+    date: typeof frontmatter.date === 'object' ? frontmatter.date.toISOString() : String(frontmatter.date),
+    description: frontmatter.description,
+    thumbnail: frontmatter.thumbnail,
+    tags: frontmatter.tags,
+    url: `/lab/${frontmatter.slug}`,
+    body: { raw: content },
+  })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
+
 // Cache the results so we don't re-read files on every import
 let _allJobs: Job[] | null = null
 let _allProjects: Project[] | null = null
 let _allPostCollections: PostCollection[] | null = null
 let _allPostSeries: PostSeries[] | null = null
+let _allExperiments: Experiment[] | null = null
 
 export const allJobs: Job[] = (() => {
   if (!_allJobs) _allJobs = getJobs()
@@ -177,4 +191,9 @@ export const allPostSeries: PostSeries[] = (() => {
   return _allPostSeries
 })()
 
-export type { Post, Job, Project, PostCollection, PostSeries }
+export const allExperiments: Experiment[] = (() => {
+  if (!_allExperiments) _allExperiments = getExperimentsMdx()
+  return _allExperiments
+})()
+
+export type { Post, Job, Project, PostCollection, PostSeries, Experiment }

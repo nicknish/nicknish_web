@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 import siteConfig from '@/config'
-import { createUrl, NEWSLETTER_PATH } from '@/constants/urls'
+import { createUrl, LAB_PATH, NEWSLETTER_PATH } from '@/constants/urls'
 import { START_PAGE_PATHNAME, START_PAGE_TITLE } from './constants'
 import { getPostsFromCollection } from '@/lib/posts'
 import { getItemBySlug } from '@/lib/utils'
@@ -88,11 +88,14 @@ function StartHeader() {
             <b>I aim to help you leverage those opportunities by providing you a toolkit</b> to
             create products and navigate the technology world.
           </p>
-          {/* <p className='my-4'>
-          I'm fascinated by the indie maker movement and how software engineers
-          and non-engineers are utilizing new tools to create products that
-          provide them financial independence.
-        </p> */}
+          <p>
+            These days, I spend most of my time experimenting with AI, building tools and games
+            that push the boundaries of what{"'"}s possible. Check out my recent experiments in{' '}
+            <Link href={LAB_PATH} prefetch={false}>
+              the Lab
+            </Link>
+            .
+          </p>
           <p>
             On this blog you can expect ideas, tutorials, and resources ranging topics like
             startups, making products, and software engineering.

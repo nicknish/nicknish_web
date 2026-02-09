@@ -71,3 +71,16 @@ export interface PostSeries {
     raw: string
   }
 }
+
+export interface Experiment {
+  title: string
+  slug: string
+  date: string
+  description: string
+  thumbnail?: string
+  tags?: string[]
+  url: string
+  body: {
+    raw: string
+  }
+}

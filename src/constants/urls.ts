@@ -6,6 +6,7 @@ export const PROJECTS_PATH = '/projects'
 export const START_PATH = '/start'
 export const NEWSLETTER_PATH = '/newsletter'
 export const CONTACT_PATH = '/contact'
+export const LAB_PATH = '/lab'
 
 const API_ROUTE = '/api'
 export const API_CONTACT_PATH = `${API_ROUTE}/contact`
