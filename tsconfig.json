@@ -23,7 +23,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "content/*": ["./content/*"],
-      "cypress/*": ["./cypress/*"],
       "lib/*": ["./lib/*"]
     },
     "typeRoots": ["./src/types"]
