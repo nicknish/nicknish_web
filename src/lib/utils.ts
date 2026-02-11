@@ -1,4 +1,4 @@
-import type { Post, Job, Project, PostSeries, PostCollection } from 'lib/content'
+import type { Post, Job, Project, PostSeries, PostCollection, Experiment } from 'lib/content'
 
 export function getItemBySlug(collection: Post[], slug: Post['slug']): Post
 export function getItemBySlug(collection: Job[], slug: Job['slug']): Job
@@ -8,6 +8,7 @@ export function getItemBySlug(
   collection: PostCollection[],
   slug: PostCollection['slug']
 ): PostCollection
+export function getItemBySlug(collection: Experiment[], slug: Experiment['slug']): Experiment
 export function getItemBySlug(collection: any[], slug: string) {
   return collection.find(item => item.slug === slug)
 }
