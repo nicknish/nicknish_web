@@ -91,6 +91,8 @@ export default async function BlogPost(props: IBlogPostProps) {
               <h1 className="mb-4 text-3xl md:text-4xl font-bold">{post.title}</h1>
               <div className="flex items-center gap-x-3 text-slate-600 dark:text-white-80">
                 <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
+                <span>·</span>
+                <span>{post.readingTime} min read</span>
                 <span>–</span>
                 <BlogPostCommentsCount
                   title={post.title}

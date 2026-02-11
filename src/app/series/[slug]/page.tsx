@@ -116,12 +116,11 @@ export default async function BlogPostSeriesPage(props: IBlogPostSeriesProps) {
                   {post.title}
                 </h2>
                 <p className="mb-3 dark:text-white-80">{post.description}</p>
-                <time
-                  dateTime={post.date}
-                  className="block text-sm text-black-50 dark:text-white-50"
-                >
-                  {formatIsoDate(post.date)}
-                </time>
+                <div className="flex items-center gap-x-2 text-sm text-black-50 dark:text-white-50">
+                  <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
+                  <span>·</span>
+                  <span>{post.readingTime} min read</span>
+                </div>
               </Link>
             ))}
           </ProseContainer>

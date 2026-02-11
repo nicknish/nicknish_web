@@ -5,6 +5,7 @@ export interface Post {
   description: string
   tags?: string[]
   shareImage?: any
+  readingTime: number
   url: string
   body: {
     raw: string

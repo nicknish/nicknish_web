@@ -4,6 +4,7 @@ import matter from 'gray-matter'
 import type { Post, Job, Project, PostCollection, PostSeries, Experiment } from './types'
 import { fetchNotionPosts } from 'lib/notion/fetcher'
 import { notionPostToPost } from 'lib/notion/adapter'
+import { calculateReadingTime } from './reading-time'
 
 const contentDir = path.join(process.cwd(), 'content')
 
@@ -49,6 +50,7 @@ function getMdxPosts(): Post[] {
     description: frontmatter.description,
     tags: frontmatter.tags,
     shareImage: frontmatter.shareImage,
+    readingTime: calculateReadingTime(content),
     url: `/blog/${frontmatter.slug}`,
     body: { raw: content },
     source: 'mdx' as const,
