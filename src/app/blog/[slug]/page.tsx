@@ -9,11 +9,13 @@ import { getMeAuthorStructuredData } from '@/components/Layout/SEO/StructuredDat
 import { createUrl } from '@/constants/urls'
 import siteConfig from '@/config'
 
+import { getRelatedPosts } from '@/lib/related-posts'
 import { DynamicProseBlock } from '@/components/common/content/DynamicProseBlock'
 import { BlogPostContent } from './BlogPostContent'
 import { BlogPostComments } from './BlogPostComments'
 import { BlogPostCommentsCount } from './BlogPostCommentsCount'
 import { BlogPostTags } from './BlogPostTags'
+import { RelatedPosts } from './RelatedPosts'
 import { StructuredData } from '@/components/Layout/SEO/StructuredData'
 
 export const dynamicParams = false
@@ -82,6 +84,7 @@ export default async function BlogPost(props: IBlogPostProps) {
   if (!post) {
     notFound()
   }
+  const relatedPosts = getRelatedPosts(post, allPosts)
 
   return (
     <>
@@ -118,6 +121,8 @@ export default async function BlogPost(props: IBlogPostProps) {
               </footer>
             )}
           </section>
+
+          <RelatedPosts posts={relatedPosts} />
 
           <div className="mt-8" data-target="comments">
             <BlogPostComments title={post.title} identifier={post.slug} />
