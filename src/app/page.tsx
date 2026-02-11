@@ -133,7 +133,7 @@ function PostCard(post: Post) {
           {post.title}
         </Link>
       </h3>
-      <div className="flex items-center gap-x-2 mb-2 text-sm text-black-40 dark:text-white-50">
+      <div className="flex items-center gap-x-1.5 mb-2 text-sm text-black-40 dark:text-white-50">
         <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
         <span>·</span>
         <span>{post.readingTime} min read</span>
@@ -152,7 +152,7 @@ function PopularPostCard(post: Post) {
         </Link>
         <p className="text-sm line-clamp-4 dark:text-white-80">{post.description}</p>
       </div>
-      <div className="flex items-center gap-x-2 mt-4 text-sm dark:text-white-50">
+      <div className="flex items-center gap-x-1.5 mt-4 text-sm dark:text-white-50">
         <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
         <span>·</span>
         <span>{post.readingTime} min read</span>

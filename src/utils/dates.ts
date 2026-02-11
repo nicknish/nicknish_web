@@ -14,5 +14,5 @@ export const getDate = (startDate?: string, endDate?: string, current?: boolean)
 }
 
 export const formatIsoDate = (isoDate: string, formatType?: string): string => {
-  return format(parseISO(isoDate), formatType ?? 'LLLL d, yyyy')
+  return format(parseISO(isoDate), formatType ?? 'MMM d, yyyy')
 }
