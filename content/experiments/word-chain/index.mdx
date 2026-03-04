@@ -1,0 +1,24 @@
+---
+title: "Word Chain: AI Association Game"
+slug: "word-chain"
+date: "2026-03-04T00:00"
+description: "Build the longest chain of associated words. Each guess is validated by AI — how far can you go?"
+tags: ["game", "ai", "interactive"]
+---
+
+You start with a word. Type something related — anything with a clear association. The AI decides if the link is strong enough. Keep going until a word breaks the chain. How long a chain can you build?
+
+<WordChain />
+
+## Rules
+
+- Each word must be meaningfully associated with the previous word
+- No repeating words in the same chain
+- Single words only — no spaces
+- The AI is the judge: it's generous but not foolish
+
+## How it works
+
+Word associations are validated in real time by a large language model via [OpenRouter](https://openrouter.ai). The model evaluates whether your word has a clear semantic, categorical, or cultural connection to the current word. "knight" to "castle" passes. "knight" to "refrigerator" does not.
+
+Built with React, TypeScript, and the Cloudflare Turnstile API for bot protection. High scores are saved to your browser's local storage.
