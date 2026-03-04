@@ -78,9 +78,9 @@ async function judgeAssociation(
 				{ role: "user", content: userPrompt },
 			],
 			temperature: 0.1,
-			max_tokens: 100,
+			max_tokens: 300,
 		}),
-		signal: AbortSignal.timeout(10_000),
+		signal: AbortSignal.timeout(15_000),
 	});
 
 	if (!res.ok) {
@@ -88,7 +88,11 @@ async function judgeAssociation(
 	}
 
 	const data = (await res.json()) as OpenRouterResponse;
-	const content = data.choices[0]?.message?.content ?? "";
+	const message = data.choices[0]?.message;
+	// Some reasoning models (e.g. glm-4.5-air) put output in content;
+	// others may return content: null if reasoning consumed all tokens.
+	// biome-ignore lint/suspicious/noExplicitAny: OpenRouter response shape varies by model
+	const content = message?.content ?? (message as any)?.reasoning ?? "";
 
 	// Extract JSON from response (model might wrap it in markdown code blocks)
 	const match = content.match(/\{[\s\S]*?\}/);
