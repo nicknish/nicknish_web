@@ -73,6 +73,8 @@ async function callModel(
 	systemPrompt: string,
 	userPrompt: string,
 ): Promise<LLMJudgement | null> {
+	console.log(`[word-chain] trying model: ${model}`);
+
 	const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 		method: "POST",
 		headers: {
@@ -91,12 +93,19 @@ async function callModel(
 		signal: AbortSignal.timeout(20_000),
 	});
 
-	if (!res.ok) return null;
+	if (!res.ok) {
+		const errBody = await res.text().catch(() => "(unreadable)");
+		console.error(`[word-chain] ${model} HTTP ${res.status}: ${errBody}`);
+		return null;
+	}
 
 	// biome-ignore lint/suspicious/noExplicitAny: OpenRouter response shape varies
 	const data = (await res.json()) as any;
 	const message = data?.choices?.[0]?.message;
-	if (!message) return null;
+	if (!message) {
+		console.error(`[word-chain] ${model} no message in response:`, JSON.stringify(data).slice(0, 300));
+		return null;
+	}
 
 	// Try content first, then fall back to reasoning field.
 	// Many free-tier models are reasoning models that put chain-of-thought
@@ -105,7 +114,20 @@ async function callModel(
 	const content = message.content ?? "";
 	const reasoning = message.reasoning ?? "";
 
-	return extractJudgement(content) ?? extractJudgement(reasoning);
+	const fromContent = extractJudgement(content);
+	if (fromContent) {
+		console.log(`[word-chain] ${model} OK (from content): valid=${fromContent.valid}`);
+		return fromContent;
+	}
+
+	const fromReasoning = extractJudgement(reasoning);
+	if (fromReasoning) {
+		console.log(`[word-chain] ${model} OK (from reasoning): valid=${fromReasoning.valid}`);
+		return fromReasoning;
+	}
+
+	console.error(`[word-chain] ${model} no JSON found. content=${JSON.stringify(content).slice(0, 200)} reasoning=${JSON.stringify(reasoning).slice(0, 200)}`);
+	return null;
 }
 
 async function judgeAssociation(
@@ -114,6 +136,7 @@ async function judgeAssociation(
 ): Promise<LLMJudgement> {
 	const apiKey = process.env.OPENROUTER_API_KEY;
 	if (!apiKey) {
+		console.error("[word-chain] OPENROUTER_API_KEY is not set");
 		return { valid: false, reason: COULD_NOT_VALIDATE };
 	}
 
@@ -126,11 +149,12 @@ async function judgeAssociation(
 		try {
 			const result = await callModel(apiKey, model, systemPrompt, userPrompt);
 			if (result) return result;
-		} catch {
-			// Model timed out or errored — try next
+		} catch (e) {
+			console.error(`[word-chain] ${model} threw:`, e instanceof Error ? e.message : e);
 		}
 	}
 
+	console.error(`[word-chain] all ${MODELS.length} models failed for "${currentWord}" → "${guess}"`);
 	return { valid: false, reason: COULD_NOT_VALIDATE };
 }
 
@@ -189,11 +213,15 @@ export async function POST(
 			currentWord.trim().toLowerCase(),
 			trimmedGuess,
 		);
+		if (result.reason === COULD_NOT_VALIDATE) {
+			return NextResponse.json(result, { status: 502 });
+		}
 		return NextResponse.json(result);
-	} catch {
-		return NextResponse.json({
-			valid: false,
-			reason: COULD_NOT_VALIDATE,
-		});
+	} catch (e) {
+		console.error("[word-chain] unhandled error:", e instanceof Error ? e.message : e);
+		return NextResponse.json(
+			{ valid: false, reason: COULD_NOT_VALIDATE },
+			{ status: 502 },
+		);
 	}
 }
