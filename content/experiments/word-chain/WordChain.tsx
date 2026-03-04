@@ -185,6 +185,17 @@ export function WordChain() {
 				turnstileToken,
 			);
 
+			// If the API couldn't reach the LLM, let the player retry
+			// instead of ending the game.
+			if (
+				!result.valid &&
+				result.reason === "Couldn't validate — try again"
+			) {
+				setReason("Couldn't validate — try again");
+				triggerShake();
+				return;
+			}
+
 			if (result.valid) {
 				const newChain = [...chain, guess];
 				const newScore = newChain.length - 1;
@@ -218,12 +229,6 @@ export function WordChain() {
 		} catch {
 			setReason("Couldn't validate — try again");
 			triggerShake();
-			setTimeout(() => {
-				setFinalChain([...chain]);
-				setFinalScore(score);
-				setFinalReason("Couldn't validate — try again");
-				setPhase("gameOver");
-			}, 800);
 		} finally {
 			setValidating(false);
 		}
@@ -634,7 +639,7 @@ export function WordChain() {
 						<button
 							type="button"
 							onClick={handlePlayAgain}
-							className="wc-btn-primary px-8 py-3 rounded-xl font-semibold"
+							className="wc-btn-primary px-10 py-4 rounded-xl font-semibold"
 							style={{
 								background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
 								color: "#fff",
@@ -642,6 +647,7 @@ export function WordChain() {
 								fontSize: "1rem",
 								cursor: "pointer",
 								letterSpacing: "0.01em",
+								marginTop: 4,
 							}}
 						>
 							Play Again
