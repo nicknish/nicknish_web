@@ -16,23 +16,20 @@ interface TurnstileVerifyResponse {
 	"error-codes"?: string[];
 }
 
-interface OpenRouterMessage {
-	role: string;
-	content: string;
-}
-
-interface OpenRouterChoice {
-	message: OpenRouterMessage;
-}
-
-interface OpenRouterResponse {
-	choices: OpenRouterChoice[];
-}
-
 interface LLMJudgement {
 	valid: boolean;
 	reason: string;
 }
+
+const COULD_NOT_VALIDATE = "Couldn't validate — try again";
+
+// Models to try in order. Free-tier reasoning models are unreliable, so we
+// rotate through several to increase the odds of getting a non-empty content.
+const MODELS = [
+	"z-ai/glm-4.5-air:free",
+	"mistralai/mistral-small-3.1-24b-instruct:free",
+	"arcee-ai/trinity-mini:free",
+];
 
 async function verifyTurnstile(token: string): Promise<boolean> {
 	const secret = process.env.TURNSTILE_SECRET_KEY;
@@ -41,14 +38,74 @@ async function verifyTurnstile(token: string): Promise<boolean> {
 	const body = new URLSearchParams({ secret, response: token });
 	const res = await fetch(
 		"https://challenges.cloudflare.com/turnstile/v0/siteverify",
-		{
-			method: "POST",
-			body,
-		},
+		{ method: "POST", body },
 	);
 
 	const data = (await res.json()) as TurnstileVerifyResponse;
 	return data.success === true;
+}
+
+/**
+ * Extract a JSON object like {"valid": true, "reason": "..."} from a string.
+ * Returns null if not found or unparseable.
+ */
+function extractJudgement(text: string): LLMJudgement | null {
+	const match = text.match(/\{[\s\S]*?\}/);
+	if (!match) return null;
+
+	try {
+		const parsed = JSON.parse(match[0]) as Partial<LLMJudgement>;
+		if (
+			typeof parsed.valid !== "boolean" ||
+			typeof parsed.reason !== "string"
+		) {
+			return null;
+		}
+		return { valid: parsed.valid, reason: parsed.reason };
+	} catch {
+		return null;
+	}
+}
+
+async function callModel(
+	apiKey: string,
+	model: string,
+	systemPrompt: string,
+	userPrompt: string,
+): Promise<LLMJudgement | null> {
+	const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			model,
+			messages: [
+				{ role: "system", content: systemPrompt },
+				{ role: "user", content: userPrompt },
+			],
+			temperature: 0.1,
+			max_tokens: 1000,
+		}),
+		signal: AbortSignal.timeout(20_000),
+	});
+
+	if (!res.ok) return null;
+
+	// biome-ignore lint/suspicious/noExplicitAny: OpenRouter response shape varies
+	const data = (await res.json()) as any;
+	const message = data?.choices?.[0]?.message;
+	if (!message) return null;
+
+	// Try content first, then fall back to reasoning field.
+	// Many free-tier models are reasoning models that put chain-of-thought
+	// in a "reasoning" field and may return content: null if all tokens
+	// were spent on reasoning.
+	const content = message.content ?? "";
+	const reasoning = message.reasoning ?? "";
+
+	return extractJudgement(content) ?? extractJudgement(reasoning);
 }
 
 async function judgeAssociation(
@@ -57,61 +114,24 @@ async function judgeAssociation(
 ): Promise<LLMJudgement> {
 	const apiKey = process.env.OPENROUTER_API_KEY;
 	if (!apiKey) {
-		return { valid: false, reason: "Couldn't validate — try again" };
+		return { valid: false, reason: COULD_NOT_VALIDATE };
 	}
 
-	const systemPrompt =
-		'You are a word association judge. Given two words, determine if the second word is meaningfully related to the first through association, category, semantic similarity, or common cultural connection. Be generous but not absurd — "knight" → "castle" is valid, "knight" → "refrigerator" is not. Respond ONLY with valid JSON: {"valid": boolean, "reason": "brief explanation"}';
+	const systemPrompt = `You are a word association judge. Given two words, determine if the second word is meaningfully related to the first through association, category, semantic similarity, or common cultural connection. Be generous but not absurd — "knight" → "castle" is valid, "knight" → "refrigerator" is not. Respond ONLY with valid JSON: {"valid": boolean, "reason": "brief explanation"}. Do NOT think step-by-step. Output the JSON immediately.`;
 
 	const userPrompt = `Current word: "${currentWord}". Guess: "${guess}".`;
 
-	const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${apiKey}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			model: "z-ai/glm-4.5-air:free",
-			messages: [
-				{ role: "system", content: systemPrompt },
-				{ role: "user", content: userPrompt },
-			],
-			temperature: 0.1,
-			max_tokens: 300,
-		}),
-		signal: AbortSignal.timeout(15_000),
-	});
-
-	if (!res.ok) {
-		return { valid: false, reason: "Couldn't validate — try again" };
-	}
-
-	const data = (await res.json()) as OpenRouterResponse;
-	const message = data.choices[0]?.message;
-	// Some reasoning models (e.g. glm-4.5-air) put output in content;
-	// others may return content: null if reasoning consumed all tokens.
-	// biome-ignore lint/suspicious/noExplicitAny: OpenRouter response shape varies by model
-	const content = message?.content ?? (message as any)?.reasoning ?? "";
-
-	// Extract JSON from response (model might wrap it in markdown code blocks)
-	const match = content.match(/\{[\s\S]*?\}/);
-	if (!match) {
-		return { valid: false, reason: "Couldn't validate — try again" };
-	}
-
-	try {
-		const parsed = JSON.parse(match[0]) as Partial<LLMJudgement>;
-		if (
-			typeof parsed.valid !== "boolean" ||
-			typeof parsed.reason !== "string"
-		) {
-			return { valid: false, reason: "Couldn't validate — try again" };
+	// Try each model until one returns a valid judgement
+	for (const model of MODELS) {
+		try {
+			const result = await callModel(apiKey, model, systemPrompt, userPrompt);
+			if (result) return result;
+		} catch {
+			// Model timed out or errored — try next
 		}
-		return { valid: parsed.valid, reason: parsed.reason };
-	} catch {
-		return { valid: false, reason: "Couldn't validate — try again" };
 	}
+
+	return { valid: false, reason: COULD_NOT_VALIDATE };
 }
 
 export async function POST(
@@ -157,18 +177,13 @@ export async function POST(
 	// through so gameplay isn't interrupted.)
 	if (turnstileToken) {
 		try {
-			const turnstileOk = await verifyTurnstile(turnstileToken);
-			if (!turnstileOk) {
-				// Token was already consumed or expired — that's fine for
-				// in-game requests. The initial Turnstile gate on the client
-				// is sufficient bot protection.
-			}
+			await verifyTurnstile(turnstileToken);
 		} catch {
 			// Turnstile service hiccup — don't block gameplay
 		}
 	}
 
-	// Judge via OpenRouter
+	// Judge via OpenRouter (tries multiple models)
 	try {
 		const result = await judgeAssociation(
 			currentWord.trim().toLowerCase(),
@@ -178,7 +193,7 @@ export async function POST(
 	} catch {
 		return NextResponse.json({
 			valid: false,
-			reason: "Couldn't validate — try again",
+			reason: COULD_NOT_VALIDATE,
 		});
 	}
 }
