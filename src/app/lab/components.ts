@@ -20,4 +20,11 @@ export const experimentComponents: Record<string, Record<string, ComponentType<a
       }))
     ),
   },
+  'word-chain': {
+    WordChain: dynamic(() =>
+      import('../../../content/experiments/word-chain/WordChain').then(mod => ({
+        default: mod.WordChain,
+      }))
+    ),
+  },
 }
