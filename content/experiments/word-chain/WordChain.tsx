@@ -332,12 +332,13 @@ export function WordChain() {
 					background:
 						"radial-gradient(ellipse at 50% 30%, #1a1040 0%, #0f0f1a 65%)",
 					borderRadius: 16,
-					padding: "28px 20px",
+					padding: "40px 24px",
 					minHeight: 440,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
-					justifyContent: "center",
+					justifyContent: "flex-start",
+					paddingTop: 48,
 					position: "relative",
 					overflow: "hidden",
 					border: "1px solid rgba(255,255,255,0.06)",
@@ -348,12 +349,12 @@ export function WordChain() {
 				{/* ---- TURNSTILE PHASE ---- */}
 				{phase === "turnstile" && (
 					<div
-						className="wc-fade-up flex flex-col items-center gap-6 text-center w-full"
+						className="wc-fade-up flex flex-col items-center gap-8 text-center w-full"
 						style={{ maxWidth: 400 }}
 					>
 						<div>
 							<h2
-								className="font-bold mb-3"
+								className="font-bold mb-4"
 								style={{
 									fontSize: "clamp(1.75rem, 6vw, 2.5rem)",
 									background:
@@ -372,6 +373,7 @@ export function WordChain() {
 									fontSize: "0.95rem",
 									lineHeight: 1.65,
 									maxWidth: 320,
+									margin: "0 auto",
 								}}
 							>
 								Start with a word. Type something associated with it. Each valid
@@ -385,7 +387,7 @@ export function WordChain() {
 							type="button"
 							onClick={startGame}
 							disabled={!turnstileToken}
-							className="wc-btn-primary px-10 py-4 rounded-xl font-semibold"
+							className="wc-btn-primary rounded-xl font-semibold"
 							style={{
 								background: turnstileToken
 									? "linear-gradient(135deg, #7c3aed, #4f46e5)"
@@ -393,9 +395,9 @@ export function WordChain() {
 								color: turnstileToken ? "#fff" : "rgba(255,255,255,0.25)",
 								cursor: turnstileToken ? "pointer" : "not-allowed",
 								border: "none",
-								fontSize: "1.05rem",
+								fontSize: "1.1rem",
 								letterSpacing: "0.01em",
-								marginTop: 4,
+								padding: "16px 48px",
 							}}
 						>
 							{turnstileToken ? "Start Game" : "Verifying..."}
