@@ -333,12 +333,11 @@ export function WordChain() {
 						"radial-gradient(ellipse at 50% 30%, #1a1040 0%, #0f0f1a 65%)",
 					borderRadius: 16,
 					padding: "40px 24px",
-					minHeight: 440,
+					minHeight: 420,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
-					justifyContent: "flex-start",
-					paddingTop: 48,
+					justifyContent: "center",
 					position: "relative",
 					overflow: "hidden",
 					border: "1px solid rgba(255,255,255,0.06)",
@@ -408,19 +407,21 @@ export function WordChain() {
 				{/* ---- PLAYING PHASE ---- */}
 				{phase === "playing" && (
 					<div
-						className="flex flex-col items-center gap-5 w-full"
+						className="flex flex-col items-center gap-6 w-full"
 						style={{ maxWidth: 600 }}
 					>
 						{/* Score bar */}
 						<div
-							className="flex gap-4 font-mono text-sm justify-center"
-							style={{ color: "rgba(255,255,255,0.5)" }}
+							className="flex font-mono text-sm justify-center"
+							style={{ color: "rgba(255,255,255,0.5)", gap: 24 }}
 						>
 							<span>
-								Chain: <strong style={{ color: "#a78bfa" }}>{score}</strong>
+								Chain:{" "}
+								<strong style={{ color: "#a78bfa" }}>{score}</strong>
 							</span>
 							<span>
-								Best: <strong style={{ color: "#fbbf24" }}>{highScore}</strong>
+								Best:{" "}
+								<strong style={{ color: "#fbbf24" }}>{highScore}</strong>
 							</span>
 						</div>
 
@@ -454,42 +455,6 @@ export function WordChain() {
 								{currentWord}
 							</div>
 						</div>
-
-						{/* Chain pills */}
-						{chain.length > 0 && (
-							<div
-								ref={chainScrollRef}
-								className="wc-chain-scroll flex gap-2 w-full pb-2"
-								style={{
-									overflowX: "auto",
-									flexWrap: "nowrap",
-									flexShrink: 0,
-								}}
-							>
-								{chain.map((word, i) => (
-									<span
-										key={word}
-										className={newWord === word ? "wc-pill-new" : ""}
-										style={{
-											display: "inline-flex",
-											alignItems: "center",
-											padding: "5px 14px",
-											borderRadius: 999,
-											fontSize: "0.82rem",
-											fontWeight: 600,
-											color: "#fff",
-											background: PILL_GRADIENTS[i % PILL_GRADIENTS.length],
-											opacity: i === chain.length - 1 ? 1 : 0.55,
-											whiteSpace: "nowrap",
-											transition: "opacity 0.3s",
-											letterSpacing: "0.01em",
-										}}
-									>
-										{word}
-									</span>
-								))}
-							</div>
-						)}
 
 						{/* Input area */}
 						<div className="flex flex-col items-center gap-2 w-full">
@@ -555,6 +520,44 @@ export function WordChain() {
 						>
 							Press Enter to submit
 						</div>
+
+						{/* Chain pills */}
+						{chain.length > 0 && (
+							<div
+								ref={chainScrollRef}
+								className="wc-chain-scroll flex gap-2 w-full justify-center"
+								style={{
+									overflowX: "auto",
+									flexWrap: "wrap",
+									flexShrink: 0,
+									maxHeight: 72,
+									marginTop: 4,
+								}}
+							>
+								{chain.map((word, i) => (
+									<span
+										key={word}
+										className={newWord === word ? "wc-pill-new" : ""}
+										style={{
+											display: "inline-flex",
+											alignItems: "center",
+											padding: "4px 12px",
+											borderRadius: 999,
+											fontSize: "0.75rem",
+											fontWeight: 600,
+											color: "#fff",
+											background: PILL_GRADIENTS[i % PILL_GRADIENTS.length],
+											opacity: i === chain.length - 1 ? 1 : 0.45,
+											whiteSpace: "nowrap",
+											transition: "opacity 0.3s",
+											letterSpacing: "0.01em",
+										}}
+									>
+										{word}
+									</span>
+								))}
+							</div>
+						)}
 					</div>
 				)}
 
