@@ -343,20 +343,7 @@ export function WordChain() {
 					border: "1px solid rgba(255,255,255,0.06)",
 				}}
 			>
-				{/* Score bar */}
-				{phase === "playing" && (
-					<div
-						className="absolute top-4 right-5 flex gap-4 font-mono text-sm"
-						style={{ color: "rgba(255,255,255,0.5)" }}
-					>
-						<span>
-							Chain: <strong style={{ color: "#a78bfa" }}>{score}</strong>
-						</span>
-						<span>
-							Best: <strong style={{ color: "#fbbf24" }}>{highScore}</strong>
-						</span>
-					</div>
-				)}
+				{/* Score bar — positioned inside flow, not absolute */}
 
 				{/* ---- TURNSTILE PHASE ---- */}
 				{phase === "turnstile" && (
@@ -398,7 +385,7 @@ export function WordChain() {
 							type="button"
 							onClick={startGame}
 							disabled={!turnstileToken}
-							className="wc-btn-primary px-8 py-3 rounded-xl font-semibold"
+							className="wc-btn-primary px-10 py-4 rounded-xl font-semibold"
 							style={{
 								background: turnstileToken
 									? "linear-gradient(135deg, #7c3aed, #4f46e5)"
@@ -406,8 +393,9 @@ export function WordChain() {
 								color: turnstileToken ? "#fff" : "rgba(255,255,255,0.25)",
 								cursor: turnstileToken ? "pointer" : "not-allowed",
 								border: "none",
-								fontSize: "1rem",
+								fontSize: "1.05rem",
 								letterSpacing: "0.01em",
+								marginTop: 4,
 							}}
 						>
 							{turnstileToken ? "Start Game" : "Verifying..."}
@@ -421,6 +409,19 @@ export function WordChain() {
 						className="flex flex-col items-center gap-5 w-full"
 						style={{ maxWidth: 600 }}
 					>
+						{/* Score bar */}
+						<div
+							className="flex gap-4 font-mono text-sm justify-center"
+							style={{ color: "rgba(255,255,255,0.5)" }}
+						>
+							<span>
+								Chain: <strong style={{ color: "#a78bfa" }}>{score}</strong>
+							</span>
+							<span>
+								Best: <strong style={{ color: "#fbbf24" }}>{highScore}</strong>
+							</span>
+						</div>
+
 						{/* Current word */}
 						<div className="text-center">
 							<div
@@ -456,10 +457,11 @@ export function WordChain() {
 						{chain.length > 0 && (
 							<div
 								ref={chainScrollRef}
-								className="wc-chain-scroll flex gap-2 w-full pb-1"
+								className="wc-chain-scroll flex gap-2 w-full pb-2"
 								style={{
 									overflowX: "auto",
-									flexWrap: "wrap",
+									flexWrap: "nowrap",
+									flexShrink: 0,
 								}}
 							>
 								{chain.map((word, i) => (

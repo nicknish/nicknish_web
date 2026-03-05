@@ -26,9 +26,9 @@ const COULD_NOT_VALIDATE = "Couldn't validate — try again";
 // Models to try in order. Free-tier reasoning models are unreliable, so we
 // rotate through several to increase the odds of getting a non-empty content.
 const MODELS = [
+	"arcee-ai/trinity-mini:free",
 	"z-ai/glm-4.5-air:free",
 	"mistralai/mistral-small-3.1-24b-instruct:free",
-	"arcee-ai/trinity-mini:free",
 ];
 
 async function verifyTurnstile(token: string): Promise<boolean> {
